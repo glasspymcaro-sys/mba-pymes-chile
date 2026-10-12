@@ -4,11 +4,13 @@ import { cargarDatosUsuario, sincronizarTodoElNegocio } from '../services/dbServ
 
 const INSUMOS_DEFAULT = {
   restaurant: [
-    { id: 'ins_1', nombre: 'Manzanas Rojas', costoUnitario: 1200, unidadMedida: 'kg', imagenFalUrl: null },
-    { id: 'ins_2', nombre: 'Carne Vacuno Lomo', costoUnitario: 4800, unidadMedida: 'kg', imagenFalUrl: null },
-    { id: 'ins_3', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, unidadMedida: 'un', imagenFalUrl: null },
-    { id: 'ins_4', nombre: 'Tomates Frescos', costoUnitario: 900, unidadMedida: 'kg', imagenFalUrl: null },
-    { id: 'ins_5', nombre: 'Queso Cheddar Fundido', costoUnitario: 1100, unidadMedida: 'kg', imagenFalUrl: null },
+    { id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_2', nombre: 'Carne Vacuno Lomo (200g)', costoUnitario: 2400, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_3', nombre: 'Tomates Frescos (100g)', costoUnitario: 350, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_4', nombre: 'Queso Cheddar Fundido', costoUnitario: 450, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_5', nombre: 'Lechuga Hidropónica', costoUnitario: 250, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_6', nombre: 'Papas Fritas Porción', costoUnitario: 650, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_7', nombre: 'Manzanas Rojas', costoUnitario: 1200, unidadMedida: 'kg', imagenFalUrl: null },
   ],
   minimarket: [
     { id: 'ins_mini_1', nombre: 'Bebida Botella 1.5L', costoUnitario: 950, unidadMedida: 'un', imagenFalUrl: null },
@@ -22,6 +24,56 @@ const INSUMOS_DEFAULT = {
     { id: 'ins_srv_2', nombre: 'Desarrollador FullStack', costoUnitario: 14000, unidadMedida: 'hr', imagenFalUrl: null },
     { id: 'ins_srv_3', nombre: 'Licencia Software Cloud', costoUnitario: 6500, unidadMedida: 'un', imagenFalUrl: null },
     { id: 'ins_srv_4', nombre: 'Diseñador UI/UX', costoUnitario: 11000, unidadMedida: 'hr', imagenFalUrl: null },
+  ],
+};
+
+const RECETAS_DEFAULT = {
+  restaurant: [
+    {
+      id: 'rec_1',
+      nombre: 'Hamburguesa Artesanal Completa',
+      precioVenta: 8900,
+      ingredientes: [
+        { idAsignado: 'ing_1', id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, cantidad: 1, unidadMedida: 'un' },
+        { idAsignado: 'ing_2', id: 'ins_2', nombre: 'Carne Vacuno Lomo (200g)', costoUnitario: 2400, cantidad: 1, unidadMedida: 'un' },
+        { idAsignado: 'ing_3', id: 'ins_3', nombre: 'Tomates Frescos (100g)', costoUnitario: 350, cantidad: 1, unidadMedida: 'un' },
+        { idAsignado: 'ing_4', id: 'ins_4', nombre: 'Queso Cheddar Fundido', costoUnitario: 450, cantidad: 1, unidadMedida: 'un' },
+        { idAsignado: 'ing_5', id: 'ins_5', nombre: 'Lechuga Hidropónica', costoUnitario: 250, cantidad: 1, unidadMedida: 'un' },
+      ],
+    },
+    {
+      id: 'rec_2',
+      nombre: 'Tarta Tibia de Manzanas',
+      precioVenta: 4500,
+      ingredientes: [
+        { idAsignado: 'ing_6', id: 'ins_7', nombre: 'Manzanas Rojas', costoUnitario: 1200, cantidad: 1, unidadMedida: 'kg' },
+        { idAsignado: 'ing_7', id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, cantidad: 1, unidadMedida: 'un' },
+      ],
+    },
+  ],
+  minimarket: [
+    {
+      id: 'rec_mini_1',
+      nombre: 'Pack Desayuno Familiar Express',
+      precioVenta: 6990,
+      ingredientes: [
+        { idAsignado: 'ing_m1', id: 'ins_mini_2', nombre: 'Pan de Molde Familiar', costoUnitario: 1400, cantidad: 1, unidadMedida: 'un' },
+        { idAsignado: 'ing_m2', id: 'ins_mini_3', nombre: 'Leche Entera 1L', costoUnitario: 820, cantidad: 2, unidadMedida: 'lt' },
+        { idAsignado: 'ing_m3', id: 'ins_mini_5', nombre: 'Café Grano Tostado 250g', costoUnitario: 2600, cantidad: 1, unidadMedida: 'un' },
+      ],
+    },
+  ],
+  services: [
+    {
+      id: 'rec_srv_1',
+      nombre: 'Auditoría Estratégica & TI Mensual',
+      precioVenta: 55000,
+      ingredientes: [
+        { idAsignado: 'ing_s1', id: 'ins_srv_1', nombre: 'Consultor Senior MBA', costoUnitario: 18000, cantidad: 1, unidadMedida: 'hr' },
+        { idAsignado: 'ing_s2', id: 'ins_srv_2', nombre: 'Desarrollador FullStack', costoUnitario: 14000, cantidad: 1, unidadMedida: 'hr' },
+        { idAsignado: 'ing_s3', id: 'ins_srv_3', nombre: 'Licencia Software Cloud', costoUnitario: 6500, cantidad: 1, unidadMedida: 'un' },
+      ],
+    },
   ],
 };
 
@@ -55,34 +107,43 @@ export function AppStateProvider({ children }) {
 
   // Perfil de negocio (restaurant, minimarket, services)
   const [perfil, setPerfil] = useState('restaurant');
-  const [nombreNegocio, setNombreNegocio] = useState('Mi Negocio PyME');
+  const [nombreNegocio, setNombreNegocio] = useState('Restaurante y Bistró Central');
 
-  // Parámetros Clave para Punto de Equilibrio
-  const [precioVentaConsolidado, setPrecioVentaConsolidado] = useState(9500);
-  const [ventasEstimadasMensuales, setVentasEstimadasMensuales] = useState(450);
-
-  // Insumos en Catálogo y Insumos Asignados a la Ollita/Estante/Mesa
+  // Insumos disponibles en catálogo
   const [insumos, setInsumos] = useState(INSUMOS_DEFAULT.restaurant);
-  const [insumosAsignados, setInsumosAsignados] = useState([
-    INSUMOS_DEFAULT.restaurant[0], // Manzanas
-    INSUMOS_DEFAULT.restaurant[1], // Carne
-    INSUMOS_DEFAULT.restaurant[2], // Pan
-  ]);
+
+  // Catálogo de Recetas / Productos Creados
+  const [recetas, setRecetas] = useState(RECETAS_DEFAULT.restaurant);
+
+  // Receta en Preparación adentro de la Ollita / Stand
+  const [recetaEnOlla, setRecetaEnOlla] = useState(RECETAS_DEFAULT.restaurant[0]);
 
   // Costos Fijos
   const [costosFijos, setCostosFijos] = useState(COSTOS_FIJOS_DEFAULT.restaurant);
 
-  // Costo Directo Unitario calculado automáticamente a partir del contenedor 3D
+  // Parámetros Clave para Punto de Equilibrio
+  const [ventasEstimadasMensuales, setVentasEstimadasMensuales] = useState(450);
+
+  // Costo Directo Unitario (CV) derivado de la receta activa en la ollita
   const costoVariableConsolidado = useMemo(() => {
-    return insumosAsignados.reduce((acc, item) => acc + Number(item.costoUnitario || 0), 0);
-  }, [insumosAsignados]);
+    if (!recetaEnOlla || !Array.isArray(recetaEnOlla.ingredientes)) return 0;
+    return recetaEnOlla.ingredientes.reduce(
+      (acc, item) => acc + Number(item.costoUnitario || 0) * Number(item.cantidad || 1),
+      0
+    );
+  }, [recetaEnOlla]);
+
+  // Precio de venta consolidado derivado de la receta activa
+  const precioVentaConsolidado = useMemo(() => {
+    return Number(recetaEnOlla?.precioVenta || 8900);
+  }, [recetaEnOlla]);
 
   // Costo Fijo Total mensual
   const costoFijoTotal = useMemo(() => {
     return costosFijos.reduce((acc, item) => acc + Number(item.monto || 0), 0);
   }, [costosFijos]);
 
-  // Cambiar perfil de negocio adaptando insumos 3D y costos
+  // Cambiar perfil de negocio
   const cambiarPerfil = useCallback((nuevoPerfil) => {
     setPerfil(nuevoPerfil);
     const nombres = {
@@ -94,52 +155,131 @@ export function AppStateProvider({ children }) {
 
     const nuevosInsumos = INSUMOS_DEFAULT[nuevoPerfil] || [];
     setInsumos(nuevosInsumos);
-    setInsumosAsignados(nuevosInsumos.slice(0, 3));
+
+    const nuevasRecetas = RECETAS_DEFAULT[nuevoPerfil] || [];
+    setRecetas(nuevasRecetas);
+    setRecetaEnOlla(nuevasRecetas[0] || { nombre: 'Nuevo Producto', precioVenta: 5000, ingredientes: [] });
+
     setCostosFijos(COSTOS_FIJOS_DEFAULT[nuevoPerfil] || []);
 
     if (nuevoPerfil === 'restaurant') {
-      setPrecioVentaConsolidado(9500);
       setVentasEstimadasMensuales(450);
     } else if (nuevoPerfil === 'minimarket') {
-      setPrecioVentaConsolidado(3200);
       setVentasEstimadasMensuales(1100);
     } else if (nuevoPerfil === 'services') {
-      setPrecioVentaConsolidado(42000);
       setVentasEstimadasMensuales(90);
     }
   }, []);
 
-  // Mutadores de Insumos y Asignación 3D
+  // Mutadores de Insumos
   const agregarInsumo = (nuevoItem) => {
     setInsumos((prev) => [nuevoItem, ...prev]);
   };
 
   const eliminarInsumo = (id) => {
     setInsumos((prev) => prev.filter((item) => item.id !== id));
-    setInsumosAsignados((prev) => prev.filter((item) => item.id !== id));
+    // También quitar de la receta en preparación si estaba
+    setRecetaEnOlla((prev) => ({
+      ...prev,
+      ingredientes: (prev.ingredientes || []).filter((item) => item.id !== id),
+    }));
   };
 
   const editarInsumo = (itemActualizado) => {
     setInsumos((prev) =>
       prev.map((item) => (item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item))
     );
-    setInsumosAsignados((prev) =>
-      prev.map((item) => (item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item))
-    );
+    setRecetaEnOlla((prev) => ({
+      ...prev,
+      ingredientes: (prev.ingredientes || []).map((item) =>
+        item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item
+      ),
+    }));
   };
 
-  const asignarInsumoAContenedor = (insumo) => {
-    setInsumosAsignados((prev) => {
-      // Si ya está, añade otra unidad o duplicado con nuevo id
-      const clon = { ...insumo, idAsignado: `${insumo.id}_${Date.now()}` };
-      return [...prev, clon];
+  // Dinámica de la Ollita / Generador de Recetas
+  const agregarIngredienteAOlla = (insumo, cantidad = 1) => {
+    setRecetaEnOlla((prev) => {
+      const ingredientesActuales = prev.ingredientes || [];
+      const existente = ingredientesActuales.find((item) => item.id === insumo.id);
+
+      if (existente) {
+        return {
+          ...prev,
+          ingredientes: ingredientesActuales.map((item) =>
+            item.id === insumo.id ? { ...item, cantidad: (item.cantidad || 1) + cantidad } : item
+          ),
+        };
+      }
+
+      const nuevoIngrediente = {
+        ...insumo,
+        idAsignado: `ing_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        cantidad,
+      };
+
+      return {
+        ...prev,
+        ingredientes: [...ingredientesActuales, nuevoIngrediente],
+      };
     });
   };
 
-  const desasignarInsumoDeContenedor = (idAsignadoOId) => {
-    setInsumosAsignados((prev) =>
-      prev.filter((item) => item.idAsignado !== idAsignadoOId && item.id !== idAsignadoOId)
-    );
+  const eliminarIngredienteDeOlla = (idAsignadoOId) => {
+    setRecetaEnOlla((prev) => ({
+      ...prev,
+      ingredientes: (prev.ingredientes || []).filter(
+        (item) => item.idAsignado !== idAsignadoOId && item.id !== idAsignadoOId
+      ),
+    }));
+  };
+
+  const cambiarCantidadIngrediente = (idAsignado, nuevaCantidad) => {
+    const cant = Math.max(0.1, Number(nuevaCantidad) || 1);
+    setRecetaEnOlla((prev) => ({
+      ...prev,
+      ingredientes: (prev.ingredientes || []).map((item) =>
+        item.idAsignado === idAsignado || item.id === idAsignado ? { ...item, cantidad: cant } : item
+      ),
+    }));
+  };
+
+  const setNombreRecetaEnOlla = (nuevoNombre) => {
+    setRecetaEnOlla((prev) => ({ ...prev, nombre: nuevoNombre }));
+  };
+
+  const setPrecioRecetaEnOlla = (nuevoPrecio) => {
+    setRecetaEnOlla((prev) => ({ ...prev, precioVenta: Number(nuevoPrecio) || 0 }));
+  };
+
+  const vaciarOlla = () => {
+    setRecetaEnOlla({
+      id: 'rec_' + Date.now(),
+      nombre: perfil === 'restaurant' ? 'Nueva Receta de Plato' : perfil === 'minimarket' ? 'Nuevo Pack de Productos' : 'Nueva Propuesta de Servicio',
+      precioVenta: 5000,
+      ingredientes: [],
+    });
+  };
+
+  const guardarRecetaActiva = () => {
+    if (!recetaEnOlla) return;
+    const recetaGuardada = {
+      ...recetaEnOlla,
+      id: recetaEnOlla.id || 'rec_' + Date.now(),
+      costoTotal: costoVariableConsolidado,
+    };
+
+    setRecetas((prev) => {
+      const existe = prev.some((r) => r.id === recetaGuardada.id);
+      if (existe) {
+        return prev.map((r) => (r.id === recetaGuardada.id ? recetaGuardada : r));
+      }
+      return [recetaGuardada, ...prev];
+    });
+  };
+
+  const cargarRecetaEnOlla = (receta) => {
+    setRecetaEnOlla({ ...receta });
   };
 
   // Mutadores de Costos Fijos
@@ -163,10 +303,10 @@ export function AppStateProvider({ children }) {
         porcentajeMermaGlobal: 0,
         margenObjetivoPorcentaje: 40,
         costosFijos,
-        costosVariables: [{ id: 'cv_dir', nombre: 'Costo Directo 3D', costoPorUnidad: costoVariableConsolidado }],
+        costosVariables: [{ id: 'cv_dir', nombre: recetaEnOlla?.nombre || 'Receta Activa', costoPorUnidad: costoVariableConsolidado }],
         lotesLIFO: [],
         insumos,
-        recetas: [],
+        recetas,
         inventario: [],
         servicios: [],
       });
@@ -175,7 +315,7 @@ export function AppStateProvider({ children }) {
       console.error('Error sincronizando con Supabase:', err);
       setSyncStatus('error');
     }
-  }, [user, perfil, nombreNegocio, ventasEstimadasMensuales, costosFijos, costoVariableConsolidado, insumos]);
+  }, [user, perfil, nombreNegocio, ventasEstimadasMensuales, costosFijos, costoVariableConsolidado, insumos, recetas, recetaEnOlla]);
 
   useEffect(() => {
     if (isInitialLoadRef.current || !user?.id) return;
@@ -186,7 +326,7 @@ export function AppStateProvider({ children }) {
     return () => {
       if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
     };
-  }, [user, perfil, nombreNegocio, costosFijos, insumos, insumosAsignados, precioVentaConsolidado, sincronizarConNube]);
+  }, [user, perfil, nombreNegocio, costosFijos, insumos, recetaEnOlla, sincronizarConNube]);
 
   // Sesión Supabase al inicio
   useEffect(() => {
@@ -206,9 +346,13 @@ export function AppStateProvider({ children }) {
           }
           if (datos?.costosFijos?.length) setCostosFijos(datos.costosFijos);
           if (datos?.insumos?.length) setInsumos(datos.insumos);
+          if (datos?.recetas?.length) {
+            setRecetas(datos.recetas);
+            setRecetaEnOlla(datos.recetas[0]);
+          }
         }
       } catch (e) {
-        console.warn('Supabase local/offline:', e.message);
+        console.warn('Supabase offline:', e.message);
       } finally {
         setAuthLoading(false);
         isInitialLoadRef.current = false;
@@ -235,19 +379,26 @@ export function AppStateProvider({ children }) {
       nombreNegocio,
       setNombreNegocio,
       precioVentaConsolidado,
-      setPrecioVentaConsolidado,
       ventasEstimadasMensuales,
       setVentasEstimadasMensuales,
       costoVariableConsolidado,
       costoFijoTotal,
       insumos,
-      insumosAsignados,
-      costosFijos,
+      recetas,
+      recetaEnOlla,
+      insumosAsignados: recetaEnOlla?.ingredientes || [],
       agregarInsumo,
       editarInsumo,
       eliminarInsumo,
-      asignarInsumoAContenedor,
-      desasignarInsumoDeContenedor,
+      agregarIngredienteAOlla,
+      eliminarIngredienteDeOlla,
+      cambiarCantidadIngrediente,
+      setNombreRecetaEnOlla,
+      setPrecioRecetaEnOlla,
+      guardarRecetaActiva,
+      cargarRecetaEnOlla,
+      vaciarOlla,
+      costosFijos,
       agregarCostoFijo,
       eliminarCostoFijo,
     }),
@@ -264,7 +415,8 @@ export function AppStateProvider({ children }) {
       costoVariableConsolidado,
       costoFijoTotal,
       insumos,
-      insumosAsignados,
+      recetas,
+      recetaEnOlla,
       costosFijos,
     ]
   );

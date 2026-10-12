@@ -21,7 +21,7 @@ function ContenidoPrincipal() {
     agregarInsumo,
     editarInsumo,
     eliminarInsumo,
-    asignarInsumoAContenedor,
+    agregarIngredienteAOlla,
     costoVariableConsolidado,
     costoFijoTotal,
     precioVentaConsolidado,
@@ -313,7 +313,7 @@ function ContenidoPrincipal() {
             onAgregarInsumo={agregarInsumo}
             onEditarInsumo={editarInsumo}
             onEliminarInsumo={eliminarInsumo}
-            onAsignarCostoDirecto={asignarInsumoAContenedor}
+            onAsignarCostoDirecto={agregarIngredienteAOlla}
           />
         )}
 
