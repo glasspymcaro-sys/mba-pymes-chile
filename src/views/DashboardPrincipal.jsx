@@ -6,7 +6,7 @@ import GraficoPuntoEquilibrio from '../components/charts/GraficoPuntoEquilibrio.
 import OllitaCocina3D from '../components/svg3d/OllitaCocina3D.jsx';
 import EstanteRetail3D from '../components/svg3d/EstanteRetail3D.jsx';
 import MesaServicios3D from '../components/svg3d/MesaServicios3D.jsx';
-import { formatearCLP } from '../utils/formatters.js';
+import { formatCLP } from '../utils/formatters.js';
 
 export default function DashboardPrincipal() {
   const {
@@ -66,84 +66,91 @@ export default function DashboardPrincipal() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* 1. Tarjetas Métricas Directivas del Punto de Equilibrio */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* 1. Tarjetas Métricas Directivas del Punto de Equilibrio (Sección 8.3) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
         <TarjetaMetrica
           titulo="Punto de Equilibrio"
           valor={`${puntoEquilibrioUnidades.toLocaleString('es-CL')} un.`}
-          subtitulo={formatearCLP(ventasPuntoEquilibrioPesos)}
+          subtitulo={`Ventas mínimas: ${formatCLP(ventasPuntoEquilibrioPesos)}`}
           tendencia={ventasEfectivas >= puntoEquilibrioUnidades ? 'Solvente' : 'Déficit'}
-          color={ventasEfectivas >= puntoEquilibrioUnidades ? 'var(--accent-green)' : 'var(--accent-red)'}
+          color={ventasEfectivas >= puntoEquilibrioUnidades ? 'var(--color-success)' : 'var(--color-danger)'}
         />
 
         <TarjetaMetrica
           titulo="Margen de Contribución"
-          valor={formatearCLP(margenContribucionUnitario)}
-          subtitulo={`P ($${precioEfectivo.toLocaleString('es-CL')}) - CV ($${costoVarEfectivo.toLocaleString('es-CL')})`}
+          valor={formatCLP(margenContribucionUnitario)}
+          subtitulo={`P (${formatCLP(precioEfectivo)}) - CV (${formatCLP(costoVarEfectivo)})`}
           tendencia={`${precioEfectivo > 0 ? Math.round((margenContribucionUnitario / precioEfectivo) * 100) : 0}% s/ venta`}
-          color="var(--primary-color)"
+          color="var(--color-primary)"
         />
 
         <TarjetaMetrica
           titulo="Costos Fijos Mensuales"
-          valor={formatearCLP(costoFijoEfectivo)}
+          valor={formatCLP(costoFijoEfectivo)}
           subtitulo="Compromiso estructural total"
           tendencia="Fijo mensual"
         />
 
         <TarjetaMetrica
           titulo="Resultado Operacional"
-          valor={formatearCLP(resultadoOperacional)}
-          subtitulo={`Margen operacional: ${margenPorcentual}%`}
+          valor={formatCLP(resultadoOperacional)}
+          subtitulo={`Margen final: ${margenPorcentual}%`}
           tendencia={resultadoOperacional >= 0 ? 'Ganancia' : 'Pérdida'}
-          color={resultadoOperacional >= 0 ? 'var(--accent-green)' : 'var(--accent-red)'}
+          color={resultadoOperacional >= 0 ? 'var(--color-success)' : 'var(--color-danger)'}
         />
       </div>
 
-      {/* 2. Escenario de Costos Directos 3D Integrados */}
+      {/* 2. Stand de Costo Directo Unitario Consolidado */}
       <div
         style={{
-          background: 'var(--bg-neumorphic)',
-          borderRadius: '24px',
+          backgroundColor: 'var(--color-surface)',
+          borderRadius: '12px',
+          border: '1px solid var(--color-border)',
           padding: '20px 24px',
-          boxShadow: 'var(--neu-flat)',
+          boxShadow: 'var(--shadow-card)',
           display: 'grid',
           gridTemplateColumns: 'auto minmax(0, 1fr)',
           gap: '24px',
           alignItems: 'center',
         }}
       >
-        {/* Render 3D del contenedor activo */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {perfil === 'restaurant' && <OllitaCocina3D tamaño={110} insumosEnOlla={insumosAsignados} />}
-          {perfil === 'minimarket' && <EstanteRetail3D tamaño={110} itemsEnEstante={insumosAsignados} />}
-          {perfil === 'services' && <MesaServicios3D tamaño={110} itemsEnMesa={insumosAsignados} />}
+          {perfil === 'restaurant' && <OllitaCocina3D tamaño={105} insumosEnOlla={insumosAsignados} />}
+          {perfil === 'minimarket' && <EstanteRetail3D tamaño={105} itemsEnEstante={insumosAsignados} />}
+          {perfil === 'services' && <MesaServicios3D tamaño={105} itemsEnMesa={insumosAsignados} />}
         </div>
 
-        {/* Resumen del costo directo unitario */}
         <div>
-          <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Composición de Costo Directo Unitario (CV)
           </span>
-          <h3 style={{ fontSize: '17px', fontWeight: '900', color: '#1a202c', margin: '4px 0 6px 0' }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-foreground)', margin: '4px 0 6px 0' }}>
             {insumosAsignados.length > 0
               ? `${insumosAsignados.map((i) => i.nombre).join(' + ')}`
-              : 'Sin insumos asignados'}
+              : 'Sin insumos asignados en el stand'}
           </h3>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>
-            El costo directo unitario suma <strong>{formatearCLP(costoVarEfectivo)}</strong> por cada unidad vendida. Cada producto comercializado aporta <strong>{formatearCLP(margenContribucionUnitario)}</strong> al pago de los costos fijos estructurales.
+          <p style={{ fontSize: '13px', color: 'var(--color-muted-foreground)', margin: 0, lineHeight: 1.5 }}>
+            El costo directo unitario suma <strong>{formatCLP(costoVarEfectivo)}</strong> por cada unidad vendida. Cada venta aporta <strong>{formatCLP(margenContribucionUnitario)}</strong> a la absorción de los costos fijos operacionales.
           </p>
         </div>
       </div>
 
-      {/* 3. Gráfico de Punto de Equilibrio y Simulador */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1.2fr)', gap: '24px', alignItems: 'stretch' }}>
+      {/* 3. Gráfico de Punto de Equilibrio y Simulador (Totalmente Responsive) */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '20px',
+          alignItems: 'stretch',
+        }}
+      >
         <div
           style={{
-            background: 'var(--bg-neumorphic)',
-            borderRadius: '20px',
-            boxShadow: 'var(--neu-flat)',
+            backgroundColor: 'var(--color-surface)',
+            borderRadius: '12px',
+            border: '1px solid var(--color-border)',
+            boxShadow: 'var(--shadow-card)',
             padding: '20px',
           }}
         >
@@ -153,7 +160,7 @@ export default function DashboardPrincipal() {
           />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <SimuladorPrecio
             precioVenta={precioEfectivo}
             ventasEstimadas={ventasEfectivas}
@@ -169,23 +176,24 @@ export default function DashboardPrincipal() {
 
           <div
             style={{
-              background: 'var(--bg-neumorphic)',
-              borderRadius: '20px',
-              boxShadow: 'var(--neu-flat)',
-              padding: '20px',
+              backgroundColor: 'var(--color-surface)',
+              borderRadius: '12px',
+              border: '1px solid var(--color-border)',
+              boxShadow: 'var(--shadow-card)',
+              padding: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              gap: '8px',
+              gap: '6px',
             }}
           >
-            <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Dictamen Operativo de Punto de Equilibrio
             </span>
-            <p style={{ fontSize: '13px', color: 'var(--text-main)', lineHeight: '1.55', margin: 0 }}>
+            <p style={{ fontSize: '13px', color: 'var(--color-foreground)', lineHeight: 1.55, margin: 0 }}>
               {ventasEfectivas >= puntoEquilibrioUnidades
-                ? `Operación viable. Comercializas ${ventasEfectivas - puntoEquilibrioUnidades} unidades por encima del umbral de equilibrio, generando una ganancia neta estimada de ${formatearCLP(resultadoOperacional)}.`
-                : `Operación bajo el umbral crítico. Requiere comercializar ${puntoEquilibrioUnidades - ventasEfectivas} unidades adicionales para amortizar los costos fijos de ${formatearCLP(costoFijoEfectivo)}.`}
+                ? `Operación solvente. Comercializas ${ventasEfectivas - puntoEquilibrioUnidades} unidades por encima del umbral de equilibrio, proyectando una ganancia neta estimada de ${formatCLP(resultadoOperacional)}.`
+                : `Operación bajo el umbral crítico. Requiere comercializar ${puntoEquilibrioUnidades - ventasEfectivas} unidades adicionales para amortizar los costos fijos de ${formatCLP(costoFijoEfectivo)}.`}
             </p>
           </div>
         </div>

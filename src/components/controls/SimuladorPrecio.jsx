@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatearCLP } from '../../utils/formatters.js';
+import { formatCLP } from '../../utils/formatters.js';
 
 export default function SimuladorPrecio({
   precioVenta = 0,
@@ -18,24 +18,30 @@ export default function SimuladorPrecio({
   return (
     <div
       style={{
-        background: 'var(--bg-neumorphic)',
-        borderRadius: '20px',
-        boxShadow: 'var(--neu-flat)',
-        padding: '22px',
+        backgroundColor: 'var(--color-surface)',
+        borderRadius: '12px',
+        border: '1px solid var(--color-border)',
+        boxShadow: 'var(--shadow-card)',
+        padding: '20px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '18px',
+        gap: '16px',
       }}
     >
-      <h3 style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
-        Simulador de Sensibilidad en Vivo
-      </h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-foreground)', margin: 0 }}>
+          Simulador de Sensibilidad
+        </h3>
+        <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)', fontWeight: 500 }}>
+          En tiempo real
+        </span>
+      </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>
           <span>Precio de Venta Promedio</span>
-          <span style={{ color: 'var(--primary-color)', fontWeight: '900', fontSize: '14px' }}>
-            {formatearCLP(precioVenta)}
+          <span className="tabular-nums" style={{ color: 'var(--color-primary)', fontWeight: 700, fontSize: '14px' }}>
+            {formatCLP(precioVenta)}
           </span>
         </div>
         <input
@@ -46,17 +52,18 @@ export default function SimuladorPrecio({
           value={precioVenta || 0}
           onChange={(e) => onPrecioChange(Number(e.target.value))}
           style={{
-            accentColor: 'var(--primary-color)',
+            accentColor: 'var(--color-primary)',
             cursor: 'pointer',
             width: '100%',
+            height: '6px',
           }}
         />
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>
           <span>Volumen Estimado Mensual</span>
-          <span style={{ color: 'var(--primary-color)', fontWeight: '900', fontSize: '14px' }}>
+          <span className="tabular-nums" style={{ color: 'var(--color-primary)', fontWeight: 700, fontSize: '14px' }}>
             {(ventasEstimadas || 0).toLocaleString('es-CL')} un.
           </span>
         </div>
@@ -68,9 +75,10 @@ export default function SimuladorPrecio({
           value={ventasEstimadas || 0}
           onChange={(e) => onVentasChange(Number(e.target.value))}
           style={{
-            accentColor: 'var(--primary-color)',
+            accentColor: 'var(--color-primary)',
             cursor: 'pointer',
             width: '100%',
+            height: '6px',
           }}
         />
       </div>

@@ -6,13 +6,12 @@ import GestionCostosFijosSimple from './components/costs/GestionCostosFijosSimpl
 import AsesorFinancieroIA from './components/ai/AsesorFinancieroIA.jsx';
 import AuthModal from './components/auth/AuthModal.jsx';
 import Logo from './components/illustrations/Logo.jsx';
-import { formatearCLP } from './utils/formatters.js';
+import { formatCLP } from './utils/formatters.js';
 
 function ContenidoPrincipal() {
   const {
     perfil,
     cambiarPerfil,
-    nombreNegocio,
     user,
     cerrarSesion,
     syncStatus,
@@ -20,6 +19,7 @@ function ContenidoPrincipal() {
     insumos,
     insumosAsignados,
     agregarInsumo,
+    editarInsumo,
     eliminarInsumo,
     asignarInsumoAContenedor,
     costoVariableConsolidado,
@@ -27,75 +27,85 @@ function ContenidoPrincipal() {
     precioVentaConsolidado,
   } = useAppState();
 
-  const [vista, setVista] = useState('punto_equilibrio'); // 'punto_equilibrio' | 'insumos_3d' | 'costos_fijos' | 'asesor_ia'
+  const [vista, setVista] = useState('punto_equilibrio'); // 'punto_equilibrio' | 'insumos' | 'costos_fijos' | 'asesor_ia'
   const [modalAuthAbierto, setModalAuthAbierto] = useState(false);
 
-  // Cálculos rápidos de Punto de Equilibrio para el Header
+  // Cálculos de Punto de Equilibrio para el Header
   const margenContribucion = Math.max(0, precioVentaConsolidado - costoVariableConsolidado);
   const peUnidades = margenContribucion > 0 ? Math.ceil(costoFijoTotal / margenContribucion) : 0;
   const pePesos = peUnidades * precioVentaConsolidado;
 
   const botonNavStyle = (activo) => ({
     padding: '8px 14px',
-    borderRadius: '12px',
-    fontSize: '12px',
-    fontWeight: '800',
+    borderRadius: '8px',
+    fontSize: '13px',
+    fontWeight: activo ? 700 : 500,
     cursor: 'pointer',
-    background: 'var(--bg-neumorphic)',
-    color: activo ? 'var(--primary-color)' : 'var(--text-muted)',
-    boxShadow: activo ? 'var(--neu-pressed)' : 'var(--neu-flat-sm)',
-    border: 'none',
+    backgroundColor: activo ? 'var(--color-brand-50)' : 'transparent',
+    color: activo ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
+    border: activo ? '1px solid var(--color-brand-200)' : '1px solid transparent',
     transition: 'all 0.15s ease',
     whiteSpace: 'nowrap',
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
+    minHeight: '38px',
   });
 
   const botonRubroStyle = (activo) => ({
     padding: '6px 12px',
-    borderRadius: '10px',
-    fontSize: '11px',
-    fontWeight: '800',
+    borderRadius: '6px',
+    fontSize: '12px',
+    fontWeight: 600,
     cursor: 'pointer',
-    background: 'var(--bg-neumorphic)',
-    color: activo ? '#ffffff' : 'var(--text-main)',
-    backgroundColor: activo ? 'var(--primary-color)' : 'var(--bg-neumorphic)',
-    boxShadow: activo ? 'var(--neu-pressed)' : 'var(--neu-flat-sm)',
+    backgroundColor: activo ? 'var(--color-primary)' : 'transparent',
+    color: activo ? '#ffffff' : 'var(--color-foreground)',
     border: 'none',
     transition: 'all 0.15s ease',
     display: 'flex',
     alignItems: 'center',
     gap: '5px',
+    minHeight: '32px',
   });
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-neumorphic)' }}>
-      {/* 1. Barra de Navegación y Control Directivo */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
+      {/* 1. Barra de Navegación Superior y Control de Negocio */}
       <header
         style={{
-          backgroundColor: 'var(--bg-neumorphic)',
-          padding: '12px 24px',
+          backgroundColor: '#ffffff',
+          borderBottom: '1px solid var(--color-border)',
+          padding: '12px 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '12px',
-          boxShadow: 'var(--neu-flat-sm)',
           position: 'sticky',
           top: 0,
           zIndex: 40,
         }}
       >
-        {/* Identidad y Selector de Rubro de Negocio */}
+        {/* Identidad y Selector de Rubro */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           <Logo style={{ height: '28px' }} />
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px', borderRadius: '12px', boxShadow: 'var(--neu-pressed)' }}>
+          {/* Selector de los 3 Modelos de Negocio */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '3px',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border)',
+              backgroundColor: '#f8fafc',
+            }}
+          >
             <button
               onClick={() => cambiarPerfil('restaurant')}
               style={botonRubroStyle(perfil === 'restaurant')}
-              title="Cambiar a modelo Restaurante (Ollita 3D)"
+              title="Cambiar a modelo Restaurante (Ollita de cocina)"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
@@ -110,7 +120,7 @@ function ContenidoPrincipal() {
             <button
               onClick={() => cambiarPerfil('minimarket')}
               style={botonRubroStyle(perfil === 'minimarket')}
-              title="Cambiar a modelo Minimarket (Góndola 3D)"
+              title="Cambiar a modelo Minimarket (Góndola)"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
@@ -123,7 +133,7 @@ function ContenidoPrincipal() {
             <button
               onClick={() => cambiarPerfil('services')}
               style={botonRubroStyle(perfil === 'services')}
-              title="Cambiar a modelo Servicios (Mesa 3D)"
+              title="Cambiar a modelo Servicios (Mesa de proyectos)"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
@@ -135,20 +145,22 @@ function ContenidoPrincipal() {
 
           {/* Badge del Punto de Equilibrio en Vivo */}
           <div
+            className="tabular-nums"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
               padding: '4px 10px',
-              borderRadius: '8px',
-              boxShadow: 'var(--neu-pressed)',
-              fontSize: '11px',
-              fontWeight: '800',
-              color: 'var(--primary-color)',
+              borderRadius: '6px',
+              backgroundColor: 'var(--color-brand-50)',
+              border: '1px solid var(--color-brand-200)',
+              fontSize: '11.5px',
+              fontWeight: 700,
+              color: 'var(--color-primary)',
             }}
           >
             <span>PE: {peUnidades.toLocaleString('es-CL')} un.</span>
-            <span style={{ color: 'var(--text-muted)' }}>({formatearCLP(pePesos)})</span>
+            <span style={{ color: 'var(--color-muted-foreground)', fontWeight: 500 }}>({formatCLP(pePesos)})</span>
           </div>
 
           {/* Indicador Nube Supabase */}
@@ -160,26 +172,26 @@ function ContenidoPrincipal() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '5px',
-                fontSize: '10.5px',
-                fontWeight: '700',
-                padding: '3px 8px',
+                fontSize: '11px',
+                fontWeight: 600,
+                padding: '4px 8px',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                background: 'var(--bg-neumorphic)',
-                boxShadow: 'var(--neu-flat-sm)',
-                color: syncStatus === 'synced' ? '#2f855a' : syncStatus === 'syncing' ? '#d69e2e' : '#e53e3e',
+                backgroundColor: syncStatus === 'synced' ? 'var(--color-success-bg)' : '#f8fafc',
+                border: `1px solid ${syncStatus === 'synced' ? 'var(--color-success-border)' : 'var(--color-border)'}`,
+                color: syncStatus === 'synced' ? 'var(--color-success)' : 'var(--color-muted-foreground)',
               }}
             >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
                 <circle cx="12" cy="12" r="8" />
               </svg>
-              <span>{syncStatus === 'synced' ? 'Nube Sincronizada' : syncStatus === 'syncing' ? 'Guardando...' : 'Nube'}</span>
+              <span>{syncStatus === 'synced' ? 'Sincronizado' : syncStatus === 'syncing' ? 'Guardando…' : 'Nube'}</span>
             </div>
           )}
         </div>
 
-        {/* Módulos Principales Centrados en Punto de Equilibrio */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        {/* Navegación Principal */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setVista('punto_equilibrio')}
             style={botonNavStyle(vista === 'punto_equilibrio')}
@@ -193,15 +205,15 @@ function ContenidoPrincipal() {
           </button>
 
           <button
-            onClick={() => setVista('insumos_3d')}
-            style={botonNavStyle(vista === 'insumos_3d')}
+            onClick={() => setVista('insumos')}
+            style={botonNavStyle(vista === 'insumos')}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="12 2 2 7 12 12 22 7 12 2" />
               <polyline points="2 17 12 22 22 17" />
               <polyline points="2 12 12 17 22 12" />
             </svg>
-            Generador 3D & Costos Directos
+            Insumos & Costos Directos
           </button>
 
           <button
@@ -227,18 +239,18 @@ function ContenidoPrincipal() {
             Asesor Financiero IA
           </button>
 
-          {/* Gestión de Usuario */}
+          {/* Autenticación de Usuario */}
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span
                 style={{
-                  fontSize: '11px',
-                  fontWeight: '700',
-                  color: 'var(--text-muted)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  color: 'var(--color-muted-foreground)',
                   padding: '4px 8px',
-                  borderRadius: '8px',
-                  boxShadow: 'var(--neu-pressed)',
-                  maxWidth: '110px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)',
+                  maxWidth: '120px',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -249,15 +261,14 @@ function ContenidoPrincipal() {
               <button
                 onClick={cerrarSesion}
                 style={{
-                  padding: '7px 10px',
-                  borderRadius: '10px',
-                  fontSize: '11px',
-                  fontWeight: '700',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: 600,
                   cursor: 'pointer',
-                  background: 'var(--bg-neumorphic)',
-                  color: 'var(--accent-red)',
-                  boxShadow: 'var(--neu-flat-sm)',
-                  border: 'none',
+                  backgroundColor: 'var(--color-danger-bg)',
+                  color: 'var(--color-danger)',
+                  border: '1px solid var(--color-danger-border)',
                 }}
               >
                 Salir
@@ -267,15 +278,14 @@ function ContenidoPrincipal() {
             <button
               onClick={() => setModalAuthAbierto(true)}
               style={{
-                padding: '7px 12px',
-                borderRadius: '10px',
-                fontSize: '11.5px',
-                fontWeight: '700',
+                padding: '7px 14px',
+                borderRadius: '6px',
+                fontSize: '12px',
+                fontWeight: 600,
                 cursor: 'pointer',
-                background: 'var(--bg-neumorphic)',
-                color: 'var(--primary-color)',
-                boxShadow: 'var(--neu-flat-sm)',
-                border: 'none',
+                backgroundColor: 'var(--color-brand-50)',
+                color: 'var(--color-primary)',
+                border: '1px solid var(--color-brand-200)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '5px',
@@ -292,15 +302,16 @@ function ContenidoPrincipal() {
       </header>
 
       {/* 2. Área de Trabajo Principal */}
-      <main style={{ flex: 1, padding: '24px', maxWidth: '1400px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
+      <main style={{ flex: 1, padding: '20px 16px', maxWidth: '1360px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
         {vista === 'punto_equilibrio' && <DashboardPrincipal />}
 
-        {vista === 'insumos_3d' && (
+        {vista === 'insumos' && (
           <CarruselInsumos3D
             rubro={perfil}
             insumos={insumos}
             insumosAsignados={insumosAsignados}
             onAgregarInsumo={agregarInsumo}
+            onEditarInsumo={editarInsumo}
             onEliminarInsumo={eliminarInsumo}
             onAsignarCostoDirecto={asignarInsumoAContenedor}
           />

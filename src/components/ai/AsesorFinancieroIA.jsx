@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAppState } from '../../store/appState.jsx';
 import { generarDiagnosticoFinanciero } from '../../lib/gemini.js';
 import { registrarDiagnosticoIA } from '../../services/dbService.js';
+import { formatCLP } from '../../utils/formatters.js';
 
 export default function AsesorFinancieroIA() {
   const {
@@ -12,8 +13,6 @@ export default function AsesorFinancieroIA() {
     costoVariableConsolidado,
     costoFijoTotal,
     ventasEstimadasMensuales,
-    porcentajeMermaGlobal,
-    margenObjetivoPorcentaje,
   } = useAppState();
 
   const [diagnostico, setDiagnostico] = useState('');
@@ -23,7 +22,7 @@ export default function AsesorFinancieroIA() {
   // Cálculos de contribución y punto de equilibrio
   const margenContribucionUnitario = Math.max(0, precioVentaConsolidado - costoVariableConsolidado);
   const puntoEquilibrioUnidades =
-    margenContribucionUnitario > 0 ? costoFijoTotal / margenContribucionUnitario : 0;
+    margenContribucionUnitario > 0 ? Math.ceil(costoFijoTotal / margenContribucionUnitario) : 0;
   const ventasPuntoEquilibrioPesos = puntoEquilibrioUnidades * precioVentaConsolidado;
   const margenSeguridadUnidades = ventasEstimadasMensuales - puntoEquilibrioUnidades;
 
@@ -40,15 +39,14 @@ export default function AsesorFinancieroIA() {
         costoVariableConsolidado,
         costoFijoTotal,
         ventasEstimadasMensuales,
-        porcentajeMermaGlobal,
-        margenObjetivoPorcentaje,
+        porcentajeMermaGlobal: 0,
+        margenObjetivoPorcentaje: 40,
         puntoEquilibrioUnidades,
         margenContribucionUnitario,
       });
 
       setDiagnostico(resultado);
 
-      // Registrar en base de datos Supabase si hay usuario activo
       if (user?.id) {
         await registrarDiagnosticoIA(
           user.id,
@@ -72,96 +70,104 @@ export default function AsesorFinancieroIA() {
     }
   };
 
-  const cardStyle = {
-    backgroundColor: 'var(--bg-neumorphic)',
-    borderRadius: '16px',
-    padding: '20px',
-    boxShadow: 'var(--neu-flat)',
-    border: '1px solid rgba(255, 255, 255, 0.4)',
-    marginBottom: '20px',
-  };
-
   const metricBoxStyle = {
-    backgroundColor: 'var(--bg-neumorphic)',
-    boxShadow: 'var(--neu-pressed)',
-    padding: '12px 14px',
-    borderRadius: '12px',
+    backgroundColor: '#ffffff',
+    border: '1px solid var(--color-border)',
+    padding: '14px',
+    borderRadius: '8px',
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
   };
 
   return (
-    <div style={cardStyle}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+    <div
+      style={{
+        backgroundColor: 'var(--color-surface)',
+        borderRadius: '12px',
+        border: '1px solid var(--color-border)',
+        padding: '24px',
+        boxShadow: 'var(--shadow-card)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <span style={{ fontSize: '10.5px', fontWeight: '800', color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            Auditoría y Estrategia Financiera • Gemini 3.8
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Auditoría y Estrategia • Gemini
           </span>
-          <h3 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)', margin: '4px 0 0 0' }}>
-            Asesor Financiero MBA con Inteligencia Artificial
-          </h3>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
+            Asesor Financiero con Inteligencia Artificial
+          </h2>
         </div>
 
         <button
           onClick={handleConsultarIA}
           disabled={cargando}
           style={{
-            padding: '9px 18px',
-            borderRadius: '10px',
-            backgroundColor: 'var(--primary-color)',
+            padding: '10px 18px',
+            borderRadius: '8px',
+            backgroundColor: 'var(--color-primary)',
             color: '#ffffff',
             border: 'none',
-            fontSize: '12px',
-            fontWeight: '700',
+            fontSize: '13px',
+            fontWeight: 600,
             cursor: cargando ? 'not-allowed' : 'pointer',
-            boxShadow: 'var(--neu-flat-sm)',
-            transition: 'all 0.15s ease',
+            transition: 'background-color 0.15s ease',
           }}
         >
-          {cargando ? 'Generando Dictamen Ejecutivo...' : 'Generar Dictamen con IA'}
+          {cargando ? 'Generando Dictamen…' : 'Generar Dictamen con IA'}
         </button>
       </div>
 
       {/* Grid de Métricas Analizadas */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '18px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>PUNTO DE EQUILIBRIO</span>
-          <span style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text-main)' }}>
-            {Math.ceil(puntoEquilibrioUnidades)} u / mes
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>PUNTO DE EQUILIBRIO</span>
+          <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)' }}>
+            {puntoEquilibrioUnidades.toLocaleString('es-CL')} un.
           </span>
-          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-            ${Math.round(ventasPuntoEquilibrioPesos).toLocaleString('es-CL')} CLP
+          <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
+            {formatCLP(ventasPuntoEquilibrioPesos)}
           </span>
         </div>
 
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>MARGEN CONTRIBUCIÓN</span>
-          <span style={{ fontSize: '15px', fontWeight: '800', color: 'var(--primary-color)' }}>
-            ${Math.round(margenContribucionUnitario).toLocaleString('es-CL')} CLP
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>MARGEN CONTRIBUCIÓN</span>
+          <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-primary)' }}>
+            {formatCLP(margenContribucionUnitario)}
           </span>
-          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
             {precioVentaConsolidado > 0 ? Math.round((margenContribucionUnitario / precioVentaConsolidado) * 100) : 0}% s/ venta
           </span>
         </div>
 
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>MARGEN DE SEGURIDAD</span>
-          <span style={{ fontSize: '15px', fontWeight: '800', color: margenSeguridadUnidades >= 0 ? '#059669' : '#dc2626' }}>
-            {Math.round(margenSeguridadUnidades)} u
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>MARGEN DE SEGURIDAD</span>
+          <span
+            className="tabular-nums"
+            style={{
+              fontSize: '18px',
+              fontWeight: 700,
+              color: margenSeguridadUnidades >= 0 ? 'var(--color-success)' : 'var(--color-danger)',
+            }}
+          >
+            {Math.round(margenSeguridadUnidades)} un.
           </span>
-          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
             {ventasEstimadasMensuales > 0 ? Math.round((margenSeguridadUnidades / ventasEstimadasMensuales) * 100) : 0}% holgura
           </span>
         </div>
 
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>MERMA DECLARADA</span>
-          <span style={{ fontSize: '15px', fontWeight: '800', color: 'var(--accent-red)' }}>
-            {porcentajeMermaGlobal}%
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>COSTO FIJO TOTAL</span>
+          <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)' }}>
+            {formatCLP(costoFijoTotal)}
           </span>
-          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-            Impacta costo reposición
+          <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
+            Compromiso estructural
           </span>
         </div>
       </div>
@@ -170,23 +176,22 @@ export default function AsesorFinancieroIA() {
       {diagnostico && (
         <div
           style={{
-            backgroundColor: 'var(--bg-neumorphic)',
-            boxShadow: 'var(--neu-pressed)',
-            borderRadius: '12px',
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            border: '1px solid var(--color-border)',
             padding: '18px',
-            fontSize: '12.5px',
+            fontSize: '13px',
             lineHeight: 1.6,
-            color: 'var(--text-main)',
+            color: 'var(--color-foreground)',
             whiteSpace: 'pre-line',
-            border: '1px solid rgba(0, 0, 0, 0.05)',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--primary-color)', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase' }}>
               Dictamen Estratégico Generado por Gemini AI
             </span>
             {historialGuardado && (
-              <span style={{ fontSize: '10.5px', color: '#059669', fontWeight: '700' }}>
+              <span style={{ fontSize: '11px', color: 'var(--color-success)', fontWeight: 600 }}>
                 Registrado en Supabase
               </span>
             )}

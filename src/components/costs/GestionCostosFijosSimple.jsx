@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppState } from '../../store/appState.jsx';
-import { formatearCLP } from '../../utils/formatters.js';
+import { formatCLP } from '../../utils/formatters.js';
 
 export default function GestionCostosFijosSimple() {
   const { costosFijos, agregarCostoFijo, eliminarCostoFijo, costoFijoTotal } = useAppState();
@@ -27,10 +27,11 @@ export default function GestionCostosFijosSimple() {
   return (
     <div
       style={{
-        background: 'var(--bg-neumorphic)',
-        borderRadius: '24px',
+        backgroundColor: 'var(--color-surface)',
+        borderRadius: '12px',
+        border: '1px solid var(--color-border)',
+        boxShadow: 'var(--shadow-card)',
         padding: '24px',
-        boxShadow: 'var(--neu-flat)',
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',
@@ -38,16 +39,18 @@ export default function GestionCostosFijosSimple() {
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
         <div>
-          <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-            Estructura Estructural Fija
-          </span>
-          <h2 style={{ fontSize: '18px', fontWeight: '900', color: '#1a202c', margin: '4px 0 0 0' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)', margin: 0 }}>
             Costos Fijos Operacionales
           </h2>
+          <p style={{ fontSize: '13px', color: 'var(--color-muted-foreground)', margin: '2px 0 0 0' }}>
+            Compromisos mensuales estructurales independientes del volumen de ventas
+          </p>
         </div>
-        <div style={{ padding: '8px 16px', borderRadius: '12px', boxShadow: 'var(--neu-pressed)', textAlign: 'right' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: '700', color: 'var(--text-muted)', display: 'block' }}>TOTAL COSTOS FIJOS</span>
-          <span style={{ fontSize: '17px', fontWeight: '900', color: '#1a202c' }}>{formatearCLP(costoFijoTotal)}</span>
+        <div style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--color-border)', backgroundColor: '#f8fafc', textAlign: 'right' }}>
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>TOTAL COSTOS FIJOS</span>
+          <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)' }}>
+            {formatCLP(costoFijoTotal)}
+          </span>
         </div>
       </div>
 
@@ -62,32 +65,31 @@ export default function GestionCostosFijosSimple() {
         }}
       >
         <div>
-          <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+          <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
             CONCEPTO DEL COSTO FIJO
           </label>
           <input
             type="text"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
-            placeholder="Ej: Arriendo, Seguros, Sueldo básico..."
+            placeholder="Ej: Arriendo, Sueldos fijos..."
             required
             style={{
               width: '100%',
               padding: '10px 14px',
-              borderRadius: '10px',
-              border: 'none',
-              outline: 'none',
-              backgroundColor: 'var(--bg-neumorphic)',
-              boxShadow: 'var(--neu-pressed)',
-              fontSize: '13px',
-              color: 'var(--text-main)',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border)',
+              backgroundColor: '#ffffff',
+              fontSize: '14px',
+              color: 'var(--color-foreground)',
               boxSizing: 'border-box',
+              outline: 'none',
             }}
           />
         </div>
 
         <div>
-          <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+          <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
             MONTO MENSUAL ($ CLP)
           </label>
           <input
@@ -100,20 +102,19 @@ export default function GestionCostosFijosSimple() {
             style={{
               width: '100%',
               padding: '10px 14px',
-              borderRadius: '10px',
-              border: 'none',
-              outline: 'none',
-              backgroundColor: 'var(--bg-neumorphic)',
-              boxShadow: 'var(--neu-pressed)',
-              fontSize: '13px',
-              color: 'var(--text-main)',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border)',
+              backgroundColor: '#ffffff',
+              fontSize: '14px',
+              color: 'var(--color-foreground)',
               boxSizing: 'border-box',
+              outline: 'none',
             }}
           />
         </div>
 
         <div>
-          <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+          <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
             CATEGORÍA
           </label>
           <select
@@ -122,14 +123,13 @@ export default function GestionCostosFijosSimple() {
             style={{
               width: '100%',
               padding: '10px 14px',
-              borderRadius: '10px',
-              border: 'none',
-              outline: 'none',
-              backgroundColor: 'var(--bg-neumorphic)',
-              boxShadow: 'var(--neu-pressed)',
-              fontSize: '13px',
-              color: 'var(--text-main)',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border)',
+              backgroundColor: '#ffffff',
+              fontSize: '14px',
+              color: 'var(--color-foreground)',
               boxSizing: 'border-box',
+              outline: 'none',
               cursor: 'pointer',
             }}
           >
@@ -143,19 +143,19 @@ export default function GestionCostosFijosSimple() {
         <button
           type="submit"
           style={{
-            padding: '11px 18px',
-            borderRadius: '10px',
-            backgroundColor: 'var(--primary-color)',
+            padding: '10px 18px',
+            minHeight: '40px',
+            borderRadius: '8px',
+            backgroundColor: 'var(--color-primary)',
             color: '#ffffff',
             border: 'none',
-            fontSize: '12px',
-            fontWeight: '800',
+            fontSize: '13px',
+            fontWeight: 600,
             cursor: 'pointer',
-            boxShadow: 'var(--neu-flat-sm)',
             whiteSpace: 'nowrap',
           }}
         >
-          Agregar Costo Fijo
+          Agregar costo fijo
         </button>
       </form>
 
@@ -166,23 +166,24 @@ export default function GestionCostosFijosSimple() {
             key={cf.id}
             style={{
               padding: '14px 18px',
-              borderRadius: '16px',
-              background: 'var(--bg-neumorphic)',
-              boxShadow: 'var(--neu-flat-sm)',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border)',
+              backgroundColor: '#ffffff',
+              boxShadow: 'var(--shadow-card)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
             <div>
-              <span style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', textTransform: 'uppercase' }}>
                 {cf.categoria || 'Fijo'}
               </span>
-              <h4 style={{ margin: '2px 0 4px 0', fontSize: '13.5px', fontWeight: '800', color: '#1a202c' }}>
+              <h4 style={{ margin: '2px 0 4px 0', fontSize: '14px', fontWeight: 700, color: 'var(--color-foreground)' }}>
                 {cf.nombre}
               </h4>
-              <span style={{ fontSize: '13px', fontWeight: '900', color: 'var(--primary-color)' }}>
-                {formatearCLP(cf.monto)} / mes
+              <span className="tabular-nums" style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-primary)' }}>
+                {formatCLP(cf.monto)} / mes
               </span>
             </div>
 
@@ -192,11 +193,10 @@ export default function GestionCostosFijosSimple() {
               style={{
                 width: '32px',
                 height: '32px',
-                borderRadius: '8px',
-                border: 'none',
-                backgroundColor: 'var(--bg-neumorphic)',
-                color: 'var(--accent-red)',
-                boxShadow: 'var(--neu-flat-sm)',
+                borderRadius: '6px',
+                border: '1px solid var(--color-border)',
+                backgroundColor: '#ffffff',
+                color: 'var(--color-danger)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',

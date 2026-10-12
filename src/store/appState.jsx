@@ -119,6 +119,15 @@ export function AppStateProvider({ children }) {
     setInsumosAsignados((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const editarInsumo = (itemActualizado) => {
+    setInsumos((prev) =>
+      prev.map((item) => (item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item))
+    );
+    setInsumosAsignados((prev) =>
+      prev.map((item) => (item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item))
+    );
+  };
+
   const asignarInsumoAContenedor = (insumo) => {
     setInsumosAsignados((prev) => {
       // Si ya está, añade otra unidad o duplicado con nuevo id
@@ -235,6 +244,7 @@ export function AppStateProvider({ children }) {
       insumosAsignados,
       costosFijos,
       agregarInsumo,
+      editarInsumo,
       eliminarInsumo,
       asignarInsumoAContenedor,
       desasignarInsumoDeContenedor,
