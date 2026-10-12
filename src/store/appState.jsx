@@ -1,333 +1,217 @@
 import React, { createContext, useContext, useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { mockRestaurant } from '../data/mockRestaurant.js';
-import { mockMinimarket } from '../data/mockMinimarket.js';
-import { mockServices } from '../data/mockServices.js';
 import { supabase } from '../lib/supabase.js';
 import { cargarDatosUsuario, sincronizarTodoElNegocio } from '../services/dbService.js';
 
-const datosPorPerfil = {
-  restaurant: mockRestaurant,
-  minimarket: mockMinimarket,
-  services: mockServices,
+const INSUMOS_DEFAULT = {
+  restaurant: [
+    { id: 'ins_1', nombre: 'Manzanas Rojas', costoUnitario: 1200, unidadMedida: 'kg', imagenFalUrl: null },
+    { id: 'ins_2', nombre: 'Carne Vacuno Lomo', costoUnitario: 4800, unidadMedida: 'kg', imagenFalUrl: null },
+    { id: 'ins_3', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_4', nombre: 'Tomates Frescos', costoUnitario: 900, unidadMedida: 'kg', imagenFalUrl: null },
+    { id: 'ins_5', nombre: 'Queso Cheddar Fundido', costoUnitario: 1100, unidadMedida: 'kg', imagenFalUrl: null },
+  ],
+  minimarket: [
+    { id: 'ins_mini_1', nombre: 'Bebida Botella 1.5L', costoUnitario: 950, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_mini_2', nombre: 'Pan de Molde Familiar', costoUnitario: 1400, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_mini_3', nombre: 'Leche Entera 1L', costoUnitario: 820, unidadMedida: 'lt', imagenFalUrl: null },
+    { id: 'ins_mini_4', nombre: 'Tornillos Yeso Cartón 100u', costoUnitario: 1900, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_mini_5', nombre: 'Café Grano Tostado 250g', costoUnitario: 2600, unidadMedida: 'un', imagenFalUrl: null },
+  ],
+  services: [
+    { id: 'ins_srv_1', nombre: 'Consultor Senior MBA', costoUnitario: 18000, unidadMedida: 'hr', imagenFalUrl: null },
+    { id: 'ins_srv_2', nombre: 'Desarrollador FullStack', costoUnitario: 14000, unidadMedida: 'hr', imagenFalUrl: null },
+    { id: 'ins_srv_3', nombre: 'Licencia Software Cloud', costoUnitario: 6500, unidadMedida: 'un', imagenFalUrl: null },
+    { id: 'ins_srv_4', nombre: 'Diseñador UI/UX', costoUnitario: 11000, unidadMedida: 'hr', imagenFalUrl: null },
+  ],
 };
 
-const LOTES_LIFO_DEFAULT = [
-  { id: 'lot_1', fecha: '2026-08-01', sku: 'FER-001', producto: 'Tornillo Yeso Cartón 6x1', cantidadComprada: 30, cantidadDisponible: 0, costoUnitario: 4200 },
-  { id: 'lot_2', fecha: '2026-08-10', sku: 'FER-001', producto: 'Tornillo Yeso Cartón 6x1', cantidadComprada: 25, cantidadDisponible: 5, costoUnitario: 4500 },
-  { id: 'lot_3', fecha: '2026-08-20', sku: 'FER-001', producto: 'Tornillo Yeso Cartón 6x1', cantidadComprada: 20, cantidadDisponible: 20, costoUnitario: 4900 },
-  { id: 'lot_4', fecha: '2026-08-05', sku: 'FER-002', producto: 'Disco Corte Metal 4 1/2"', cantidadComprada: 100, cantidadDisponible: 20, costoUnitario: 600 },
-  { id: 'lot_5', fecha: '2026-08-18', sku: 'FER-002', producto: 'Disco Corte Metal 4 1/2"', cantidadComprada: 80, cantidadDisponible: 80, costoUnitario: 680 }
-];
+const COSTOS_FIJOS_DEFAULT = {
+  restaurant: [
+    { id: 'cf_1', nombre: 'Arriendo Local Comercial', monto: 850000, categoria: 'Infraestructura' },
+    { id: 'cf_2', nombre: 'Sueldos Base Cocina y Caja', monto: 1200000, categoria: 'Personal' },
+    { id: 'cf_3', nombre: 'Servicios Básicos (Luz, Agua, Gas)', monto: 280000, categoria: 'Operacional' },
+  ],
+  minimarket: [
+    { id: 'cf_mini_1', nombre: 'Arriendo Almacén de Barrio', monto: 650000, categoria: 'Infraestructura' },
+    { id: 'cf_mini_2', nombre: 'Remuneraciones Personal Fijo', monto: 950000, categoria: 'Personal' },
+    { id: 'cf_mini_3', nombre: 'Electricidad Refrigeradores', monto: 320000, categoria: 'Operacional' },
+  ],
+  services: [
+    { id: 'cf_srv_1', nombre: 'Arriendo Espacio Coworking / Oficina', monto: 450000, categoria: 'Infraestructura' },
+    { id: 'cf_srv_2', nombre: 'Servicios de Conectividad y SaaS', monto: 180000, categoria: 'Tecnología' },
+    { id: 'cf_srv_3', nombre: 'Sueldos de Gestión Administrativa', monto: 800000, categoria: 'Personal' },
+  ],
+};
 
 const AppStateContext = createContext(null);
 
 export function AppStateProvider({ children }) {
-  // Autenticacion y Estado de Nube Supabase
+  // Autenticación Supabase
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [syncStatus, setSyncStatus] = useState('idle'); // 'idle' | 'syncing' | 'synced' | 'error'
+  const [syncStatus, setSyncStatus] = useState('idle');
   const isInitialLoadRef = useRef(true);
   const syncTimeoutRef = useRef(null);
 
-  // Estados del Negocio
-  const [perfil, setPerfil] = useState(null);
-  const [nombreNegocio, setNombreNegocio] = useState('');
-  const [ventasEstimadasMensuales, setVentasEstimadasMensuales] = useState(0);
+  // Perfil de negocio (restaurant, minimarket, services)
+  const [perfil, setPerfil] = useState('restaurant');
+  const [nombreNegocio, setNombreNegocio] = useState('Mi Negocio PyME');
 
-  // Parámetros de Control Operativo
-  const [porcentajeMermaGlobal, setPorcentajeMermaGlobal] = useState(5);
-  const [margenObjetivoPorcentaje, setMargenObjetivoPorcentaje] = useState(40);
+  // Parámetros Clave para Punto de Equilibrio
+  const [precioVentaConsolidado, setPrecioVentaConsolidado] = useState(9500);
+  const [ventasEstimadasMensuales, setVentasEstimadasMensuales] = useState(450);
 
-  // Inventario y Lotes LIFO Globales
-  const [lotesLIFO, setLotesLIFO] = useState(LOTES_LIFO_DEFAULT);
+  // Insumos en Catálogo y Insumos Asignados a la Ollita/Estante/Mesa
+  const [insumos, setInsumos] = useState(INSUMOS_DEFAULT.restaurant);
+  const [insumosAsignados, setInsumosAsignados] = useState([
+    INSUMOS_DEFAULT.restaurant[0], // Manzanas
+    INSUMOS_DEFAULT.restaurant[1], // Carne
+    INSUMOS_DEFAULT.restaurant[2], // Pan
+  ]);
 
-  // Estados Base
-  const [insumos, setInsumos] = useState([]);
-  const [recetas, setRecetas] = useState([]);
-  const [catalogoMayorista, setCatalogoMayorista] = useState([]);
-  const [inventario, setInventario] = useState([]);
-  const [recursos, setRecursos] = useState([]);
-  const [servicios, setServicios] = useState([]);
-  const [costosVariables, setCostosVariables] = useState([]);
-  const [costosFijos, setCostosFijos] = useState([]);
+  // Costos Fijos
+  const [costosFijos, setCostosFijos] = useState(COSTOS_FIJOS_DEFAULT.restaurant);
 
-  // Variables consolidadas para Dashboard
-  const [precioVentaConsolidado, setPrecioVentaConsolidado] = useState(0);
-  const [costoVariableConsolidado, setCostoVariableConsolidado] = useState(0);
-  const [costoFijoTotal, setCostoFijoTotal] = useState(0);
+  // Costo Directo Unitario calculado automáticamente a partir del contenedor 3D
+  const costoVariableConsolidado = useMemo(() => {
+    return insumosAsignados.reduce((acc, item) => acc + Number(item.costoUnitario || 0), 0);
+  }, [insumosAsignados]);
 
-  // Cargar datos remotos desde Supabase
-  const hidratarDesdeSupabase = useCallback(async (activeUserId) => {
-    if (!activeUserId) return;
-    try {
-      setSyncStatus('syncing');
-      const datos = await cargarDatosUsuario(activeUserId);
-      if (datos && datos.perfil) {
-        setPerfil(datos.perfil.perfil || 'restaurant');
-        setNombreNegocio(datos.perfil.nombre_negocio || 'Mi Negocio PyME');
-        setVentasEstimadasMensuales(Number(datos.perfil.ventas_estimadas_mensuales || 0));
-        setPorcentajeMermaGlobal(Number(datos.perfil.porcentaje_merma_global || 5));
-        setMargenObjetivoPorcentaje(Number(datos.perfil.margen_objetivo_porcentaje || 40));
+  // Costo Fijo Total mensual
+  const costoFijoTotal = useMemo(() => {
+    return costosFijos.reduce((acc, item) => acc + Number(item.monto || 0), 0);
+  }, [costosFijos]);
 
-        if (datos.costosFijos?.length) setCostosFijos(datos.costosFijos);
-        if (datos.costosVariables?.length) setCostosVariables(datos.costosVariables);
-        if (datos.lotesLIFO?.length) setLotesLIFO(datos.lotesLIFO);
-        if (datos.insumos?.length) setInsumos(datos.insumos);
-        if (datos.recetas?.length) setRecetas(datos.recetas);
-        if (datos.inventario?.length) setInventario(datos.inventario);
-        if (datos.servicios?.length) setServicios(datos.servicios);
-      }
-      setSyncStatus('synced');
-    } catch (err) {
-      console.error('Error al hidratar desde Supabase:', err);
-      setSyncStatus('error');
+  // Cambiar perfil de negocio adaptando insumos 3D y costos
+  const cambiarPerfil = useCallback((nuevoPerfil) => {
+    setPerfil(nuevoPerfil);
+    const nombres = {
+      restaurant: 'Restaurante y Bistró Central',
+      minimarket: 'Minimarket & Abarrotes Express',
+      services: 'Agencia de Consultoría & TI',
+    };
+    setNombreNegocio(nombres[nuevoPerfil] || 'Mi Negocio PyME');
+
+    const nuevosInsumos = INSUMOS_DEFAULT[nuevoPerfil] || [];
+    setInsumos(nuevosInsumos);
+    setInsumosAsignados(nuevosInsumos.slice(0, 3));
+    setCostosFijos(COSTOS_FIJOS_DEFAULT[nuevoPerfil] || []);
+
+    if (nuevoPerfil === 'restaurant') {
+      setPrecioVentaConsolidado(9500);
+      setVentasEstimadasMensuales(450);
+    } else if (nuevoPerfil === 'minimarket') {
+      setPrecioVentaConsolidado(3200);
+      setVentasEstimadasMensuales(1100);
+    } else if (nuevoPerfil === 'services') {
+      setPrecioVentaConsolidado(42000);
+      setVentasEstimadasMensuales(90);
     }
   }, []);
 
-  // Escuchar estado de sesión de Supabase al montar
-  useEffect(() => {
-    let montado = true;
+  // Mutadores de Insumos y Asignación 3D
+  const agregarInsumo = (nuevoItem) => {
+    setInsumos((prev) => [nuevoItem, ...prev]);
+  };
 
-    async function initAuth() {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (montado) {
-          const activeUser = session?.user || null;
-          setUser(activeUser);
-          if (activeUser) {
-            await hidratarDesdeSupabase(activeUser.id);
-          }
-        }
-      } catch (err) {
-        console.warn('Supabase auth no disponible o sin conexión:', err);
-      } finally {
-        if (montado) {
-          setAuthLoading(false);
-          isInitialLoadRef.current = false;
-        }
-      }
-    }
+  const eliminarInsumo = (id) => {
+    setInsumos((prev) => prev.filter((item) => item.id !== id));
+    setInsumosAsignados((prev) => prev.filter((item) => item.id !== id));
+  };
 
-    initAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!montado) return;
-      const currentUser = session?.user || null;
-      setUser(currentUser);
-      if (currentUser && (event === 'SIGNED_IN' || event === 'USER_UPDATED')) {
-        await hidratarDesdeSupabase(currentUser.id);
-      }
+  const asignarInsumoAContenedor = (insumo) => {
+    setInsumosAsignados((prev) => {
+      // Si ya está, añade otra unidad o duplicado con nuevo id
+      const clon = { ...insumo, idAsignado: `${insumo.id}_${Date.now()}` };
+      return [...prev, clon];
     });
+  };
 
-    return () => {
-      montado = false;
-      subscription?.unsubscribe();
-    };
-  }, [hidratarDesdeSupabase]);
+  const desasignarInsumoDeContenedor = (idAsignadoOId) => {
+    setInsumosAsignados((prev) =>
+      prev.filter((item) => item.idAsignado !== idAsignadoOId && item.id !== idAsignadoOId)
+    );
+  };
 
-  // Sincronización automática periódica / debounced hacia Supabase
+  // Mutadores de Costos Fijos
+  const agregarCostoFijo = (nuevoCF) => {
+    setCostosFijos((prev) => [...prev, nuevoCF]);
+  };
+
+  const eliminarCostoFijo = (id) => {
+    setCostosFijos((prev) => prev.filter((cf) => cf.id !== id));
+  };
+
+  // Sincronización Supabase
   const sincronizarConNube = useCallback(async () => {
-    if (!user?.id || !perfil) return;
+    if (!user?.id) return;
     try {
       setSyncStatus('syncing');
-      const exito = await sincronizarTodoElNegocio(user.id, {
+      await sincronizarTodoElNegocio(user.id, {
         perfil,
         nombreNegocio,
         ventasEstimadasMensuales,
-        porcentajeMermaGlobal,
-        margenObjetivoPorcentaje,
+        porcentajeMermaGlobal: 0,
+        margenObjetivoPorcentaje: 40,
         costosFijos,
-        costosVariables,
-        lotesLIFO,
+        costosVariables: [{ id: 'cv_dir', nombre: 'Costo Directo 3D', costoPorUnidad: costoVariableConsolidado }],
+        lotesLIFO: [],
         insumos,
-        recetas,
-        inventario,
-        servicios,
+        recetas: [],
+        inventario: [],
+        servicios: [],
       });
-      setSyncStatus(exito ? 'synced' : 'error');
+      setSyncStatus('synced');
     } catch (err) {
-      console.error('Error de sincronización con Supabase:', err);
+      console.error('Error sincronizando con Supabase:', err);
       setSyncStatus('error');
     }
-  }, [
-    user,
-    perfil,
-    nombreNegocio,
-    ventasEstimadasMensuales,
-    porcentajeMermaGlobal,
-    margenObjetivoPorcentaje,
-    costosFijos,
-    costosVariables,
-    lotesLIFO,
-    insumos,
-    recetas,
-    inventario,
-    servicios,
-  ]);
+  }, [user, perfil, nombreNegocio, ventasEstimadasMensuales, costosFijos, costoVariableConsolidado, insumos]);
 
-  // Disparar sincronización diferida al cambiar datos cuando el usuario está logueado
   useEffect(() => {
-    if (isInitialLoadRef.current || !user?.id || !perfil) return;
-
-    if (syncTimeoutRef.current) {
-      clearTimeout(syncTimeoutRef.current);
-    }
-
+    if (isInitialLoadRef.current || !user?.id) return;
+    if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
     syncTimeoutRef.current = setTimeout(() => {
       sincronizarConNube();
     }, 2500);
-
     return () => {
       if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
     };
-  }, [
-    user,
-    perfil,
-    nombreNegocio,
-    costosFijos,
-    costosVariables,
-    lotesLIFO,
-    insumos,
-    recetas,
-    inventario,
-    servicios,
-    porcentajeMermaGlobal,
-    margenObjetivoPorcentaje,
-    sincronizarConNube,
-  ]);
+  }, [user, perfil, nombreNegocio, costosFijos, insumos, insumosAsignados, precioVentaConsolidado, sincronizarConNube]);
 
-  async function cerrarSesion() {
-    try {
-      await supabase.auth.signOut();
-      setUser(null);
-      setSyncStatus('idle');
-    } catch (err) {
-      console.error('Error al cerrar sesión:', err);
-    }
-  }
-
-  function elegirPerfil(perfilElegido) {
-    const datos = datosPorPerfil[perfilElegido];
-    if (!datos) return;
-
-    setPerfil(perfilElegido);
-    setNombreNegocio(datos.nombreNegocio || (perfilElegido === 'restaurant' ? 'Mi Restaurante' : perfilElegido === 'minimarket' ? 'Mi Minimarket' : 'Mi Agencia'));
-
-    if (perfilElegido === 'restaurant') {
-      setInsumos(Array.isArray(datos.insumos) ? datos.insumos.map(i => ({ ...i })) : []);
-      setRecetas(Array.isArray(datos.recetas) ? datos.recetas.map(i => ({ ...i })) : []);
-      setCostosVariables(Array.isArray(datos.costosVariables) ? datos.costosVariables.map(i => ({ ...i })) : []);
-      setCostosFijos(Array.isArray(datos.costosFijos) ? datos.costosFijos.map(i => ({ ...i })) : []);
-      setCatalogoMayorista([]);
-      setInventario([]);
-      setRecursos([]);
-      setServicios([]);
-    } else if (perfilElegido === 'minimarket') {
-      setCatalogoMayorista(Array.isArray(datos.catalogoMayorista) ? datos.catalogoMayorista.map(i => ({ ...i })) : []);
-      setInventario(Array.isArray(datos.inventario) ? datos.inventario.map(i => ({ ...i })) : []);
-      setCostosVariables(Array.isArray(datos.costosVariables) ? datos.costosVariables.map(i => ({ ...i })) : []);
-      setCostosFijos(Array.isArray(datos.costosFijos) ? datos.costosFijos.map(i => ({ ...i })) : []);
-      setInsumos([]);
-      setRecetas([]);
-      setRecursos([]);
-      setServicios([]);
-    } else if (perfilElegido === 'services') {
-      setRecursos(Array.isArray(datos.recursos) ? datos.recursos.map(i => ({ ...i })) : []);
-      setServicios(Array.isArray(datos.servicios) ? datos.servicios.map(i => ({ ...i })) : []);
-      setCostosVariables(Array.isArray(datos.costosVariables) ? datos.costosVariables.map(i => ({ ...i })) : []);
-      setCostosFijos(Array.isArray(datos.costosFijos) ? datos.costosFijos.map(i => ({ ...i })) : []);
-      setInsumos([]);
-      setRecetas([]);
-      setCatalogoMayorista([]);
-      setInventario([]);
-    }
-  }
-
-  // Mutadores Globales
-  const guardarCostoFijo = (nuevoCosto) => setCostosFijos((prev) => [...prev, nuevoCosto]);
-  const eliminarCostoFijo = (id) => setCostosFijos((prev) => prev.filter((cf) => cf.id !== id));
-  const guardarCostoVariable = (nuevoCosto) => setCostosVariables((prev) => [...prev, nuevoCosto]);
-  const eliminarCostoVariable = (id) => setCostosVariables((prev) => prev.filter((cv) => cv.id !== id));
-  const guardarInsumo = (nuevoInsumo) => setInsumos((prev) => [...prev, nuevoInsumo]);
-  const guardarReceta = (nuevaReceta) => setRecetas((prev) => [...prev, nuevaReceta]);
-  const guardarProductoInventario = (nuevoItem) => setInventario((prev) => [...prev, nuevoItem]);
-  const importarLoteInventario = (lote) => setInventario((prev) => [...prev, ...lote]);
-
-  // Recálculo Reactivo Integral (Incluye costo de reposición LIFO)
+  // Sesión Supabase al inicio
   useEffect(() => {
-    if (!perfil) return;
-
-    const totalFijos = costosFijos.reduce((acc, cf) => acc + Number(cf.monto || 0), 0);
-    setCostoFijoTotal(totalFijos);
-
-    const totalOtrosVariables = costosVariables.reduce((acc, cv) => acc + Number(cv.costoPorUnidad || 0), 0);
-    const factorMerma = 1 + (Number(porcentajeMermaGlobal || 0) / 100);
-
-    if (perfil === 'restaurant') {
-      if (recetas.length > 0) {
-        const volumen = recetas.reduce((acc, r) => acc + Number(r.ventasEstimadas || 0), 0);
-        setVentasEstimadasMensuales(volumen);
-
-        if (volumen > 0) {
-          const ingresos = recetas.reduce((acc, r) => acc + (Number(r.precioVenta || 0) * Number(r.ventasEstimadas || 0)), 0);
-          const costos = recetas.reduce((acc, r) => acc + (Number(r.costoTotal || 0) * Number(r.ventasEstimadas || 0)), 0);
-          setPrecioVentaConsolidado(Math.round(ingresos / volumen));
-          setCostoVariableConsolidado(Math.round((costos / volumen) * factorMerma + totalOtrosVariables));
+    async function initAuth() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const activeUser = session?.user || null;
+        setUser(activeUser);
+        if (activeUser) {
+          const datos = await cargarDatosUsuario(activeUser.id);
+          if (datos?.perfil) {
+            setPerfil(datos.perfil.perfil || 'restaurant');
+            setNombreNegocio(datos.perfil.nombre_negocio || 'Mi Negocio PyME');
+            if (datos.perfil.ventas_estimadas_mensuales) {
+              setVentasEstimadasMensuales(Number(datos.perfil.ventas_estimadas_mensuales));
+            }
+          }
+          if (datos?.costosFijos?.length) setCostosFijos(datos.costosFijos);
+          if (datos?.insumos?.length) setInsumos(datos.insumos);
         }
-      }
-    } else if (perfil === 'minimarket') {
-      if (inventario.length > 0) {
-        const volumen = inventario.reduce((acc, item) => acc + Number(item.ventasMensuales || 0), 0);
-        setVentasEstimadasMensuales(volumen);
-
-        if (volumen > 0) {
-          const ingresos = inventario.reduce((acc, item) => acc + (Number(item.precioVenta || 0) * Number(item.ventasMensuales || 0)), 0);
-          
-          // Costo unitario según última capa LIFO activa si existe
-          const costos = inventario.reduce((acc, item) => {
-            const lotesDelSku = lotesLIFO
-              .filter(l => l.sku === item.sku && l.cantidadDisponible > 0)
-              .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-            
-            const costoUnitarioEfectivo = lotesDelSku.length > 0 ? lotesDelSku[0].costoUnitario : Number(item.costoCompra || 0);
-            return acc + (costoUnitarioEfectivo * Number(item.ventasMensuales || 0));
-          }, 0);
-
-          setPrecioVentaConsolidado(Math.round(ingresos / volumen));
-          setCostoVariableConsolidado(Math.round((costos / volumen) * factorMerma + totalOtrosVariables));
-        }
-      }
-    } else if (perfil === 'services') {
-      if (servicios.length > 0) {
-        const volumen = servicios.reduce((acc, s) => acc + Number(s.ventasMensuales || 0), 0);
-        setVentasEstimadasMensuales(volumen);
-
-        if (volumen > 0) {
-          const ingresos = servicios.reduce((acc, s) => acc + (Number(s.precioVenta || 0) * Number(s.ventasMensuales || 0)), 0);
-          const costos = servicios.reduce((acc, s) => acc + (Number(s.costoTotal || 0) * Number(s.ventasMensuales || 0)), 0);
-          setPrecioVentaConsolidado(Math.round(ingresos / volumen));
-          setCostoVariableConsolidado(Math.round((costos / volumen) * factorMerma + totalOtrosVariables));
-        }
+      } catch (e) {
+        console.warn('Supabase local/offline:', e.message);
+      } finally {
+        setAuthLoading(false);
+        isInitialLoadRef.current = false;
       }
     }
-  }, [recetas, inventario, servicios, costosVariables, costosFijos, perfil, porcentajeMermaGlobal, lotesLIFO]);
+    initAuth();
+  }, []);
 
-  function reiniciarNegocio() {
-    setPerfil(null);
-    setNombreNegocio('');
-    setVentasEstimadasMensuales(0);
-    setInsumos([]);
-    setRecetas([]);
-    setCatalogoMayorista([]);
-    setInventario([]);
-    setRecursos([]);
-    setServicios([]);
-    setCostosVariables([]);
-    setCostosFijos([]);
-    setPrecioVentaConsolidado(0);
-    setCostoVariableConsolidado(0);
-    setCostoFijoTotal(0);
-  }
+  const cerrarSesion = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
 
   const value = useMemo(
     () => ({
@@ -338,36 +222,24 @@ export function AppStateProvider({ children }) {
       sincronizarConNube,
       cerrarSesion,
       perfil,
+      cambiarPerfil,
       nombreNegocio,
+      setNombreNegocio,
+      precioVentaConsolidado,
+      setPrecioVentaConsolidado,
       ventasEstimadasMensuales,
       setVentasEstimadasMensuales,
-      porcentajeMermaGlobal,
-      setPorcentajeMermaGlobal,
-      margenObjetivoPorcentaje,
-      setMargenObjetivoPorcentaje,
-      lotesLIFO,
-      setLotesLIFO,
-      insumos,
-      recetas,
-      catalogoMayorista,
-      inventario,
-      recursos,
-      servicios,
-      costosVariables,
-      costosFijos,
-      precioVentaConsolidado,
       costoVariableConsolidado,
       costoFijoTotal,
-      elegirPerfil,
-      reiniciarNegocio,
-      guardarCostoFijo,
+      insumos,
+      insumosAsignados,
+      costosFijos,
+      agregarInsumo,
+      eliminarInsumo,
+      asignarInsumoAContenedor,
+      desasignarInsumoDeContenedor,
+      agregarCostoFijo,
       eliminarCostoFijo,
-      guardarCostoVariable,
-      eliminarCostoVariable,
-      guardarInsumo,
-      guardarReceta,
-      guardarProductoInventario,
-      importarLoteInventario,
     }),
     [
       user,
@@ -375,22 +247,15 @@ export function AppStateProvider({ children }) {
       syncStatus,
       sincronizarConNube,
       perfil,
+      cambiarPerfil,
       nombreNegocio,
-      ventasEstimadasMensuales,
-      porcentajeMermaGlobal,
-      margenObjetivoPorcentaje,
-      lotesLIFO,
-      insumos,
-      recetas,
-      catalogoMayorista,
-      inventario,
-      recursos,
-      servicios,
-      costosVariables,
-      costosFijos,
       precioVentaConsolidado,
+      ventasEstimadasMensuales,
       costoVariableConsolidado,
-      costoFijoTotal
+      costoFijoTotal,
+      insumos,
+      insumosAsignados,
+      costosFijos,
     ]
   );
 
