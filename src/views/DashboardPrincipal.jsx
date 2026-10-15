@@ -6,6 +6,7 @@ import GraficoPuntoEquilibrio from '../components/charts/GraficoPuntoEquilibrio.
 import OllitaCocina3D from '../components/svg3d/OllitaCocina3D.jsx';
 import EstanteRetail3D from '../components/svg3d/EstanteRetail3D.jsx';
 import MesaServicios3D from '../components/svg3d/MesaServicios3D.jsx';
+import InsumoFigura3D from '../components/svg3d/InsumoFigura3D.jsx';
 import { formatCLP } from '../utils/formatters.js';
 
 export default function DashboardPrincipal() {
@@ -18,6 +19,7 @@ export default function DashboardPrincipal() {
     ventasEstimadasMensuales,
     setVentasEstimadasMensuales,
     insumosAsignados,
+    recetaEnOlla,
   } = useAppState();
 
   const [precioSimulado, setPrecioSimulado] = useState(precioVentaConsolidado || 1000);
@@ -122,17 +124,59 @@ export default function DashboardPrincipal() {
         </div>
 
         <div>
-          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Composición de Costo Directo Unitario (CV)
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Producto Activo en el Stand 3D • {recetaEnOlla?.nombre || 'Formulación Directa'}
+            </span>
+            <span
+              style={{
+                fontSize: '10px',
+                fontWeight: 600,
+                color: 'var(--color-brand-700)',
+                backgroundColor: 'var(--color-brand-50)',
+                border: '1px solid var(--color-brand-200)',
+                padding: '2px 6px',
+                borderRadius: '4px',
+              }}
+            >
+              {insumosAsignados.length} {insumosAsignados.length === 1 ? 'insumo' : 'insumos'}
+            </span>
+          </div>
+
           <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-foreground)', margin: '4px 0 6px 0' }}>
             {insumosAsignados.length > 0
-              ? `${insumosAsignados.map((i) => i.nombre).join(' + ')}`
+              ? `${insumosAsignados.map((i) => `${i.cantidad && i.cantidad > 1 ? `${i.cantidad}x ` : ''}${i.nombre}`).join(' + ')}`
               : 'Sin insumos asignados en el stand'}
           </h3>
           <p style={{ fontSize: '13px', color: 'var(--color-muted-foreground)', margin: 0, lineHeight: 1.5 }}>
-            El costo directo unitario suma <strong>{formatCLP(costoVarEfectivo)}</strong> por cada unidad vendida. Cada venta aporta <strong>{formatCLP(margenContribucionUnitario)}</strong> a la absorción de los costos fijos operacionales.
+            El costo directo unitario ($CV$) suma <strong>{formatCLP(costoVarEfectivo)}</strong> por cada unidad vendida. Cada venta a <strong>{formatCLP(precioEfectivo)}</strong> aporta <strong>{formatCLP(margenContribucionUnitario)}</strong> ({precioEfectivo > 0 ? Math.round((margenContribucionUnitario / precioEfectivo) * 100) : 0}%) a la absorción de los costos fijos operacionales.
           </p>
+
+          {/* Galería de Insumos 3D del Producto */}
+          {insumosAsignados.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', flexWrap: 'wrap' }}>
+              {insumosAsignados.map((item, idx) => (
+                <div
+                  key={item.idAsignado || item.id || idx}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    backgroundColor: '#ffffff',
+                    border: '1px solid var(--color-border)',
+                    padding: '3px 8px 3px 4px',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.04)',
+                  }}
+                >
+                  <InsumoFigura3D nombre={item.nombre} tamaño={24} imagenFalUrl={item.imagenFalUrl} rubro={perfil} />
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-foreground)' }}>
+                    {item.cantidad > 1 ? `${item.cantidad}x ` : ''}{item.nombre}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

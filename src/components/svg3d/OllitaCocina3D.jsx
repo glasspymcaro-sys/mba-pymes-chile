@@ -1,7 +1,8 @@
 import React from 'react';
+import InsumoFigura3D from './InsumoFigura3D.jsx';
 
 /**
- * Ollita de Cocina Tridimensional Isométrica en SVG Puro
+ * Ollita de Cocina Tridimensional Isométrica en SVG Puro con Integración 3D de Insumos
  * Diseñada para el perfil de Restaurante: acumula insumos en la receta y calcula el costo directo unitario.
  */
 export default function OllitaCocina3D({ tamaño = 120, insumosEnOlla = [], alHacerClic, animando = false }) {
@@ -183,9 +184,61 @@ export default function OllitaCocina3D({ tamaño = 120, insumosEnOlla = [], alHa
         />
       </svg>
 
+      {/* Miniaturas 3D fotorrealistas de los ingredientes adentro de la olla */}
+      {insumosEnOlla.length > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '4px',
+            marginTop: '-18px',
+            marginBottom: '6px',
+            zIndex: 10,
+            flexWrap: 'wrap',
+            maxWidth: `${tamaño * 1.4}px`,
+          }}
+        >
+          {insumosEnOlla.slice(0, 4).map((ing, idx) => (
+            <div
+              key={ing.idAsignado || ing.id || idx}
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.22)',
+                border: '1.5px solid #ffffff',
+                backgroundColor: '#ffffff',
+                transform: `rotate(${((idx % 2 === 0 ? 1 : -1) * (idx + 1) * 3)}deg)`,
+                transition: 'transform 0.2s ease',
+              }}
+              title={`${ing.nombre} (${ing.cantidad || 1} ${ing.unidadMedida || 'un'})`}
+            >
+              <InsumoFigura3D nombre={ing.nombre} tamaño={32} imagenFalUrl={ing.imagenFalUrl} rubro="restaurant" />
+            </div>
+          ))}
+          {insumosEnOlla.length > 4 && (
+            <span
+              style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                color: '#ffffff',
+                backgroundColor: 'var(--color-primary)',
+                padding: '2px 6px',
+                borderRadius: '10px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+              }}
+            >
+              +{insumosEnOlla.length - 4}
+            </span>
+          )}
+        </div>
+      )}
+
       <span
         style={{
-          marginTop: '6px',
+          marginTop: insumosEnOlla.length > 0 ? '0px' : '6px',
           fontSize: '11px',
           fontWeight: '800',
           color: 'var(--text-muted)',

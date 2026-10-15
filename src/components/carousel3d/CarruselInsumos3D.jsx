@@ -3,6 +3,7 @@ import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
 import TarritoBasura3D from '../svg3d/TarritoBasura3D.jsx';
 import GeneradorRecetaOlla from '../recipes/GeneradorRecetaOlla.jsx';
 import { formatCLP } from '../../utils/formatters.js';
+import { generarActivo3D, construirUrlActivo3D } from '../../lib/fal3d.js';
 
 export default function CarruselInsumos3D({
   rubro = 'restaurant',
@@ -17,6 +18,8 @@ export default function CarruselInsumos3D({
   const [nombreNuevo, setNombreNuevo] = useState('');
   const [costoNuevo, setCostoNuevo] = useState('');
   const [unidadNueva, setUnidadNueva] = useState('un');
+  const [generando3D, setGenerando3D] = useState(false);
+  const [regenerandoId, setRegenerandoId] = useState(null);
 
   // Filtro de búsqueda
   const [busqueda, setBusqueda] = useState('');
@@ -32,14 +35,15 @@ export default function CarruselInsumos3D({
   const [zonaHover, setZonaHover] = useState(null); // 'stand' | 'basura' | null
   const [itemsDescartadosCount, setItemsDescartadosCount] = useState(0);
 
-  // Desplazamiento del carrusel con cursor (drag-to-scroll)
+  // Desplazamiento del carrusel con cursor (drag-to-scroll solo sobre el contenedor o espacios vacíos)
   const carruselRef = useRef(null);
   const [isDraggingScroll, setIsDraggingScroll] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
 
   const handleMouseDown = (e) => {
-    if (e.target.closest('button') || e.target.closest('input')) return;
+    // Si hace click en una tarjeta o sus elementos interactivos, no activar el scroll de carrusel
+    if (e.target.closest('[data-draggable-card]') || e.target.closest('button') || e.target.closest('input')) return;
     setIsDraggingScroll(true);
     setStartX(e.pageX - carruselRef.current.offsetLeft);
     setScrollLeftState(carruselRef.current.scrollLeft);
@@ -57,23 +61,54 @@ export default function CarruselInsumos3D({
     setIsDraggingScroll(false);
   };
 
-  // Crear insumo
-  const handleCrearInsumo = (e) => {
+  // Crear insumo con render 3D automático
+  const handleCrearInsumo = async (e) => {
     e.preventDefault();
     const nombre = nombreNuevo.trim();
     const costo = Number(costoNuevo) || 0;
     if (!nombre || costo <= 0) return;
+
+    setGenerando3D(true);
+    let imagenFalUrl = null;
+    try {
+      const res = await generarActivo3D(nombre, rubro);
+      imagenFalUrl = res.url;
+    } catch {
+      imagenFalUrl = construirUrlActivo3D(nombre, rubro);
+    } finally {
+      setGenerando3D(false);
+    }
 
     onAgregarInsumo({
       id: 'insumo_' + Date.now(),
       nombre,
       costoUnitario: costo,
       unidadMedida: unidadNueva,
+      imagenFalUrl,
       fechaCreacion: new Date().toISOString(),
     });
 
     setNombreNuevo('');
     setCostoNuevo('');
+  };
+
+  // Regenerar modelo 3D con IA para un insumo existente
+  const handleRegenerar3D = async (item) => {
+    setRegenerandoId(item.id);
+    try {
+      const promptVariacion = `${item.nombre} ${Date.now() % 1000}`;
+      const res = await generarActivo3D(promptVariacion, rubro);
+      if (res?.url) {
+        onEditarInsumo({
+          ...item,
+          imagenFalUrl: res.url,
+        });
+      }
+    } catch (err) {
+      console.warn('Error al regenerar 3D:', err);
+    } finally {
+      setRegenerandoId(null);
+    }
   };
 
   // Guardar edición
@@ -88,6 +123,7 @@ export default function CarruselInsumos3D({
       nombre: editNombre.trim(),
       costoUnitario: val,
       unidadMedida: editUnidad,
+      imagenFalUrl: insumoEditando.imagenFalUrl,
     });
 
     setInsumoEditando(null);
@@ -108,8 +144,20 @@ export default function CarruselInsumos3D({
   const handleDropEnStand = (e) => {
     e.preventDefault();
     setZonaHover(null);
-    if (itemArrastrado) {
-      onAsignarCostoDirecto(itemArrastrado);
+    let item = itemArrastrado;
+    if (!item) {
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (raw) {
+          item = JSON.parse(raw);
+        }
+      } catch {
+        const id = e.dataTransfer.getData('text/plain');
+        item = insumos.find((i) => i.id === id);
+      }
+    }
+    if (item) {
+      onAsignarCostoDirecto(item);
       setItemArrastrado(null);
     }
   };
@@ -117,8 +165,20 @@ export default function CarruselInsumos3D({
   const handleDropEnBasura = (e) => {
     e.preventDefault();
     setZonaHover(null);
-    if (itemArrastrado) {
-      onEliminarInsumo(itemArrastrado.id);
+    let item = itemArrastrado;
+    if (!item) {
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (raw) {
+          item = JSON.parse(raw);
+        }
+      } catch {
+        const id = e.dataTransfer.getData('text/plain');
+        item = insumos.find((i) => i.id === id);
+      }
+    }
+    if (item) {
+      onEliminarInsumo(item.id);
       setItemsDescartadosCount((prev) => prev + 1);
       setItemArrastrado(null);
     }
@@ -133,6 +193,12 @@ export default function CarruselInsumos3D({
       {/* 1. Generador Profesional de Recetas / Productos con la Ollita 3D */}
       <GeneradorRecetaOlla
         onDropEnStand={handleDropEnStand}
+        onDragOverStand={(e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'copy';
+          setZonaHover('stand');
+        }}
+        onDragLeaveStand={() => setZonaHover(null)}
         zonaHover={zonaHover}
         itemArrastrado={itemArrastrado}
       />
@@ -297,28 +363,41 @@ export default function CarruselInsumos3D({
 
           <button
             type="submit"
+            disabled={generando3D}
             style={{
               padding: '9px 18px',
               minHeight: '40px',
               borderRadius: '6px',
-              backgroundColor: 'var(--color-primary)',
+              backgroundColor: generando3D ? 'var(--color-brand-600)' : 'var(--color-primary)',
               color: '#ffffff',
               border: 'none',
               fontSize: '13px',
               fontWeight: 600,
-              cursor: 'pointer',
+              cursor: generando3D ? 'wait' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
               whiteSpace: 'nowrap',
+              opacity: generando3D ? 0.85 : 1,
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Generar insumo
+            {generando3D ? (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin">
+                  <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="12" />
+                </svg>
+                <span>Renderizando 3D…</span>
+              </>
+            ) : (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span>Generar insumo</span>
+              </>
+            )}
           </button>
         </form>
       </div>
@@ -408,8 +487,16 @@ export default function CarruselInsumos3D({
               return (
                 <div
                   key={item.id}
+                  data-draggable-card="true"
                   draggable={true}
-                  onDragStart={(e) => handleDragStart(e, item)}
+                  onDragStart={(e) => {
+                    handleDragStart(e, item);
+                    try {
+                      e.dataTransfer.setData('text/plain', JSON.stringify(item));
+                    } catch {
+                      e.dataTransfer.setData('text/plain', item.id);
+                    }
+                  }}
                   onDragEnd={handleDragEnd}
                   style={{
                     flex: '0 0 200px',
@@ -417,14 +504,16 @@ export default function CarruselInsumos3D({
                     border: `1px solid ${siendoArrastrado ? 'var(--color-primary)' : 'var(--color-border)'}`,
                     borderRadius: '10px',
                     padding: '14px',
-                    boxShadow: 'var(--shadow-card)',
+                    boxShadow: siendoArrastrado ? '0 8px 24px rgba(15,118,110,0.25)' : 'var(--shadow-card)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     position: 'relative',
-                    opacity: siendoArrastrado ? 0.35 : 1,
-                    transition: 'all 0.15s ease',
+                    opacity: siendoArrastrado ? 0.4 : 1,
+                    transform: siendoArrastrado ? 'scale(0.96)' : 'scale(1)',
+                    transition: 'border 0.15s ease, opacity 0.15s ease, transform 0.15s ease',
                     cursor: 'grab',
+                    touchAction: 'none',
                   }}
                 >
                   {/* Badge de estado */}
@@ -450,36 +539,75 @@ export default function CarruselInsumos3D({
                     )}
                   </div>
 
-                  {/* Botón Editar */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setInsumoEditando(item);
-                      setEditNombre(item.nombre);
-                      setEditCosto(String(item.costoUnitario));
-                      setEditUnidad(item.unidadMedida || 'un');
-                    }}
-                    title="Editar insumo"
-                    style={{
-                      position: 'absolute',
-                      top: '6px',
-                      right: '6px',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      color: 'var(--color-muted-foreground)',
-                      padding: '4px',
-                    }}
-                  >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 20h9" />
-                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                    </svg>
-                  </button>
+                  {/* Botones Superiores: Regenerar 3D & Editar */}
+                  <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRegenerar3D(item);
+                      }}
+                      disabled={regenerandoId === item.id}
+                      title="Regenerar modelo 3D con IA"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: regenerandoId === item.id ? 'wait' : 'pointer',
+                        color: regenerandoId === item.id ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
+                        padding: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      {regenerandoId === item.id ? (
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin">
+                          <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="12" />
+                        </svg>
+                      ) : (
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                      )}
+                    </button>
 
-                  {/* Figura Vectorial */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setInsumoEditando(item);
+                        setEditNombre(item.nombre);
+                        setEditCosto(String(item.costoUnitario));
+                        setEditUnidad(item.unidadMedida || 'un');
+                      }}
+                      title="Editar insumo"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'var(--color-muted-foreground)',
+                        padding: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 20h9" />
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Render 3D de Estudio Fotográfico de Alta Definición */}
                   <div style={{ margin: '14px 0 6px 0', pointerEvents: 'none' }}>
-                    <InsumoFigura3D nombre={item.nombre} tamaño={64} imagenFalUrl={item.imagenFalUrl} />
+                    <InsumoFigura3D
+                      nombre={item.nombre}
+                      tamaño={72}
+                      imagenFalUrl={item.imagenFalUrl}
+                      rubro={rubro}
+                      animando={siendoArrastrado || regenerandoId === item.id}
+                    />
                   </div>
 
                   <h4
@@ -608,10 +736,64 @@ export default function CarruselInsumos3D({
               </h3>
               <button
                 onClick={() => setInsumoEditando(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-muted-foreground)', fontSize: '16px' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-muted-foreground)', padding: '4px' }}
+                title="Cerrar modal"
               >
-                ✕
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
               </button>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 12px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid var(--color-border)', marginBottom: '14px' }}>
+              <InsumoFigura3D
+                nombre={editNombre}
+                tamaño={60}
+                imagenFalUrl={insumoEditando?.imagenFalUrl}
+                rubro={rubro}
+                animando={regenerandoId === insumoEditando?.id}
+              />
+              <div style={{ flex: 1 }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
+                  Modelo 3D Fotorrealista
+                </span>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!insumoEditando) return;
+                    setRegenerandoId(insumoEditando.id);
+                    try {
+                      const res = await generarActivo3D(editNombre + ' ' + (Date.now() % 1000), rubro);
+                      if (res?.url) {
+                        setInsumoEditando((prev) => ({ ...prev, imagenFalUrl: res.url }));
+                      }
+                    } finally {
+                      setRegenerandoId(null);
+                    }
+                  }}
+                  disabled={regenerandoId === insumoEditando?.id}
+                  style={{
+                    marginTop: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '5px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    backgroundColor: 'var(--color-brand-50)',
+                    color: 'var(--color-primary)',
+                    border: '1px solid var(--color-brand-200)',
+                    cursor: regenerandoId === insumoEditando?.id ? 'wait' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  {regenerandoId === insumoEditando?.id ? 'Renderizando 3D…' : 'Regenerar 3D con IA'}
+                </button>
+              </div>
             </div>
 
             <form onSubmit={guardarEdicion} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

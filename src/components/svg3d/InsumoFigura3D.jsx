@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { obtenerUrlActivo3D } from '../../lib/fal3d.js';
 
 /**
  * Renderizador de Figuras 3D Profesionales para Insumos
- * Renderiza o bien la imagen generada por fal.ai o figuras vectoriales 3D isométricas de alta definición en SVG puro.
+ * Renderiza modelos 3D isométricos de estudio fotográfico generados por IA o catálogo de alta definición.
  */
-export default function InsumoFigura3D({ nombre = '', tamaño = 72, imagenFalUrl = null, animando = false }) {
+export default function InsumoFigura3D({
+  nombre = '',
+  tamaño = 72,
+  imagenFalUrl = null,
+  rubro = 'restaurant',
+  animando = false,
+}) {
+  const [errorCarga, setErrorCarga] = useState(false);
   const nombreLimpio = (nombre || '').trim().toLowerCase();
 
-  // Si cuenta con imagen 3D de fal.ai, renderizarla con marco tridimensional neumórfico
-  if (imagenFalUrl) {
+  // URL 3D: utiliza la provista o resuelve del motor neural/catálogo 3D
+  const urlFinal = imagenFalUrl || (!errorCarga ? obtenerUrlActivo3D(nombre, rubro) : null);
+
+  // Si cuenta con imagen 3D, renderizar con acabado de estudio fotográfico profesional
+  if (urlFinal && !errorCarga) {
     return (
       <div
         style={{
@@ -16,25 +27,30 @@ export default function InsumoFigura3D({ nombre = '', tamaño = 72, imagenFalUrl
           height: tamaño,
           borderRadius: '16px',
           overflow: 'hidden',
-          boxShadow: 'var(--neu-pressed)',
-          backgroundColor: 'var(--bg-neumorphic)',
+          boxShadow: '0 8px 18px -3px rgba(15, 118, 110, 0.16), 0 3px 6px -1px rgba(0, 0, 0, 0.08)',
+          border: '1.5px solid rgba(226, 232, 240, 0.95)',
+          backgroundColor: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '4px',
+          padding: '2px',
           boxSizing: 'border-box',
-          transform: animando ? 'scale(1.1) rotate(4deg)' : 'scale(1)',
-          transition: 'transform 0.25s ease',
+          transform: animando ? 'scale(1.12) rotate(3deg)' : 'scale(1)',
+          transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
         <img
-          src={imagenFalUrl}
+          src={urlFinal}
           alt={nombre}
+          loading="lazy"
+          onError={() => setErrorCarga(true)}
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            borderRadius: '12px',
+            borderRadius: '13px',
+            userSelect: 'none',
+            pointerEvents: 'none',
           }}
         />
       </div>

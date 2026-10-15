@@ -6,7 +6,13 @@ import MesaServicios3D from '../svg3d/MesaServicios3D.jsx';
 import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
 import { formatCLP } from '../../utils/formatters.js';
 
-export default function GeneradorRecetaOlla({ onDropEnStand, zonaHover, itemArrastrado }) {
+export default function GeneradorRecetaOlla({
+  onDropEnStand,
+  onDragOverStand,
+  onDragLeaveStand,
+  zonaHover,
+  itemArrastrado,
+}) {
   const {
     perfil,
     recetaEnOlla,
@@ -207,9 +213,8 @@ export default function GeneradorRecetaOlla({ onDropEnStand, zonaHover, itemArra
       >
         {/* Lado A: Zona de Cocción / Ollita 3D con Drop Zone */}
         <div
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
+          onDragOver={onDragOverStand}
+          onDragLeave={onDragLeaveStand}
           onDrop={onDropEnStand}
           style={{
             border: `2px dashed ${zonaHover === 'stand' ? 'var(--color-primary)' : 'var(--color-border)'}`,
@@ -224,6 +229,7 @@ export default function GeneradorRecetaOlla({ onDropEnStand, zonaHover, itemArra
             textAlign: 'center',
             transition: 'all 0.2s ease',
             minHeight: '260px',
+            boxShadow: zonaHover === 'stand' ? '0 0 0 4px rgba(15,118,110,0.15)' : 'none',
           }}
         >
           {perfil === 'restaurant' && (
@@ -312,8 +318,8 @@ export default function GeneradorRecetaOlla({ onDropEnStand, zonaHover, itemArra
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
-                      <div style={{ flexShrink: 0, width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <InsumoFigura3D nombre={item.nombre} tamaño={28} />
+                      <div style={{ flexShrink: 0, width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <InsumoFigura3D nombre={item.nombre} tamaño={32} imagenFalUrl={item.imagenFalUrl} rubro={perfil} />
                       </div>
 
                       <div style={{ minWidth: 0 }}>
