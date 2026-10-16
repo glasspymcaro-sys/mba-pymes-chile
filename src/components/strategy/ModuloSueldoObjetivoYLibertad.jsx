@@ -53,7 +53,7 @@ export default function ModuloSueldoObjetivoYLibertad() {
   const sueldosRapidos = [800000, 1500000, 2500000, 4000000];
 
   return (
-    <div className="bento-grid-12" style={{ alignItems: 'stretch' }}>
+    <div id="seccion-sueldo" className="bento-grid-12" style={{ alignItems: 'stretch' }}>
       {/* LADO IZQUIERDO (6 COL): INGENIERÍA INVERSA "EL SUELDO OBJETIVO" + ALERTA DE CAPACIDAD FÍSICA */}
       <div
         className="bento-col-6 card-ejecutiva-destacada"

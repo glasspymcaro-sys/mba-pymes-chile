@@ -27,7 +27,7 @@ export default function ModuloFijacionPreciosYFugas() {
   });
 
   return (
-    <div className="card-ejecutiva" style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div id="seccion-precios" className="card-ejecutiva" style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Cabecera: Fijación de Precios Inteligente + Contraste Markup vs Margen Bruto Real */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

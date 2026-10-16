@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppState } from '../store/appState.jsx';
 import TarjetaMetrica from '../components/indicators/TarjetaMetrica.jsx';
 import SimuladorPrecio from '../components/controls/SimuladorPrecio.jsx';
 import GraficoPuntoEquilibrio from '../components/charts/GraficoPuntoEquilibrio.jsx';
 import VisorEscenaPBR3D from '../components/svg3d/VisorEscenaPBR3D.jsx';
+import SelectorProductosYMargenes from '../components/strategy/SelectorProductosYMargenes.jsx';
 import ModuloSueldoObjetivoYLibertad from '../components/strategy/ModuloSueldoObjetivoYLibertad.jsx';
 import ModuloFijacionPreciosYFugas from '../components/strategy/ModuloFijacionPreciosYFugas.jsx';
 import ModuloSimuladorQuePasaSi from '../components/strategy/ModuloSimuladorQuePasaSi.jsx';
@@ -11,13 +12,14 @@ import ModuloIngenieriaMenuMultiproducto from '../components/strategy/ModuloInge
 import { formatCLP } from '../utils/formatters.js';
 
 /**
- * Dashboard Principal $5,000+ USD:
- * Integra desde la primera pantalla:
- * 1. Ingeniería Inversa "El Sueldo Objetivo" + Alerta de Capacidad Física Real + Calendario "El Día de la Libertad"
- * 2. Fijación de Precios Inteligente: Detector de Fugas de Margen (IVA, POS, Delivery, Merma) + 3 Escenarios Psicológicos
- * 3. Simulador "¿Qué pasa si...?": Destructor de Descuentos + Escudo Anti-Inflación en el Bolsillo
- * 4. Punto de Equilibrio Multi-Producto + Matriz de Rentabilidad (Minas de Oro, Ganchos, Joyas Ocultas, Vampiros)
- * 5. Curva de Punto de Equilibrio + Visor 3D PBR de Costos Directos
+ * Centro Estratégico Ejecutivo $5,000+ USD:
+ * Arquitectura ordenada e interconectada en 5 pasos lógicos:
+ * 1. Lo primero: Ver productos, insumos y márgenes directos para decidir sin confusión.
+ * 2. Fijación de Precios Inteligente: Detector de fugas de margen (IVA, POS, Delivery, Merma).
+ * 3. Simulador de Decisiones: Destructor de descuentos en tiempo real + Escudo anti-inflación.
+ * 4. Ingeniería Inversa: Sueldo Objetivo + Capacidad física + Calendario "Día de la Libertad".
+ * 5. Punto de Equilibrio y Gráfico con Explorador a Detalle + Matriz de Rentabilidad (Minas vs Vampiros).
+ * Cumple estrictamente con la regla de cero emojis.
  */
 export default function DashboardPrincipal({ onIrAInsumos }) {
   const {
@@ -33,6 +35,8 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
     recetaEnOlla,
     analisisFugasActivas,
   } = useAppState();
+
+  const [filtroSeccion, setFiltroSeccion] = useState('todas'); // 'todas' | 'productos' | 'precios' | 'descuentos' | 'sueldo' | 'equilibrio' | 'matriz'
 
   const precioEfectivo = Number(precioVentaConsolidado || 1000);
   const ventasEfectivas = Number(ventasEstimadasMensuales || 100);
@@ -67,166 +71,271 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
     });
   }
 
+  const desplazarASeccion = (idSeccion) => {
+    const el = document.getElementById(idSeccion);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* BLOQUE 1: INGENIERÍA INVERSA "EL SUELDO OBJETIVO" + CAPACIDAD FÍSICA + CALENDARIO "EL DÍA DE LA LIBERTAD" */}
-      <ModuloSueldoObjetivoYLibertad />
-
-      {/* BLOQUE 2: CALCULADORA DE PRECIO REAL + DETECTOR DE FUGAS DE MARGEN + 3 ESCENARIOS PSICOLÓGICOS */}
-      <ModuloFijacionPreciosYFugas />
-
-      {/* BLOQUE 3: SIMULADOR "¿QUÉ PASA SI...?" (DESTRUCTOR DE DESCUENTOS + ESCUDO ANTI-INFLACIÓN) */}
-      <ModuloSimuladorQuePasaSi />
-
-      {/* BLOQUE 4: PUNTO DE EQUILIBRIO MULTI-PRODUCTO E INGENIERÍA DE MENÚ (MINAS DE ORO VS VAMPIROS) */}
-      <ModuloIngenieriaMenuMultiproducto onEditarProductoEnOllita={onIrAInsumos} />
-
-      {/* BLOQUE 5: KPIS EJECUTIVOS DE SÍNTESIS CONTABLE */}
-      <div className="bento-kpi-grid">
-        <div className="bento-kpi-primary">
-          <TarjetaMetrica
-            titulo="Punto de Equilibrio Base (Ganar $0)"
-            icono="equilibrio"
-            valor={`${puntoEquilibrioUnidades.toLocaleString('es-CL')} un.`}
-            subtitulo={`Facturación base: ${formatCLP(ventasPuntoEquilibrioPesos)}`}
-            tendencia={ventasEfectivas >= puntoEquilibrioUnidades ? 'Cubierto' : 'Déficit'}
-            color={ventasEfectivas >= puntoEquilibrioUnidades ? 'var(--color-success)' : 'var(--color-danger)'}
-          />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+      {/* BARRA DE NAVEGACIÓN RÁPIDA & FLUJO DE DECISIÓN DEL CENTRO ESTRATÉGICO */}
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '12px',
+          border: '1.5px solid #CBD5E1',
+          padding: '12px 18px',
+          boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 800,
+              color: '#0F766E',
+              backgroundColor: '#CCFBF1',
+              border: '1px solid #99F6E4',
+              padding: '2px 8px',
+              borderRadius: '5px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+            }}
+          >
+            Flujo Estratégico Interconectado
+          </span>
+          <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+            Producto evaluado: <strong style={{ color: '#0F172A' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
+          </span>
         </div>
 
-        <div className="bento-kpi-secondary">
-          <TarjetaMetrica
-            titulo="Resultado Líquido Mensual (EBIT)"
-            icono="ebit"
-            valor={formatCLP(resultadoOperacional)}
-            subtitulo={`Margen real neto: ${margenPorcentual}% | Sueldo meta: ${formatCLP(sueldoObjetivo)}`}
-            tendencia={resultadoOperacional >= sueldoObjetivo ? 'Meta Lograda' : resultadoOperacional >= 0 ? 'Positivo' : 'Pérdida'}
-            color={resultadoOperacional >= sueldoObjetivo ? 'var(--color-success)' : resultadoOperacional >= 0 ? 'var(--color-primary)' : 'var(--color-danger)'}
-          />
-        </div>
-
-        <div className="bento-kpi-compact">
-          <TarjetaMetrica
-            titulo="Ganancia Real / Un."
-            icono="margen"
-            valor={formatCLP(margenContribucionUnitario)}
-            subtitulo={`Neto tras fugas (${analisisFugasActivas.margenBrutoRealPorcentaje}%)`}
-            color="var(--color-primary)"
-          />
-        </div>
-
-        <div className="bento-kpi-compact">
-          <TarjetaMetrica
-            titulo="Costos Fijos Mes"
-            icono="fijos"
-            valor={formatCLP(costoFijoEfectivo)}
-            subtitulo="Estructura base"
-          />
+        {/* Píldoras de Navegación por Secciones */}
+        <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+          {[
+            { id: 'todas', label: 'Ver Todo el Centro' },
+            { id: 'productos', label: '1. Insumos & Márgenes', anchor: 'seccion-productos-insumos' },
+            { id: 'precios', label: '2. Precios & Fugas', anchor: 'seccion-precios' },
+            { id: 'descuentos', label: '3. Simulador Descuentos', anchor: 'seccion-descuentos' },
+            { id: 'sueldo', label: '4. Sueldo & Libertad', anchor: 'seccion-sueldo' },
+            { id: 'equilibrio', label: '5. Gráfico de Equilibrio', anchor: 'seccion-grafico-equilibrio' },
+            { id: 'matriz', label: '6. Matriz de Catálogo', anchor: 'seccion-matriz' },
+          ].map((sec) => (
+            <button
+              key={sec.id}
+              type="button"
+              onClick={() => {
+                setFiltroSeccion(sec.id);
+                if (sec.anchor) desplazarASeccion(sec.anchor);
+              }}
+              style={{
+                padding: '5px 11px',
+                borderRadius: '6px',
+                fontSize: '11.5px',
+                fontWeight: filtroSeccion === sec.id ? 700 : 500,
+                backgroundColor: filtroSeccion === sec.id ? '#0F766E' : '#F8FAFC',
+                color: filtroSeccion === sec.id ? '#FFFFFF' : '#475569',
+                border: `1px solid ${filtroSeccion === sec.id ? '#0F766E' : '#CBD5E1'}`,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {sec.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* BLOQUE 6: GRÁFICO DE UMBRAL DE RENTABILIDAD + SIMULADOR DE VOLUMEN */}
-      <div className="bento-grid-12" style={{ alignItems: 'stretch' }}>
-        <div
-          className="bento-col-7 card-ejecutiva"
-          style={{
-            padding: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
+      {/* BLOQUE 1: LO PRIMERO: CATÁLOGO DE PRODUCTOS, INSUMOS & MÁRGENES DIRECTOS */}
+      {(filtroSeccion === 'todas' || filtroSeccion === 'productos') && (
+        <SelectorProductosYMargenes
+          onIrAInsumos={onIrAInsumos}
+          onIrADescuentos={() => {
+            setFiltroSeccion('todas');
+            setTimeout(() => desplazarASeccion('seccion-descuentos'), 80);
           }}
-        >
-          <GraficoPuntoEquilibrio
-            datos={datosGrafico}
-            puntoEquilibrioUnidades={puntoEquilibrioUnidades}
-            precioUnitario={precioEfectivo}
-            costoVariableUnitario={costoVarEfectivo}
-            costoFijoTotal={costoFijoEfectivo}
-            sueldoObjetivo={sueldoObjetivo}
-            ventasEstimadas={ventasEfectivas}
-          />
-        </div>
+        />
+      )}
 
-        <div className="bento-col-5" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <SimuladorPrecio
-            precioVenta={precioEfectivo}
-            ventasEstimadas={ventasEfectivas}
-            onPrecioChange={(val) => setPrecioRecetaEnOlla(val)}
-            onVentasChange={(val) => setVentasEstimadasMensuales(val)}
-          />
+      {/* BLOQUE 2: CALCULADORA DE PRECIO REAL + DETECTOR DE FUGAS DE MARGEN (IVA, POS, DELIVERY, MERMA) */}
+      {(filtroSeccion === 'todas' || filtroSeccion === 'precios') && (
+        <ModuloFijacionPreciosYFugas />
+      )}
 
-          <div
-            className="card-ejecutiva"
-            style={{
-              padding: '18px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              gap: '10px',
-              flex: 1,
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-              <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--color-muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                Cobertura de Costos Fijos + Sueldo Objetivo
-              </span>
-              <span
-                className="tabular-nums"
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  padding: '2px 8px',
-                  borderRadius: '6px',
-                  backgroundColor: ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success-bg)' : 'var(--color-warning-bg)',
-                  color: ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success)' : 'var(--color-warning)',
-                  border: `1px solid ${ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success-border)' : 'var(--color-warning-border)'}`,
-                }}
-              >
-                Meta con Sueldo: {puntoEquilibrioConSueldoUnidades.toLocaleString('es-CL')} un.
-              </span>
+      {/* BLOQUE 3: SIMULADOR DE DECISIONES "¿QUÉ PASA SI...?" (DESTRUCTOR DE DESCUENTOS + ESCUDO ANTI-INFLACIÓN) */}
+      {(filtroSeccion === 'todas' || filtroSeccion === 'descuentos') && (
+        <ModuloSimuladorQuePasaSi />
+      )}
+
+      {/* BLOQUE 4: INGENIERÍA INVERSA "EL SUELDO OBJETIVO" + CAPACIDAD FÍSICA + CALENDARIO "EL DÍA DE LA LIBERTAD" */}
+      {(filtroSeccion === 'todas' || filtroSeccion === 'sueldo') && (
+        <ModuloSueldoObjetivoYLibertad />
+      )}
+
+      {/* BLOQUE 5: SÍNTESIS CONTABLE & GRÁFICO EJECUTIVO DE PUNTO DE EQUILIBRIO CON EXPLORADOR A DETALLE */}
+      {(filtroSeccion === 'todas' || filtroSeccion === 'equilibrio') && (
+        <div id="seccion-grafico-equilibrio" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* Bento KPIs de Síntesis */}
+          <div className="bento-kpi-grid">
+            <div className="bento-kpi-primary">
+              <TarjetaMetrica
+                titulo="Punto de Equilibrio Base (Ganar $0)"
+                icono="equilibrio"
+                valor={`${puntoEquilibrioUnidades.toLocaleString('es-CL')} un.`}
+                subtitulo={`Facturación base: ${formatCLP(ventasPuntoEquilibrioPesos)}`}
+                tendencia={ventasEfectivas >= puntoEquilibrioUnidades ? 'Cubierto' : 'Déficit'}
+                color={ventasEfectivas >= puntoEquilibrioUnidades ? 'var(--color-success)' : 'var(--color-danger)'}
+              />
             </div>
 
-            <p style={{ fontSize: '13px', color: 'var(--color-foreground)', lineHeight: 1.55, margin: 0 }}>
-              {ventasEfectivas >= puntoEquilibrioConSueldoUnidades
-                ? `Logras pagar todos los costos fijos (${formatCLP(costoFijoEfectivo)}) y tu sueldo objetivo líquido (${formatCLP(sueldoObjetivo)}), con un excedente adicional de ${formatCLP(resultadoOperacional - sueldoObjetivo)}.`
-                : `Te faltan ${Math.max(0, puntoEquilibrioConSueldoUnidades - ventasEfectivas).toLocaleString('es-CL')} unidades mensuales para cubrir simultáneamente los costos fijos y el 100% de tu sueldo objetivo.`}
-            </p>
+            <div className="bento-kpi-secondary">
+              <TarjetaMetrica
+                titulo="Resultado Líquido Mensual (EBIT)"
+                icono="ebit"
+                valor={formatCLP(resultadoOperacional)}
+                subtitulo={`Margen real neto: ${margenPorcentual}% | Sueldo meta: ${formatCLP(sueldoObjetivo)}`}
+                tendencia={resultadoOperacional >= sueldoObjetivo ? 'Meta Lograda' : resultadoOperacional >= 0 ? 'Positivo' : 'Pérdida'}
+                color={resultadoOperacional >= sueldoObjetivo ? 'var(--color-success)' : resultadoOperacional >= 0 ? 'var(--color-primary)' : 'var(--color-danger)'}
+              />
+            </div>
 
-            <div style={{ marginTop: '4px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--color-muted-foreground)', marginBottom: '4px', fontWeight: 600 }}>
-                <span>Progreso hacia Sueldo Objetivo ({formatCLP(sueldoObjetivo)})</span>
-                <span className="tabular-nums" style={{ fontWeight: 800, color: 'var(--color-foreground)' }}>
-                  {puntoEquilibrioConSueldoUnidades > 0
-                    ? `${Math.min(100, Math.round((ventasEfectivas / puntoEquilibrioConSueldoUnidades) * 100))}%`
-                    : '100%'}
-                </span>
-              </div>
-              <div style={{ width: '100%', height: '8px', backgroundColor: '#E2E8F0', borderRadius: '999px', overflow: 'hidden' }}>
-                <div
-                  style={{
-                    width: `${puntoEquilibrioConSueldoUnidades > 0 ? Math.min(100, Math.round((ventasEfectivas / puntoEquilibrioConSueldoUnidades) * 100)) : 100}%`,
-                    height: '100%',
-                    backgroundColor: ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success)' : 'var(--color-primary)',
-                    transition: 'width 0.25s ease',
-                  }}
-                />
+            <div className="bento-kpi-compact">
+              <TarjetaMetrica
+                titulo="Ganancia Real / Un."
+                icono="margen"
+                valor={formatCLP(margenContribucionUnitario)}
+                subtitulo={`Neto tras fugas (${analisisFugasActivas.margenBrutoRealPorcentaje}%)`}
+                color="var(--color-primary)"
+              />
+            </div>
+
+            <div className="bento-kpi-compact">
+              <TarjetaMetrica
+                titulo="Costos Fijos Mes"
+                icono="fijos"
+                valor={formatCLP(costoFijoEfectivo)}
+                subtitulo="Estructura base"
+              />
+            </div>
+          </div>
+
+          {/* Gráfico y Simulador de Volumen */}
+          <div className="bento-grid-12" style={{ alignItems: 'stretch' }}>
+            <div
+              className="bento-col-7 card-ejecutiva"
+              style={{
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <GraficoPuntoEquilibrio
+                datos={datosGrafico}
+                puntoEquilibrioUnidades={puntoEquilibrioUnidades}
+                precioUnitario={precioEfectivo}
+                costoVariableUnitario={costoVarEfectivo}
+                costoFijoTotal={costoFijoEfectivo}
+                sueldoObjetivo={sueldoObjetivo}
+                ventasEstimadas={ventasEfectivas}
+              />
+            </div>
+
+            <div className="bento-col-5" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <SimuladorPrecio
+                precioVenta={precioEfectivo}
+                ventasEstimadas={ventasEfectivas}
+                onPrecioChange={(val) => setPrecioRecetaEnOlla(val)}
+                onVentasChange={(val) => setVentasEstimadasMensuales(val)}
+              />
+
+              <div
+                className="card-ejecutiva"
+                style={{
+                  padding: '18px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '10px',
+                  flex: 1,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                  <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--color-muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    Cobertura de Costos Fijos + Sueldo Objetivo
+                  </span>
+                  <span
+                    className="tabular-nums"
+                    style={{
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      backgroundColor: ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success-bg)' : 'var(--color-warning-bg)',
+                      color: ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success)' : 'var(--color-warning)',
+                      border: `1px solid ${ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success-border)' : 'var(--color-warning-border)'}`,
+                    }}
+                  >
+                    Meta con Sueldo: {puntoEquilibrioConSueldoUnidades.toLocaleString('es-CL')} un.
+                  </span>
+                </div>
+
+                <p style={{ fontSize: '13px', color: 'var(--color-foreground)', lineHeight: 1.55, margin: 0 }}>
+                  {ventasEfectivas >= puntoEquilibrioConSueldoUnidades
+                    ? `Logras pagar todos los costos fijos (${formatCLP(costoFijoEfectivo)}) y tu sueldo objetivo líquido (${formatCLP(sueldoObjetivo)}), con un excedente adicional de ${formatCLP(resultadoOperacional - sueldoObjetivo)}.`
+                    : `Te faltan ${Math.max(0, puntoEquilibrioConSueldoUnidades - ventasEfectivas).toLocaleString('es-CL')} unidades mensuales para cubrir simultáneamente los costos fijos y el 100% de tu sueldo objetivo.`}
+                </p>
+
+                <div style={{ marginTop: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--color-muted-foreground)', marginBottom: '4px', fontWeight: 600 }}>
+                    <span>Progreso hacia Sueldo Objetivo ({formatCLP(sueldoObjetivo)})</span>
+                    <span className="tabular-nums" style={{ fontWeight: 800, color: 'var(--color-foreground)' }}>
+                      {puntoEquilibrioConSueldoUnidades > 0
+                        ? `${Math.min(100, Math.round((ventasEfectivas / puntoEquilibrioConSueldoUnidades) * 100))}%`
+                        : '100%'}
+                    </span>
+                  </div>
+                  <div style={{ width: '100%', height: '8px', backgroundColor: '#E2E8F0', borderRadius: '999px', overflow: 'hidden' }}>
+                    <div
+                      style={{
+                        width: `${puntoEquilibrioConSueldoUnidades > 0 ? Math.min(100, Math.round((ventasEfectivas / puntoEquilibrioConSueldoUnidades) * 100)) : 100}%`,
+                        height: '100%',
+                        backgroundColor: ventasEfectivas >= puntoEquilibrioConSueldoUnidades ? 'var(--color-success)' : 'var(--color-primary)',
+                        transition: 'width 0.25s ease',
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* BLOQUE 7: VISOR DE ENSAMBLAJE 3D PBR INTERACTIVO */}
-      <VisorEscenaPBR3D
-        perfil={perfil}
-        nombreProducto={recetaEnOlla?.nombre || 'Formulación Directa'}
-        figuraId={recetaEnOlla?.figuraId}
-        imagenPersonalizada={recetaEnOlla?.imagenPersonalizada}
-        insumosAsignados={insumosAsignados}
-        costoVariableConsolidado={costoVariableConsolidado}
-        precioVentaConsolidado={precioEfectivo}
-        margenContribucionUnitario={margenContribucionUnitario}
-      />
+      {/* BLOQUE 6: PUNTO DE EQUILIBRIO MULTI-PRODUCTO E INGENIERÍA DE MENÚ (MINAS DE ORO VS VAMPIROS) */}
+      {(filtroSeccion === 'todas' || filtroSeccion === 'matriz') && (
+        <ModuloIngenieriaMenuMultiproducto onEditarProductoEnOllita={onIrAInsumos} />
+      )}
+
+      {/* BLOQUE 7: VISOR DE PRESENTACIÓN VISUAL DEL PRODUCTO */}
+      {filtroSeccion === 'todas' && (
+        <VisorEscenaPBR3D
+          perfil={perfil}
+          nombreProducto={recetaEnOlla?.nombre || 'Formulación Directa'}
+          figuraId={recetaEnOlla?.figuraId}
+          imagenPersonalizada={recetaEnOlla?.imagenPersonalizada}
+          insumosAsignados={insumosAsignados}
+          costoVariableConsolidado={costoVariableConsolidado}
+          precioVentaConsolidado={precioEfectivo}
+          margenContribucionUnitario={margenContribucionUnitario}
+        />
+      )}
     </div>
   );
 }

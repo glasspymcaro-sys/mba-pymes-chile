@@ -14,6 +14,7 @@ export default function ModuloSimuladorQuePasaSi() {
     costoVariableConsolidado,
     ventasEstimadasMensuales,
     analisisFugasActivas,
+    recetaEnOlla,
   } = useAppState();
 
   const [porcentajeDescuento, setPorcentajeDescuento] = useState(15);
@@ -35,7 +36,7 @@ export default function ModuloSimuladorQuePasaSi() {
   });
 
   return (
-    <div className="bento-grid-12" style={{ alignItems: 'stretch' }}>
+    <div id="seccion-descuentos" className="bento-grid-12" style={{ alignItems: 'stretch' }}>
       {/* LADO IZQUIERDO (6 COL): EL "DESTRUCTOR DE DESCUENTOS" (SIMULADOR DE PROMOCIONES) */}
       <div
         className="bento-col-6 card-ejecutiva"
@@ -68,8 +69,11 @@ export default function ModuloSimuladorQuePasaSi() {
               3. El Destructor de Descuentos • Simulador de Promociones
             </span>
             <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
-              ¿Qué pasa si lanzas un descuento o un 2x1?
+              Simulador de Descuentos ({recetaEnOlla?.nombre || 'Producto Activo'})
             </h2>
+            <span style={{ fontSize: '11px', color: '#64748B', display: 'block', marginTop: '2px' }}>
+              Precio actual: <strong>{formatCLP(precioVentaConsolidado)}</strong> • Ganancia limpia: <strong>{formatCLP(analisisFugasActivas.margenContribucionReal)}</strong>
+            </span>
           </div>
         </div>
 

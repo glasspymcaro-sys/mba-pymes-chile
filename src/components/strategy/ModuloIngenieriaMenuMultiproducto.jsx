@@ -70,7 +70,7 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
   ];
 
   return (
-    <div className="card-ejecutiva" style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div id="seccion-matriz" className="card-ejecutiva" style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Cabecera de Punto de Equilibrio Multi-Producto */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
