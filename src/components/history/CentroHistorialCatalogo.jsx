@@ -358,7 +358,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                             borderRadius: '4px',
                           }}
                         >
-                          Foto Real
+                          Foto
                         </span>
                       )}
                     </div>

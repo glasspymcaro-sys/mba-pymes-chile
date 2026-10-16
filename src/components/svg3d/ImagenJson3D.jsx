@@ -126,7 +126,7 @@ export default function ImagenJson3D({ idIcono = 'sueldo_objetivo', descriptorJs
 
   return (
     <div
-      title={`${spec.nombre} [JSON 3D Render]`}
+      title={spec.nombre}
       style={{
         width: `${tamaño}px`,
         height: `${tamaño}px`,

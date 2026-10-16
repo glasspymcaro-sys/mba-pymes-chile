@@ -52,7 +52,7 @@ export default function InsumoFigura3D({
 
   return (
     <div
-      title={`${nombre} • ${descriptorJson.tipologiaNombre} [JSON 3D]`}
+      title={`${nombre} • ${descriptorJson.tipologiaNombre}`}
       style={{
         width: `${tamaño}px`,
         height: `${tamaño}px`,

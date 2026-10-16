@@ -90,7 +90,7 @@ function ContenidoPrincipal() {
                 fontSize: '11.5px',
                 borderRadius: '7px',
               }}
-              title="Gastronomía / Restaurantes (Ollita de Cocina)"
+              title="Gastronomía / Restaurantes"
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8h1a4 4 0 0 1 0 8h-1" />

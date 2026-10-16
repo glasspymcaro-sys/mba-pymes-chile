@@ -14,7 +14,7 @@ export default function MesaServicios3D({ tamaño = 120, itemsEnMesa = [], alHac
   return (
     <div
       onClick={alHacerClic}
-      title="Mesa de Proyectos 3D • Asigna recursos de consultoría o desarrollo para consolidar costos directos"
+      title="Mesa de Proyectos • Asigna recursos de consultoría o desarrollo para consolidar costos directos"
       style={{
         display: 'inline-flex',
         flexDirection: 'column',

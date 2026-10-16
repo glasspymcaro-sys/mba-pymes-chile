@@ -813,7 +813,7 @@ export default function CarruselInsumos3D({
           <TechnicalEmptyStateSVG
             tipo="busqueda"
             titulo="Sin coincidencias en el inventario de insumos"
-            descripcion="Verifique el término de búsqueda o seleccione un insumo del catálogo de la biblioteca 3D superior."
+            descripcion="Verifique el término de búsqueda o seleccione un insumo del catálogo superior."
           />
         ) : (
           <div
@@ -1072,7 +1072,7 @@ export default function CarruselInsumos3D({
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <h3 className="heading-tight" style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0 }}>
-                Editar Insumo y Tipología 3D
+                Editar Insumo y Categoría
               </h3>
               <button
                 onClick={() => setInsumoEditando(null)}
@@ -1185,7 +1185,7 @@ export default function CarruselInsumos3D({
 
               <div>
                 <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
-                  TIPOLOGÍA CLAVE 3D
+                  CATEGORÍA / ILUSTRACIÓN
                 </label>
                 <select
                   value={editTipologia}

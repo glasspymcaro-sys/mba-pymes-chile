@@ -263,7 +263,7 @@ export default function GeneradorRecetaOlla({
               {ingredientes.length} {ingredientes.length === 1 ? 'insumo integrado' : 'insumos integrados'}
             </span>
             <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '8px' }}>
-              Arrastra insumos del catálogo o sube una foto real de tu producto
+              Arrastra insumos del catálogo o sube una foto de tu producto
             </span>
 
             {/* Controles: Selector de Ilustración & Botón de Subida de Foto */}
@@ -328,7 +328,7 @@ export default function GeneradorRecetaOlla({
                     <circle cx="8.5" cy="8.5" r="1.5" />
                     <polyline points="21 15 16 10 5 21" />
                   </svg>
-                  {recetaEnOlla?.imagenPersonalizada ? 'Cambiar Foto Real' : 'Subir Foto de Producto'}
+                  {recetaEnOlla?.imagenPersonalizada ? 'Cambiar Foto' : 'Subir Foto de Producto'}
                 </button>
 
                 {recetaEnOlla?.imagenPersonalizada && (

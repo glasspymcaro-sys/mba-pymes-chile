@@ -11,7 +11,7 @@ export default function OllitaCocina3D({ tamaño = 120, insumosEnOlla = [], alHa
   return (
     <div
       onClick={alHacerClic}
-      title="Ollita de Cocina 3D • Arrastra o asigna insumos para conformar el costo directo de la receta"
+      title="Centro de Cocina • Asigna insumos para conformar el costo directo de la receta"
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
@@ -246,7 +246,7 @@ export default function OllitaCocina3D({ tamaño = 120, insumosEnOlla = [], alHa
           letterSpacing: '0.4px',
         }}
       >
-        Ollita de Receta
+        Receta Activa
       </span>
 
       <span

@@ -8,7 +8,7 @@ export default function TarritoBasura3D({ abierto = false, tamaño = 110, alHace
   return (
     <div
       onClick={alHacerClic}
-      title="Tarrito de Basura 3D • Arrastra o presiona para descartar insumos"
+      title="Papelera • Arrastra o presiona para descartar insumos"
       style={{
         display: 'inline-flex',
         flexDirection: 'column',

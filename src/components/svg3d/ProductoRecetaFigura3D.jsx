@@ -23,7 +23,7 @@ export default function ProductoRecetaFigura3D({
   return (
     <div
       onClick={alHacerClic}
-      title={`${nombreProducto} • Escaparate 3D de Producto & Receta`}
+      title={`${nombreProducto} • Presentación de Producto`}
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
@@ -89,7 +89,7 @@ export default function ProductoRecetaFigura3D({
             border: '1px solid rgba(0,0,0,0.08)',
           }}
         >
-          {imagenPersonalizada ? 'FOTO REAL' : 'JSON 3D'}
+          {imagenPersonalizada ? 'FOTO' : 'ILUSTRACIÓN'}
         </span>
       </div>
 

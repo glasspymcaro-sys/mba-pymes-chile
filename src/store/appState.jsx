@@ -535,6 +535,14 @@ export function AppStateProvider({ children }) {
     guardarEnLocalStorage(`mba_receta_activa_${perfil}`, receta);
   };
 
+  const agregarReceta = (nuevaReceta) => {
+    setRecetas((prev) => {
+      const actualizadas = [nuevaReceta, ...prev];
+      guardarEnLocalStorage(`mba_recetas_${perfil}`, actualizadas);
+      return actualizadas;
+    });
+  };
+
   // Mutadores de Mix Multiproducto e Ingeniería de Menú
   const actualizarMixReceta = (idReceta, nuevoMix) => {
     const valor = Math.max(1, Math.min(100, Number(nuevoMix) || 1));
@@ -705,6 +713,7 @@ export function AppStateProvider({ children }) {
       setFiguraProductoIdEnOlla,
       guardarRecetaActiva,
       cargarRecetaEnOlla,
+      agregarReceta,
       vaciarOlla,
       actualizarMixReceta,
       ajustarPrecioRecetaPorId,

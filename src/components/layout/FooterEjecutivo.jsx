@@ -260,7 +260,7 @@ export default function FooterEjecutivo({
           <div className="tabular-nums" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <span>Moneda: Peso Chileno ($ CLP)</span>
             <span>•</span>
-            <span>Renderizado Vectorial 3D Autónomo</span>
+            <span>Renderizado Vectorial Autónomo</span>
           </div>
         </div>
       </div>

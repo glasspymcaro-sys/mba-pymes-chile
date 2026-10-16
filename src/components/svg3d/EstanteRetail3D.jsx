@@ -14,7 +14,7 @@ export default function EstanteRetail3D({ tamaño = 120, itemsEnEstante = [], al
   return (
     <div
       onClick={alHacerClic}
-      title="Góndola de Exhibición 3D • Asigna productos para determinar el costo de reposición directo"
+      title="Góndola de Exhibición • Asigna productos para determinar el costo de reposición directo"
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
