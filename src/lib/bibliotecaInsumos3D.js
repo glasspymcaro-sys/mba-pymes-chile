@@ -318,3 +318,38 @@ export function clasificarTipologiaInsumo(nombreInsumo = '', rubro = 'restaurant
   if (rubro === 'minimarket') return TIPOLOGIAS_3D.abarrote_grano_condimento;
   return TIPOLOGIAS_3D.verdura_fruto;
 }
+
+/**
+ * Genera el Descriptor JSON Estructurado de Imagen 3D para cualquier insumo o producto,
+ * incluyendo iluminación PBR, paleta óptica, coordenadas espaciales y geometría 3D asociada.
+ */
+export function obtenerJsonDescriptorInsumo(nombreInsumo = 'Insumo', rubro = 'restaurant', tipologiaForzada = '') {
+  const infoTipologia =
+    tipologiaForzada && TIPOLOGIAS_3D[tipologiaForzada]
+      ? TIPOLOGIAS_3D[tipologiaForzada]
+      : clasificarTipologiaInsumo(nombreInsumo, rubro);
+
+  return {
+    schemaVersion: '2.0-JSON-3D-PBR',
+    insumo: nombreInsumo || 'Insumo',
+    rubro,
+    tipologiaId: infoTipologia.id,
+    tipologiaNombre: infoTipologia.nombre,
+    viewBox: '0 0 120 120',
+    paletaOptica: {
+      colorPrimario: infoTipologia.colorPrimario,
+      colorSecundario: infoTipologia.colorSecundario,
+      colorLuzEspecular: infoTipologia.colorLuz,
+    },
+    iluminacionPBR: {
+      keyLight: { azimuth: 35, elevation: 25, intensity: 1.15 },
+      rimLight: { azimuth: 210, elevation: 65, intensity: 0.75 },
+      contactShadow: { cx: 60, cy: 96, rx: 32, ry: 9, opacity: 0.18 },
+    },
+    animacion3D: {
+      levitacion: 'float3DInsumo 3.4s ease-in-out infinite',
+      pulsoSombra: 'shadowPulse3D 3.4s ease-in-out infinite',
+    },
+  };
+}
+

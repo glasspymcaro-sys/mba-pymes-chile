@@ -12,16 +12,17 @@
   --color-brand-900: #134e4a;
   --color-brand-950: #042f2e;
 
-  /* Paleta Paper Technical (anti-ai-ui-craft: Linear / Vercel / Stripe Light Mode) */
-  --color-background: #FAFAFA;
+  /* Paleta Paper Technical de Alta Precisión ($5,000+ USD SaaS Craft) */
+  --color-background: #F4F5F7;
   --color-surface: #FFFFFF;
-  --color-surface-elevated: #F4F4F5;
-  --color-surface-hover: #F4F4F5;
+  --color-surface-elevated: #F8FAFC;
+  --color-surface-hover: #F1F5F9;
   --color-foreground: #09090B;
-  --color-muted-foreground: #52525B;
-  --color-subtle: #A1A1AA;
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-border-subtle: rgba(0, 0, 0, 0.14);
+  --color-muted-foreground: #475569;
+  --color-subtle: #94A3B8;
+  --color-border: #CBD5E1;
+  --color-border-strong: #94A3B8;
+  --color-border-subtle: #E2E8F0;
 
   --color-primary: var(--color-brand-700);
   --color-primary-hover: var(--color-brand-800);
@@ -30,19 +31,19 @@
 
   --color-success: #059669;
   --color-success-bg: #ECFDF5;
-  --color-success-border: #A7F3D0;
+  --color-success-border: #6EE7B7;
 
   --color-warning: #D97706;
   --color-warning-bg: #FFFBEB;
-  --color-warning-border: #FDE68A;
+  --color-warning-border: #FCD34D;
 
   --color-danger: #DC2626;
   --color-danger-bg: #FEF2F2;
-  --color-danger-border: #FECACA;
+  --color-danger-border: #FCA5A5;
 
   --color-info: #2563EB;
   --color-info-bg: #EFF6FF;
-  --color-info-border: #BFDBFE;
+  --color-info-border: #93C5FD;
 
   /* Compatibilidad con módulos existentes */
   --bg-neumorphic: var(--color-background);
@@ -52,13 +53,13 @@
   --accent-green: var(--color-success);
   --accent-red: var(--color-danger);
 
-  /* Micro-bordes de precisión e iluminación especular interna */
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --shadow-card-hover: 0 4px 12px -2px rgba(9, 9, 11, 0.07), 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-popover: 0 12px 24px -4px rgba(9, 9, 11, 0.12), 0 4px 8px -2px rgba(9, 9, 11, 0.06);
+  /* Bordes Arquitectónicos Biselados y Sombras Multicapa */
+  --shadow-card: 0 2px 6px -1px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-card-hover: 0 10px 24px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+  --shadow-popover: 0 16px 32px -6px rgba(9, 9, 11, 0.14), 0 6px 12px -3px rgba(9, 9, 11, 0.08);
   --neu-flat: var(--shadow-card);
-  --neu-flat-sm: 0 1px 2px rgba(9, 9, 11, 0.04);
-  --neu-pressed: inset 0 1px 2px rgba(9, 9, 11, 0.06);
+  --neu-flat-sm: 0 1px 3px rgba(9, 9, 11, 0.06);
+  --neu-pressed: inset 0 2px 4px rgba(15, 23, 42, 0.08);
 
   --font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -88,7 +89,168 @@ h1, h2, h3, .heading-tight {
   font-feature-settings: "tnum";
 }
 
-/* Bento Grid Asimétrico de 12 Columnas (anti-ai-ui-craft) */
+/* Tarjetas con Bordes Profesionales de Doble Bisel */
+.card-ejecutiva,
+.surface-card {
+  background-color: #FFFFFF;
+  border-radius: 14px;
+  border: 1.5px solid #CBD5E1;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04), inset 0 1px 0 #FFFFFF;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-ejecutiva:hover {
+  border-color: #94A3B8;
+  box-shadow: 0 10px 24px -6px rgba(15, 23, 42, 0.09), 0 2px 6px rgba(15, 23, 42, 0.05), inset 0 1px 0 #FFFFFF;
+}
+
+.card-ejecutiva-destacada {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0FDFA 100%);
+  border-radius: 14px;
+  border: 2px solid #0D9488;
+  box-shadow: 0 8px 22px -4px rgba(13, 148, 136, 0.16), inset 0 1px 0 #FFFFFF;
+}
+
+/* Botones Táctiles de Alta Ingeniería ("Botones Bacanes" con relieve físico 3D) */
+.btn-bacan-primary,
+.btn-eng-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #14B8A6 0%, #0F766E 100%);
+  color: #FFFFFF !important;
+  border: 1.5px solid #0D9488 !important;
+  box-shadow: 0 2px 0 #115E59, 0 6px 14px -2px rgba(15, 118, 110, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
+  cursor: pointer;
+  transition: all 0.14s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-decoration: none;
+}
+
+.btn-bacan-primary:hover,
+.btn-eng-primary:hover {
+  background: linear-gradient(180deg, #0D9488 0%, #115E59 100%);
+  transform: translateY(-1.5px);
+  box-shadow: 0 3px 0 #042F2E, 0 10px 18px -3px rgba(15, 118, 110, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+.btn-bacan-primary:active,
+.btn-eng-primary:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 0px 0 #115E59, 0 2px 6px rgba(15, 118, 110, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.btn-bacan-secondary,
+.btn-eng-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  color: #0F172A;
+  border: 1.5px solid #CBD5E1;
+  box-shadow: 0 2px 0 #CBD5E1, 0 3px 8px rgba(15, 23, 42, 0.06), inset 0 1px 0 #FFFFFF;
+  cursor: pointer;
+  transition: all 0.14s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-bacan-secondary:hover,
+.btn-eng-secondary:hover {
+  border-color: #0D9488;
+  color: #0F766E;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0FDFA 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 #99F6E4, 0 6px 12px rgba(13, 148, 136, 0.12), inset 0 1px 0 #FFFFFF;
+}
+
+.btn-bacan-secondary:active,
+.btn-eng-secondary:active {
+  transform: translateY(1px);
+  box-shadow: 0 0px 0 #CBD5E1, inset 0 2px 4px rgba(15, 23, 42, 0.08);
+}
+
+.btn-bacan-warning {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #F59E0B 0%, #D97706 100%);
+  color: #FFFFFF;
+  border: 1.5px solid #B45309;
+  box-shadow: 0 2px 0 #92400E, 0 6px 14px -2px rgba(217, 119, 6, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.btn-bacan-warning:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 3px 0 #78350F, 0 10px 18px -2px rgba(217, 119, 6, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* Switch Táctil de 1 Clic para Fugas de Margen */
+.switch-fuga-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #CBD5E1;
+  background: #FFFFFF;
+  box-shadow: 0 2px 0 #E2E8F0, 0 2px 6px rgba(15, 23, 42, 0.04);
+  cursor: pointer;
+  transition: all 0.16s ease;
+  text-align: left;
+}
+
+.switch-fuga-btn.activo {
+  border-color: #DC2626;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FEF2F2 100%);
+  box-shadow: 0 2px 0 #FCA5A5, 0 4px 12px rgba(220, 38, 38, 0.1);
+}
+
+.switch-fuga-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Sliders de Ingeniería de Alta Precisión */
+input[type="range"].slider-ingenieria {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #E2E8F0;
+  border: 1px solid #CBD5E1;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"].slider-ingenieria::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #14B8A6 0%, #0F766E 100%);
+  border: 2.5px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.3), 0 0 0 1.5px #0F766E;
+  cursor: grab;
+  transition: transform 0.12s ease;
+}
+
+input[type="range"].slider-ingenieria::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+
+/* Bento Grid Asimétrico de 12 Columnas */
 .bento-grid-12 {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -105,6 +267,10 @@ h1, h2, h3, .heading-tight {
 
 .bento-col-7 {
   grid-column: span 7 / span 7;
+}
+
+.bento-col-6 {
+  grid-column: span 6 / span 6;
 }
 
 .bento-col-5 {
@@ -144,6 +310,7 @@ h1, h2, h3, .heading-tight {
 @media (max-width: 900px) {
   .bento-col-8,
   .bento-col-7,
+  .bento-col-6,
   .bento-col-5,
   .bento-col-4 {
     grid-column: span 12 / span 12;
@@ -158,18 +325,7 @@ h1, h2, h3, .heading-tight {
   }
 }
 
-/* Botones de Ingeniería Compactos */
-.btn-eng-primary,
-.btn-eng-secondary {
-  transition: transform 0.1s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.btn-eng-primary:active,
-.btn-eng-secondary:active {
-  transform: translateY(1px);
-}
-
-/* Animación de Skeleton Anatómico (core-architecture-hardener) */
+/* Animación de Skeleton Anatómico */
 @keyframes shimmerSweep {
   0% {
     background-position: -200% 0;

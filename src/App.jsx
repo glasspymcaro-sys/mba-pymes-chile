@@ -27,6 +27,8 @@ function ContenidoPrincipal() {
     agregarIngredienteAOlla,
     costoVariableConsolidado,
     costoFijoTotal,
+    sueldoObjetivo,
+    analisisFugasActivas,
     precioVentaConsolidado,
     ventasEstimadasMensuales,
   } = useAppState();
@@ -34,54 +36,22 @@ function ContenidoPrincipal() {
   const [vista, setVista] = useState('punto_equilibrio'); // 'punto_equilibrio' | 'insumos' | 'costos_fijos'
   const [modalAuthAbierto, setModalAuthAbierto] = useState(false);
 
-  // Cálculos de Punto de Equilibrio para el Header y Footer
-  const margenContribucion = Math.max(0, precioVentaConsolidado - costoVariableConsolidado);
+  // Cálculos de Punto de Equilibrio con Fugas Reales y Sueldo Objetivo
+  const margenContribucion = Math.max(0, Number(analisisFugasActivas?.margenContribucionReal || (precioVentaConsolidado - costoVariableConsolidado)));
   const peUnidades = margenContribucion > 0 ? Math.ceil(costoFijoTotal / margenContribucion) : 0;
+  const peConSueldoUnidades = margenContribucion > 0 ? Math.ceil((costoFijoTotal + sueldoObjetivo) / margenContribucion) : 0;
   const pePesos = peUnidades * precioVentaConsolidado;
   const esSolvente = ventasEstimadasMensuales >= peUnidades && peUnidades > 0;
 
-  const botonNavStyle = (activo) => ({
-    height: '34px',
-    padding: '0 13px',
-    borderRadius: '6px',
-    fontSize: '12.5px',
-    fontWeight: activo ? 600 : 500,
-    cursor: 'pointer',
-    backgroundColor: activo ? 'var(--color-brand-50)' : 'transparent',
-    color: activo ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
-    border: activo ? '1px solid var(--color-brand-200)' : '1px solid transparent',
-    transition: 'all 0.15s ease',
-    whiteSpace: 'nowrap',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '6px',
-  });
-
-  const botonRubroStyle = (activo) => ({
-    height: '28px',
-    padding: '0 10px',
-    borderRadius: '5px',
-    fontSize: '12px',
-    fontWeight: activo ? 600 : 500,
-    cursor: 'pointer',
-    backgroundColor: activo ? '#FFFFFF' : 'transparent',
-    color: activo ? 'var(--color-foreground)' : 'var(--color-muted-foreground)',
-    border: 'none',
-    boxShadow: activo ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
-    transition: 'all 0.15s ease',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '5px',
-  });
-
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
-      {/* 1. Barra de Navegación Superior Paper Technical */}
+      {/* 1. Barra de Navegación Superior con Bordes Biselados y Botones Táctiles */}
       <header
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.94)',
-          backdropFilter: 'blur(8px)',
-          borderBottom: '1px solid var(--color-border)',
+          backgroundColor: 'rgba(255, 255, 255, 0.96)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1.5px solid #CBD5E1',
+          boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
           padding: '10px 20px',
           display: 'flex',
           alignItems: 'center',
@@ -93,28 +63,34 @@ function ContenidoPrincipal() {
           zIndex: 40,
         }}
       >
-        {/* Identidad y Selector de Rubro */}
+        {/* Identidad y Selector de los 3 Rubros (Gastronomía, Comercio/Retail, Servicios) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          <Logo style={{ height: '26px' }} />
+          <Logo style={{ height: '28px' }} />
 
-          {/* Selector de los 3 Modelos de Negocio con strokeWidth="1.5" */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '2px',
-              padding: '3px',
-              borderRadius: '7px',
-              border: '1px solid var(--color-border)',
-              backgroundColor: '#F4F4F5',
+              gap: '4px',
+              padding: '4px',
+              borderRadius: '10px',
+              border: '1.5px solid #CBD5E1',
+              backgroundColor: '#F1F5F9',
+              boxShadow: 'inset 0 1px 2px rgba(15, 23, 42, 0.06)',
             }}
           >
             <button
               onClick={() => cambiarPerfil('restaurant')}
-              style={botonRubroStyle(perfil === 'restaurant')}
-              title="Cambiar a modelo Restaurante (Ollita de cocina)"
+              className={perfil === 'restaurant' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
+              style={{
+                height: '30px',
+                padding: '0 11px',
+                fontSize: '11.5px',
+                borderRadius: '7px',
+              }}
+              title="Gastronomía / Restaurantes (Ollita de Cocina)"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
                 <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
                 <line x1="6" y1="1" x2="6" y2="4" />
@@ -126,23 +102,35 @@ function ContenidoPrincipal() {
 
             <button
               onClick={() => cambiarPerfil('minimarket')}
-              style={botonRubroStyle(perfil === 'minimarket')}
-              title="Cambiar a modelo Minimarket (Góndola)"
+              className={perfil === 'minimarket' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
+              style={{
+                height: '30px',
+                padding: '0 11px',
+                fontSize: '11.5px',
+                borderRadius: '7px',
+              }}
+              title="Comercio / Retail / Minimarket (Góndola)"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
-              Minimarket
+              Comercio / Retail
             </button>
 
             <button
               onClick={() => cambiarPerfil('services')}
-              style={botonRubroStyle(perfil === 'services')}
-              title="Cambiar a modelo Servicios (Mesa de proyectos)"
+              className={perfil === 'services' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
+              style={{
+                height: '30px',
+                padding: '0 11px',
+                fontSize: '11.5px',
+                borderRadius: '7px',
+              }}
+              title="Agencia / Servicios / Consultoría (Mesa de Proyectos)"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
               </svg>
@@ -150,31 +138,31 @@ function ContenidoPrincipal() {
             </button>
           </div>
 
-          {/* Badge del Punto de Equilibrio en Vivo */}
+          {/* Badge del Punto de Equilibrio + Meta Sueldo */}
           <div
             className="tabular-nums"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              height: '28px',
-              padding: '0 10px',
-              borderRadius: '6px',
-              backgroundColor: esSolvente ? 'var(--color-brand-50)' : 'var(--color-danger-bg)',
-              border: `1px solid ${esSolvente ? 'var(--color-brand-200)' : 'var(--color-danger-border)'}`,
+              height: '32px',
+              padding: '0 12px',
+              borderRadius: '8px',
+              backgroundColor: esSolvente ? '#ECFDF5' : '#FEF2F2',
+              border: `1.5px solid ${esSolvente ? '#6EE7B7' : '#FCA5A5'}`,
               fontSize: '11.5px',
-              fontWeight: 600,
-              color: esSolvente ? 'var(--color-primary)' : 'var(--color-danger)',
+              fontWeight: 700,
+              color: esSolvente ? '#065F46' : '#991B1B',
             }}
           >
             <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
               <circle cx="12" cy="12" r="8" />
             </svg>
-            <span>PE: {peUnidades.toLocaleString('es-CL')} un.</span>
-            <span style={{ color: 'var(--color-muted-foreground)', fontWeight: 500 }}>({formatCLP(pePesos)})</span>
+            <span>PE Base: {peUnidades.toLocaleString('es-CL')} un.</span>
+            <span>•</span>
+            <span style={{ color: '#0F766E' }}>Meta c/Sueldo: {peConSueldoUnidades.toLocaleString('es-CL')} un.</span>
           </div>
 
-          {/* Indicador Nube Supabase */}
           {user && (
             <div
               onClick={sincronizarConNube}
@@ -184,14 +172,14 @@ function ContenidoPrincipal() {
                 alignItems: 'center',
                 gap: '5px',
                 fontSize: '11px',
-                fontWeight: 600,
-                height: '28px',
-                padding: '0 8px',
-                borderRadius: '6px',
+                fontWeight: 700,
+                height: '30px',
+                padding: '0 10px',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                backgroundColor: syncStatus === 'synced' ? 'var(--color-success-bg)' : '#F4F4F5',
-                border: `1px solid ${syncStatus === 'synced' ? 'var(--color-success-border)' : 'var(--color-border)'}`,
-                color: syncStatus === 'synced' ? 'var(--color-success)' : 'var(--color-muted-foreground)',
+                backgroundColor: syncStatus === 'synced' ? '#ECFDF5' : '#F8FAFC',
+                border: `1.5px solid ${syncStatus === 'synced' ? '#6EE7B7' : '#CBD5E1'}`,
+                color: syncStatus === 'synced' ? '#059669' : '#475569',
               }}
             >
               <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
@@ -202,41 +190,41 @@ function ContenidoPrincipal() {
           )}
         </div>
 
-        {/* Navegación Principal (Centrada exclusivamente en Punto de Equilibrio, Costos Directos y Costos Fijos) */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
+        {/* Navegación Principal con Botones Bacanes */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setVista('punto_equilibrio')}
-            className="btn-eng-secondary"
-            style={botonNavStyle(vista === 'punto_equilibrio')}
+            className={vista === 'punto_equilibrio' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
+            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="20" x2="18" y2="10" />
               <line x1="12" y1="20" x2="12" y2="4" />
               <line x1="6" y1="20" x2="6" y2="14" />
             </svg>
-            Punto de Equilibrio
+            Centro Estratégico & Precios
           </button>
 
           <button
             onClick={() => setVista('insumos')}
-            className="btn-eng-secondary"
-            style={botonNavStyle(vista === 'insumos')}
+            className={vista === 'insumos' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
+            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="12 2 2 7 12 12 22 7 12 2" />
               <polyline points="2 17 12 22 22 17" />
               <polyline points="2 12 12 17 22 12" />
             </svg>
-            Insumos & Costos Directos
+            Recetas & Biblioteca 3D
             <span
               className="tabular-nums"
               style={{
                 fontSize: '10.5px',
-                padding: '1px 5px',
-                borderRadius: '4px',
-                backgroundColor: vista === 'insumos' ? '#FFFFFF' : '#F4F4F5',
-                color: 'var(--color-foreground)',
-                fontWeight: 600,
+                padding: '1px 6px',
+                borderRadius: '5px',
+                backgroundColor: vista === 'insumos' ? 'rgba(255,255,255,0.22)' : '#E2E8F0',
+                color: vista === 'insumos' ? '#FFFFFF' : '#09090B',
+                fontWeight: 800,
               }}
             >
               {insumos.length}
@@ -245,10 +233,10 @@ function ContenidoPrincipal() {
 
           <button
             onClick={() => setVista('costos_fijos')}
-            className="btn-eng-secondary"
-            style={botonNavStyle(vista === 'costos_fijos')}
+            className={vista === 'costos_fijos' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
+            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
               <line x1="16" y1="2" x2="16" y2="6" />
               <line x1="8" y1="2" x2="8" y2="6" />
@@ -259,28 +247,27 @@ function ContenidoPrincipal() {
               className="tabular-nums"
               style={{
                 fontSize: '10.5px',
-                padding: '1px 5px',
-                borderRadius: '4px',
-                backgroundColor: vista === 'costos_fijos' ? '#FFFFFF' : '#F4F4F5',
-                color: 'var(--color-foreground)',
-                fontWeight: 600,
+                padding: '1px 6px',
+                borderRadius: '5px',
+                backgroundColor: vista === 'costos_fijos' ? 'rgba(255,255,255,0.22)' : '#E2E8F0',
+                color: vista === 'costos_fijos' ? '#FFFFFF' : '#09090B',
+                fontWeight: 800,
               }}
             >
               {costosFijos.length}
             </span>
           </button>
 
-          {/* Autenticación de Usuario */}
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span
                 style={{
                   fontSize: '11.5px',
-                  fontWeight: 500,
-                  color: 'var(--color-muted-foreground)',
+                  fontWeight: 600,
+                  color: '#475569',
                   padding: '4px 8px',
                   borderRadius: '6px',
-                  border: '1px solid var(--color-border)',
+                  border: '1px solid #CBD5E1',
                   maxWidth: '120px',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -291,17 +278,13 @@ function ContenidoPrincipal() {
               </span>
               <button
                 onClick={cerrarSesion}
-                className="btn-eng-secondary"
+                className="btn-bacan-secondary"
                 style={{
-                  height: '32px',
+                  height: '34px',
                   padding: '0 10px',
-                  borderRadius: '6px',
                   fontSize: '12px',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  backgroundColor: 'var(--color-danger-bg)',
-                  color: 'var(--color-danger)',
-                  border: '1px solid var(--color-danger-border)',
+                  color: '#DC2626',
+                  borderColor: '#FCA5A5',
                 }}
               >
                 Salir
@@ -310,24 +293,14 @@ function ContenidoPrincipal() {
           ) : (
             <button
               onClick={() => setModalAuthAbierto(true)}
-              className="btn-eng-secondary"
+              className="btn-bacan-secondary"
               style={{
-                height: '34px',
+                height: '36px',
                 padding: '0 12px',
-                borderRadius: '6px',
                 fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                backgroundColor: '#FFFFFF',
-                color: 'var(--color-foreground)',
-                border: '1px solid var(--color-border)',
-                boxShadow: 'var(--shadow-card)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
@@ -337,14 +310,14 @@ function ContenidoPrincipal() {
         </nav>
       </header>
 
-      {/* Sub-barra de Telemetría Rápida de Unidad de Costeo */}
+      {/* Sub-barra de Telemetría Rápida de Unidad de Costeo y Sueldo Objetivo */}
       <div
         style={{
           backgroundColor: '#FFFFFF',
-          borderBottom: '1px solid var(--color-border)',
-          padding: '6px 20px',
+          borderBottom: '1.5px solid #CBD5E1',
+          padding: '8px 20px',
           fontSize: '11.5px',
-          color: 'var(--color-muted-foreground)',
+          color: '#475569',
         }}
       >
         <div
@@ -359,24 +332,28 @@ function ContenidoPrincipal() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
             </svg>
             <span>
-              Unidad Activa: <strong style={{ color: 'var(--color-foreground)' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
+              Producto Activo: <strong style={{ color: '#09090B' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
             </span>
             <span>•</span>
             <span className="tabular-nums">
-              Precio (P): <strong style={{ color: 'var(--color-foreground)' }}>{formatCLP(precioVentaConsolidado)}</strong>
+              Precio (P): <strong style={{ color: '#09090B' }}>{formatCLP(precioVentaConsolidado)}</strong>
             </span>
             <span>•</span>
             <span className="tabular-nums">
-              Costo Directo (CV): <strong style={{ color: 'var(--color-foreground)' }}>{formatCLP(costoVariableConsolidado)}</strong>
+              Costo + Fugas: <strong style={{ color: '#DC2626' }}>{formatCLP(analisisFugasActivas.costoDirectoEfectivoTotal)}</strong>
             </span>
             <span>•</span>
             <span className="tabular-nums">
-              Margen (P - CV): <strong style={{ color: 'var(--color-primary)' }}>{formatCLP(margenContribucion)}</strong>
+              Ganancia Limpia/u: <strong style={{ color: '#059669' }}>{formatCLP(margenContribucion)} ({analisisFugasActivas.margenBrutoRealPorcentaje}%)</strong>
+            </span>
+            <span>•</span>
+            <span className="tabular-nums">
+              Sueldo Objetivo: <strong style={{ color: '#0F766E' }}>{formatCLP(sueldoObjetivo)}</strong>
             </span>
           </div>
 
@@ -385,20 +362,15 @@ function ContenidoPrincipal() {
               <button
                 type="button"
                 onClick={() => setVista('insumos')}
+                className="btn-bacan-secondary"
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--color-primary)',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
+                  height: '28px',
+                  padding: '0 10px',
+                  fontSize: '11px',
                 }}
               >
-                <span>Editar receta e insumos 3D</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <span>Abrir Ollita & Biblioteca 3D</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6" />
                 </svg>
               </button>
