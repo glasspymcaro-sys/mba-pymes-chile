@@ -182,6 +182,26 @@ const COSTOS_FIJOS_DEFAULT = {
   ],
 };
 
+function cargarDeLocalStorage(clave, valorPorDefecto) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return valorPorDefecto;
+    const raw = localStorage.getItem(clave);
+    if (!raw) return valorPorDefecto;
+    return JSON.parse(raw);
+  } catch {
+    return valorPorDefecto;
+  }
+}
+
+function guardarEnLocalStorage(clave, valor) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    localStorage.setItem(clave, JSON.stringify(valor));
+  } catch (e) {
+    console.warn('Error guardando en localStorage:', e);
+  }
+}
+
 const AppStateContext = createContext(null);
 
 export function AppStateProvider({ children }) {
@@ -193,11 +213,11 @@ export function AppStateProvider({ children }) {
   const syncTimeoutRef = useRef(null);
 
   // Perfil de negocio (restaurant, minimarket, services)
-  const [perfil, setPerfil] = useState('restaurant');
-  const [nombreNegocio, setNombreNegocio] = useState('Restaurante y Bistró Central');
+  const [perfil, setPerfil] = useState(() => cargarDeLocalStorage('mba_perfil_activo', 'restaurant'));
+  const [nombreNegocio, setNombreNegocio] = useState(() => cargarDeLocalStorage('mba_nombre_negocio', 'Restaurante y Bistró Central'));
 
   // 1. Sueldo Objetivo Líquido Mensual (Ingeniería Inversa Target Profit) y Capacidad Operativa
-  const [sueldoObjetivo, setSueldoObjetivo] = useState(1500000);
+  const [sueldoObjetivo, setSueldoObjetivo] = useState(() => cargarDeLocalStorage('mba_sueldo_objetivo', 1500000));
   const [diasOperativosMes, setDiasOperativosMes] = useState(25);
   const [horasOperativasDia, setHorasOperativasDia] = useState(8);
   const [capacidadMaximaHora, setCapacidadMaximaHora] = useState(14);
@@ -212,17 +232,29 @@ export function AppStateProvider({ children }) {
     mermaPackagingPorcentaje: 3.0,
   });
 
-  // Insumos disponibles en catálogo
-  const [insumos, setInsumos] = useState(INSUMOS_DEFAULT.restaurant);
+  // Insumos disponibles en catálogo con persistencia garantizada
+  const [insumos, setInsumos] = useState(() =>
+    cargarDeLocalStorage('mba_insumos_' + (cargarDeLocalStorage('mba_perfil_activo', 'restaurant')), INSUMOS_DEFAULT.restaurant)
+  );
 
-  // Catálogo de Recetas / Productos Creados
-  const [recetas, setRecetas] = useState(RECETAS_DEFAULT.restaurant);
+  // Catálogo de Recetas / Productos Creados con persistencia garantizada
+  const [recetas, setRecetas] = useState(() =>
+    cargarDeLocalStorage('mba_recetas_' + (cargarDeLocalStorage('mba_perfil_activo', 'restaurant')), RECETAS_DEFAULT.restaurant)
+  );
 
-  // Receta en Preparación adentro de la Ollita / Stand
-  const [recetaEnOlla, setRecetaEnOlla] = useState(RECETAS_DEFAULT.restaurant[0]);
+  // Receta en Preparación adentro del generador
+  const [recetaEnOlla, setRecetaEnOlla] = useState(() => {
+    const perfilActivo = cargarDeLocalStorage('mba_perfil_activo', 'restaurant');
+    const guardada = cargarDeLocalStorage('mba_receta_activa_' + perfilActivo, null);
+    if (guardada) return guardada;
+    const lista = cargarDeLocalStorage('mba_recetas_' + perfilActivo, RECETAS_DEFAULT[perfilActivo]);
+    return (lista && lista[0]) || RECETAS_DEFAULT.restaurant[0];
+  });
 
   // Costos Fijos
-  const [costosFijos, setCostosFijos] = useState(COSTOS_FIJOS_DEFAULT.restaurant);
+  const [costosFijos, setCostosFijos] = useState(() =>
+    cargarDeLocalStorage('mba_costos_fijos_' + (cargarDeLocalStorage('mba_perfil_activo', 'restaurant')), COSTOS_FIJOS_DEFAULT.restaurant)
+  );
 
   // Parámetros Clave para Punto de Equilibrio
   const [ventasEstimadasMensuales, setVentasEstimadasMensuales] = useState(650);
@@ -262,21 +294,27 @@ export function AppStateProvider({ children }) {
   // Cambiar perfil de negocio
   const cambiarPerfil = useCallback((nuevoPerfil) => {
     setPerfil(nuevoPerfil);
+    guardarEnLocalStorage('mba_perfil_activo', nuevoPerfil);
     const nombres = {
       restaurant: 'Restaurante y Bistró Central',
       minimarket: 'Minimarket & Abarrotes Express',
       services: 'Agencia de Consultoría & TI',
     };
-    setNombreNegocio(nombres[nuevoPerfil] || 'Mi Negocio PyME');
+    const nom = nombres[nuevoPerfil] || 'Mi Negocio PyME';
+    setNombreNegocio(nom);
+    guardarEnLocalStorage('mba_nombre_negocio', nom);
 
-    const nuevosInsumos = INSUMOS_DEFAULT[nuevoPerfil] || [];
+    const nuevosInsumos = cargarDeLocalStorage('mba_insumos_' + nuevoPerfil, INSUMOS_DEFAULT[nuevoPerfil] || []);
     setInsumos(nuevosInsumos);
 
-    const nuevasRecetas = RECETAS_DEFAULT[nuevoPerfil] || [];
+    const nuevasRecetas = cargarDeLocalStorage('mba_recetas_' + nuevoPerfil, RECETAS_DEFAULT[nuevoPerfil] || []);
     setRecetas(nuevasRecetas);
-    setRecetaEnOlla(nuevasRecetas[0] || { nombre: 'Nuevo Producto', precioVenta: 5000, mixPorcentaje: 100, ingredientes: [] });
 
-    setCostosFijos(COSTOS_FIJOS_DEFAULT[nuevoPerfil] || []);
+    const recetaActiva = cargarDeLocalStorage('mba_receta_activa_' + nuevoPerfil, nuevasRecetas[0] || { nombre: 'Nuevo Producto', precioVenta: 5000, mixPorcentaje: 100, ingredientes: [] });
+    setRecetaEnOlla(recetaActiva);
+
+    const nuevosCF = cargarDeLocalStorage('mba_costos_fijos_' + nuevoPerfil, COSTOS_FIJOS_DEFAULT[nuevoPerfil] || []);
+    setCostosFijos(nuevosCF);
 
     if (nuevoPerfil === 'restaurant') {
       setVentasEstimadasMensuales(650);
@@ -296,107 +334,176 @@ export function AppStateProvider({ children }) {
     const itemCon3D = {
       ...nuevoItem,
       tipologia: tipologiaDetectada,
+      imagenPersonalizada: nuevoItem.imagenPersonalizada || null,
       imagenFalUrl: nuevoItem.imagenFalUrl || construirUrlActivo3D(nuevoItem.nombre, perfil),
     };
-    setInsumos((prev) => [itemCon3D, ...prev]);
+    setInsumos((prev) => {
+      const actualizados = [itemCon3D, ...prev];
+      guardarEnLocalStorage(`mba_insumos_${perfil}`, actualizados);
+      return actualizados;
+    });
   };
 
   const eliminarInsumo = (id) => {
-    setInsumos((prev) => prev.filter((item) => item.id !== id));
-    setRecetaEnOlla((prev) => ({
-      ...prev,
-      ingredientes: (prev.ingredientes || []).filter((item) => item.id !== id),
-    }));
+    setInsumos((prev) => {
+      const actualizados = prev.filter((item) => item.id !== id);
+      guardarEnLocalStorage(`mba_insumos_${perfil}`, actualizados);
+      return actualizados;
+    });
+    setRecetaEnOlla((prev) => {
+      const actualizada = {
+        ...prev,
+        ingredientes: (prev.ingredientes || []).filter((item) => item.id !== id),
+      };
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
+      return actualizada;
+    });
   };
 
   const editarInsumo = (itemActualizado) => {
-    setInsumos((prev) =>
-      prev.map((item) => (item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item))
-    );
-    setRecetaEnOlla((prev) => ({
-      ...prev,
-      ingredientes: (prev.ingredientes || []).map((item) =>
-        item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item
-      ),
-    }));
+    setInsumos((prev) => {
+      const actualizados = prev.map((item) => (item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item));
+      guardarEnLocalStorage(`mba_insumos_${perfil}`, actualizados);
+      return actualizados;
+    });
+    setRecetaEnOlla((prev) => {
+      const actualizada = {
+        ...prev,
+        ingredientes: (prev.ingredientes || []).map((item) =>
+          item.id === itemActualizado.id ? { ...item, ...itemActualizado } : item
+        ),
+      };
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
+      return actualizada;
+    });
   };
 
-  // Dinámica de la Ollita / Generador de Recetas
+  // Dinámica del Generador de Recetas y Productos
   const agregarIngredienteAOlla = (insumo, cantidad = 1) => {
     setRecetaEnOlla((prev) => {
       const ingredientesActuales = prev.ingredientes || [];
       const existente = ingredientesActuales.find((item) => item.id === insumo.id);
 
+      let nuevaReceta;
       if (existente) {
-        return {
+        nuevaReceta = {
           ...prev,
           ingredientes: ingredientesActuales.map((item) =>
             item.id === insumo.id ? { ...item, cantidad: (item.cantidad || 1) + cantidad } : item
           ),
         };
+      } else {
+        const nuevoIngrediente = {
+          ...insumo,
+          idAsignado: `ing_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+          cantidad,
+        };
+        nuevaReceta = {
+          ...prev,
+          ingredientes: [...ingredientesActuales, nuevoIngrediente],
+        };
       }
-
-      const nuevoIngrediente = {
-        ...insumo,
-        idAsignado: `ing_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-        cantidad,
-      };
-
-      return {
-        ...prev,
-        ingredientes: [...ingredientesActuales, nuevoIngrediente],
-      };
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, nuevaReceta);
+      return nuevaReceta;
     });
   };
 
   const eliminarIngredienteDeOlla = (idAsignadoOId) => {
-    setRecetaEnOlla((prev) => ({
-      ...prev,
-      ingredientes: (prev.ingredientes || []).filter(
-        (item) => item.idAsignado !== idAsignadoOId && item.id !== idAsignadoOId
-      ),
-    }));
+    setRecetaEnOlla((prev) => {
+      const actualizada = {
+        ...prev,
+        ingredientes: (prev.ingredientes || []).filter(
+          (item) => item.idAsignado !== idAsignadoOId && item.id !== idAsignadoOId
+        ),
+      };
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
+      return actualizada;
+    });
   };
 
   const cambiarCantidadIngrediente = (idAsignado, nuevaCantidad) => {
     const cant = Math.max(0.1, Number(nuevaCantidad) || 1);
-    setRecetaEnOlla((prev) => ({
-      ...prev,
-      ingredientes: (prev.ingredientes || []).map((item) =>
-        item.idAsignado === idAsignado || item.id === idAsignado ? { ...item, cantidad: cant } : item
-      ),
-    }));
+    setRecetaEnOlla((prev) => {
+      const actualizada = {
+        ...prev,
+        ingredientes: (prev.ingredientes || []).map((item) =>
+          item.idAsignado === idAsignado || item.id === idAsignado ? { ...item, cantidad: cant } : item
+        ),
+      };
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
+      return actualizada;
+    });
   };
 
   const setNombreRecetaEnOlla = (nuevoNombre) => {
-    setRecetaEnOlla((prev) => ({ ...prev, nombre: nuevoNombre }));
+    setRecetaEnOlla((prev) => {
+      const actualizada = { ...prev, nombre: nuevoNombre };
+      setRecetas((lista) => {
+        const nuevas = lista.map((r) => (r.id === actualizada.id ? { ...r, nombre: nuevoNombre } : r));
+        guardarEnLocalStorage(`mba_recetas_${perfil}`, nuevas);
+        return nuevas;
+      });
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
+      return actualizada;
+    });
   };
 
   const setPrecioRecetaEnOlla = (nuevoPrecio) => {
     const precioNum = Math.max(0, Number(nuevoPrecio) || 0);
     setRecetaEnOlla((prev) => {
       const actualizada = { ...prev, precioVenta: precioNum };
-      setRecetas((lista) => lista.map((r) => (r.id === actualizada.id ? { ...r, precioVenta: precioNum } : r)));
+      setRecetas((lista) => {
+        const nuevas = lista.map((r) => (r.id === actualizada.id ? { ...r, precioVenta: precioNum } : r));
+        guardarEnLocalStorage(`mba_recetas_${perfil}`, nuevas);
+        return nuevas;
+      });
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
       return actualizada;
     });
   };
 
   const setImagenRecetaEnOlla = (imagenDataUrl) => {
-    setRecetaEnOlla((prev) => ({ ...prev, imagenPersonalizada: imagenDataUrl }));
+    setRecetaEnOlla((prev) => {
+      const actualizada = { ...prev, imagenPersonalizada: imagenDataUrl };
+      setRecetas((lista) => {
+        const existe = lista.some((r) => r.id === actualizada.id);
+        const nuevas = existe
+          ? lista.map((r) => (r.id === actualizada.id ? { ...r, imagenPersonalizada: imagenDataUrl } : r))
+          : [actualizada, ...lista];
+        guardarEnLocalStorage(`mba_recetas_${perfil}`, nuevas);
+        return nuevas;
+      });
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
+      return actualizada;
+    });
   };
 
   const setFiguraProductoIdEnOlla = (figuraId) => {
-    setRecetaEnOlla((prev) => ({ ...prev, figuraId }));
+    setRecetaEnOlla((prev) => {
+      const actualizada = { ...prev, figuraId };
+      setRecetas((lista) => {
+        const existe = lista.some((r) => r.id === actualizada.id);
+        const nuevas = existe
+          ? lista.map((r) => (r.id === actualizada.id ? { ...r, figuraId } : r))
+          : [actualizada, ...lista];
+        guardarEnLocalStorage(`mba_recetas_${perfil}`, nuevas);
+        return nuevas;
+      });
+      guardarEnLocalStorage(`mba_receta_activa_${perfil}`, actualizada);
+      return actualizada;
+    });
   };
 
   const vaciarOlla = () => {
-    setRecetaEnOlla({
+    const nueva = {
       id: 'rec_' + Date.now(),
       nombre: perfil === 'restaurant' ? 'Nueva Receta de Plato' : perfil === 'minimarket' ? 'Nuevo Pack de Productos' : 'Nueva Propuesta de Servicio',
       precioVenta: 5000,
       mixPorcentaje: 20,
       ingredientes: [],
-    });
+    };
+    setRecetaEnOlla(nueva);
+    guardarEnLocalStorage(`mba_receta_activa_${perfil}`, nueva);
   };
 
   const guardarRecetaActiva = () => {
@@ -406,46 +513,65 @@ export function AppStateProvider({ children }) {
       id: recetaEnOlla.id || 'rec_' + Date.now(),
       costoTotal: costoVariableConsolidado,
       mixPorcentaje: recetaEnOlla.mixPorcentaje || 25,
+      imagenPersonalizada: recetaEnOlla.imagenPersonalizada || null,
+      figuraId: recetaEnOlla.figuraId || '',
     };
 
     setRecetas((prev) => {
       const existe = prev.some((r) => r.id === recetaGuardada.id);
-      if (existe) {
-        return prev.map((r) => (r.id === recetaGuardada.id ? recetaGuardada : r));
-      }
-      return [recetaGuardada, ...prev];
+      const nuevas = existe
+        ? prev.map((r) => (r.id === recetaGuardada.id ? recetaGuardada : r))
+        : [recetaGuardada, ...prev];
+      guardarEnLocalStorage(`mba_recetas_${perfil}`, nuevas);
+      return nuevas;
     });
+
+    setRecetaEnOlla(recetaGuardada);
+    guardarEnLocalStorage(`mba_receta_activa_${perfil}`, recetaGuardada);
   };
 
   const cargarRecetaEnOlla = (receta) => {
     setRecetaEnOlla({ ...receta });
+    guardarEnLocalStorage(`mba_receta_activa_${perfil}`, receta);
   };
 
   // Mutadores de Mix Multiproducto e Ingeniería de Menú
   const actualizarMixReceta = (idReceta, nuevoMix) => {
     const valor = Math.max(1, Math.min(100, Number(nuevoMix) || 1));
-    setRecetas((prev) => prev.map((r) => (r.id === idReceta ? { ...r, mixPorcentaje: valor } : r)));
+    setRecetas((prev) => {
+      const nuevas = prev.map((r) => (r.id === idReceta ? { ...r, mixPorcentaje: valor } : r));
+      guardarEnLocalStorage(`mba_recetas_${perfil}`, nuevas);
+      return nuevas;
+    });
   };
 
   const ajustarPrecioRecetaPorId = (idReceta, factorMultiplicador = 1.05) => {
-    setRecetas((prev) =>
-      prev.map((r) => {
+    setRecetas((prev) => {
+      const nuevas = prev.map((r) => {
         if (r.id !== idReceta) return r;
         const nuevoPrecio = Math.ceil((Number(r.precioVenta || 1000) * factorMultiplicador) / 100) * 100;
         if (recetaEnOlla?.id === idReceta) {
-          setRecetaEnOlla((actual) => ({ ...actual, precioVenta: nuevoPrecio }));
+          setRecetaEnOlla((actual) => {
+            const act = { ...actual, precioVenta: nuevoPrecio };
+            guardarEnLocalStorage(`mba_receta_activa_${perfil}`, act);
+            return act;
+          });
         }
         return { ...r, precioVenta: nuevoPrecio };
-      })
-    );
+      });
+      guardarEnLocalStorage(`mba_recetas_${perfil}`, nuevas);
+      return nuevas;
+    });
   };
 
   const eliminarRecetaPorId = (idReceta) => {
     setRecetas((prev) => {
       if (prev.length <= 1) return prev;
       const filtradas = prev.filter((r) => r.id !== idReceta);
+      guardarEnLocalStorage(`mba_recetas_${perfil}`, filtradas);
       if (recetaEnOlla?.id === idReceta && filtradas[0]) {
         setRecetaEnOlla(filtradas[0]);
+        guardarEnLocalStorage(`mba_receta_activa_${perfil}`, filtradas[0]);
       }
       return filtradas;
     });

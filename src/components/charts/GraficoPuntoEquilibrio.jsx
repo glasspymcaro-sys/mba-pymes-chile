@@ -1,12 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatCLP, formatCompactCLP } from '../../utils/formatters.js';
 
 /**
- * Gráfico Ejecutivo de Punto de Equilibrio con Iluminación PBR y Zonificación de Rentabilidad
- * Visualiza el umbral crítico, la zona de déficit operativo y la zona de beneficio neto con estética institucional.
+ * Gráfico Ejecutivo de Punto de Equilibrio y Zonificación de Rentabilidad
+ * Incorpora visor modal ampliado con simulador dinámico de volumen ('moverte por el gráfico').
+ * Cumple estrictamente con la regla de cero emojis.
  */
-export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnidades = 0 }) {
+export default function GraficoPuntoEquilibrio({
+  datos = [],
+  puntoEquilibrioUnidades = 0,
+  precioUnitario = 0,
+  costoVariableUnitario = 0,
+  costoFijoTotal = 0,
+  sueldoObjetivo = 0,
+  ventasEstimadas = 0,
+}) {
   const [hoverIndex, setHoverIndex] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [escalaZoom, setEscalaZoom] = useState(1.0);
+  const [unidadesScrubber, setUnidadesScrubber] = useState(
+    ventasEstimadas > 0 ? ventasEstimadas : puntoEquilibrioUnidades || 50
+  );
+
+  // Escuchar tecla Escape para cerrar el modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && modalAbierto) {
+        setModalAbierto(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [modalAbierto]);
+
+  // Si cambian las ventas estimadas o el punto de equilibrio, sincronizar scrubber si no se ha interactuado
+  useEffect(() => {
+    if (ventasEstimadas > 0) {
+      setUnidadesScrubber(ventasEstimadas);
+    } else if (puntoEquilibrioUnidades > 0) {
+      setUnidadesScrubber(puntoEquilibrioUnidades);
+    }
+  }, [ventasEstimadas, puntoEquilibrioUnidades]);
 
   if (!datos || datos.length === 0) {
     return (
@@ -16,6 +50,7 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
     );
   }
 
+  // --- Dimensiones Gráfico Normal (Inline) ---
   const width = 820;
   const height = 400;
   const padding = { top: 40, right: 35, bottom: 50, left: 80 };
@@ -32,13 +67,13 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
   const pathIngresos = datos.map((d, i) => `${i === 0 ? 'M' : 'L'} ${getX(d.unidades)} ${getY(d.ingresos)}`).join(' ');
   const pathCostos = datos.map((d, i) => `${i === 0 ? 'M' : 'L'} ${getX(d.unidades)} ${getY(d.costos)}`).join(' ');
 
-  // Coordenadas del Punto de Equilibrio
+  // Coordenadas del Punto de Equilibrio en Gráfico Normal
   const peX = getX(puntoEquilibrioUnidades);
   const primerDatoSobrePe = datos.find((d) => d.unidades >= puntoEquilibrioUnidades);
   const montoPeEstimado = primerDatoSobrePe ? primerDatoSobrePe.costos : maxMonto * 0.5;
   const peY = getY(montoPeEstimado);
 
-  // Polígono de Utilidad Neta (Zona a la derecha del Punto de Equilibrio donde Ingresos > Costos)
+  // Polígono de Utilidad Neta (Zona a la derecha del PE)
   const datosPostPe = datos.filter((d) => d.unidades >= puntoEquilibrioUnidades);
   let areaUtilidad = '';
   if (datosPostPe.length > 0 && puntoEquilibrioUnidades <= maxUnidades) {
@@ -47,7 +82,7 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
     areaUtilidad = `M ${peX} ${peY} ${ptsIngresos} ${ptsCostosRev} Z`;
   }
 
-  // Polígono de Déficit Operativo (Zona a la izquierda del Punto de Equilibrio donde Costos > Ingresos)
+  // Polígono de Déficit Operativo (Zona a la izquierda del PE)
   const datosPrePe = datos.filter((d) => d.unidades <= puntoEquilibrioUnidades);
   let areaDeficit = '';
   if (datosPrePe.length > 0 && puntoEquilibrioUnidades > 0) {
@@ -59,9 +94,87 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
   const yTicks = [0, maxMonto * 0.25, maxMonto * 0.5, maxMonto * 0.75, maxMonto];
   const activePoint = hoverIndex !== null ? datos[hoverIndex] : null;
 
+  // --- Dimensiones & Proyección para el Modal Ampliado ---
+  const modalW = 960;
+  const modalH = 460;
+  const modalPad = { top: 45, right: 45, bottom: 60, left: 95 };
+  const modalChartW = modalW - modalPad.left - modalPad.right;
+  const modalChartH = modalH - modalPad.top - modalPad.bottom;
+
+  const maxUnidadesModal = Math.max(Math.round(maxUnidades * escalaZoom), 20);
+  const pEfectivo = precioUnitario > 0 ? precioUnitario : (datos[1]?.ingresos || 1000) / (datos[1]?.unidades || 1);
+  const cvEfectivo = costoVariableUnitario > 0 ? costoVariableUnitario : 0;
+  const cfEfectivo = costoFijoTotal > 0 ? costoFijoTotal : datos[0]?.costos || 0;
+
+  // Monto máximo en escala ampliada
+  const maxIngresoModal = maxUnidadesModal * pEfectivo;
+  const maxCostoModal = cfEfectivo + maxUnidadesModal * cvEfectivo;
+  const maxMontoModal = Math.max(maxIngresoModal, maxCostoModal, 1000) * 1.15;
+
+  const getModalX = (unidades) => modalPad.left + (Math.min(unidades, maxUnidadesModal) / maxUnidadesModal) * modalChartW;
+  const getModalY = (monto) => modalH - modalPad.bottom - (Math.min(monto, maxMontoModal) / maxMontoModal) * modalChartH;
+
+  // Curvas analíticas continuas para el modal
+  const puntosModalCount = 12;
+  const pasoModal = Math.ceil(maxUnidadesModal / puntosModalCount);
+  const puntosSerieModal = [];
+  for (let u = 0; u <= maxUnidadesModal; u += pasoModal) {
+    puntosSerieModal.push({
+      unidades: u,
+      ingresos: u * pEfectivo,
+      costos: cfEfectivo + u * cvEfectivo,
+    });
+  }
+  if (puntosSerieModal[puntosSerieModal.length - 1].unidades < maxUnidadesModal) {
+    puntosSerieModal.push({
+      unidades: maxUnidadesModal,
+      ingresos: maxUnidadesModal * pEfectivo,
+      costos: cfEfectivo + maxUnidadesModal * cvEfectivo,
+    });
+  }
+
+  const modalPathIngresos = `M ${getModalX(0)} ${getModalY(0)} L ${getModalX(maxUnidadesModal)} ${getModalY(maxIngresoModal)}`;
+  const modalPathCostos = `M ${getModalX(0)} ${getModalY(cfEfectivo)} L ${getModalX(maxUnidadesModal)} ${getModalY(maxCostoModal)}`;
+  const modalPathCostoFijo = `M ${getModalX(0)} ${getModalY(cfEfectivo)} L ${getModalX(maxUnidadesModal)} ${getModalY(cfEfectivo)}`;
+
+  // Coordenadas del PE en el modal
+  const peModalX = getModalX(puntoEquilibrioUnidades);
+  const montoPeModal = cfEfectivo + puntoEquilibrioUnidades * cvEfectivo;
+  const peModalY = getModalY(montoPeModal);
+
+  // Áreas sombreadas en modal
+  let modalAreaDeficit = '';
+  if (puntoEquilibrioUnidades > 0) {
+    modalAreaDeficit = `M ${getModalX(0)} ${getModalY(cfEfectivo)} L ${peModalX} ${peModalY} L ${getModalX(0)} ${getModalY(0)} Z`;
+  }
+
+  let modalAreaUtilidad = '';
+  if (puntoEquilibrioUnidades < maxUnidadesModal) {
+    modalAreaUtilidad = `M ${peModalX} ${peModalY} L ${getModalX(maxUnidadesModal)} ${getModalY(maxIngresoModal)} L ${getModalX(maxUnidadesModal)} ${getModalY(maxCostoModal)} Z`;
+  }
+
+  // Telemetría en tiempo real del Scrubber (Simulación interactiva de volumen)
+  const valIngresoScrubber = Math.round(unidadesScrubber * pEfectivo);
+  const valCostoVarScrubber = Math.round(unidadesScrubber * cvEfectivo);
+  const valCostoTotalScrubber = Math.round(cfEfectivo + valCostoVarScrubber);
+  const valMargenContribucionScrubber = Math.round(valIngresoScrubber - valCostoVarScrubber);
+  const valResultadoScrubber = Math.round(valIngresoScrubber - valCostoTotalScrubber);
+  const estaEnGanancia = valResultadoScrubber >= 0;
+  const porcentajeCoberturaPE = puntoEquilibrioUnidades > 0
+    ? Math.round((unidadesScrubber / puntoEquilibrioUnidades) * 100)
+    : 100;
+
+  // Meta con Sueldo Objetivo en unidades
+  const margenUnitario = Math.max(0, pEfectivo - cvEfectivo);
+  const metaConSueldoUnidades = margenUnitario > 0
+    ? Math.ceil((cfEfectivo + Number(sueldoObjetivo || 0)) / margenUnitario)
+    : 0;
+
+  const modalYTicks = [0, maxMontoModal * 0.25, maxMontoModal * 0.5, maxMontoModal * 0.75, maxMontoModal];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative' }}>
-      {/* Encabezado y Leyenda Superior PBR */}
+      {/* Encabezado y Leyenda Superior */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
@@ -75,7 +188,7 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
           </p>
         </div>
 
-        {/* Badges de Leyenda y Estado */}
+        {/* Badges de Leyenda y Botón de Explorar en Detalle */}
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div
             style={{
@@ -92,7 +205,7 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
             }}
           >
             <span style={{ width: '10px', height: '10px', borderRadius: '3px', background: 'linear-gradient(135deg, #0F766E, #14B8A6)', display: 'inline-block' }} />
-            <span>Ingresos por Ventas</span>
+            <span>Ingresos</span>
           </div>
 
           <div
@@ -110,7 +223,7 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
             }}
           >
             <span style={{ width: '10px', height: '10px', borderRadius: '3px', background: 'linear-gradient(135deg, #DC2626, #F87171)', display: 'inline-block' }} />
-            <span>Costos Totales (CF + CV)</span>
+            <span>Costos Totales</span>
           </div>
 
           <div
@@ -130,10 +243,41 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-brand-700)', display: 'inline-block', boxShadow: '0 0 0 2px rgba(15,118,110,0.25)' }} />
             <span>PE: {puntoEquilibrioUnidades.toLocaleString('es-CL')} un.</span>
           </div>
+
+          {/* Botón Principal: Abrir Explorador a Detalle */}
+          <button
+            type="button"
+            onClick={() => setModalAbierto(true)}
+            className="btn-bacan-secondary"
+            title="Abrir vista detallada e interactiva para simular volúmenes sobre la curva"
+            style={{
+              height: '32px',
+              padding: '0 12px',
+              fontSize: '12px',
+              fontWeight: 600,
+              color: '#0F172A',
+              backgroundColor: '#FFFFFF',
+              border: '1.5px solid #0F766E',
+              borderRadius: '6px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(15, 118, 110, 0.12)',
+            }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 3 21 3 21 9" />
+              <polyline points="9 21 3 21 3 15" />
+              <line x1="21" y1="3" x2="14" y2="10" />
+              <line x1="3" y1="21" x2="10" y2="14" />
+            </svg>
+            <span>Explorar en Detalle</span>
+          </button>
         </div>
       </div>
 
-      {/* Contenedor del Gráfico SVG Responsive con Sombras de Estudio */}
+      {/* Contenedor del Gráfico SVG Responsive Inline */}
       <div
         style={{
           width: '100%',
@@ -156,21 +300,18 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
           }}
         >
           <defs>
-            {/* Gradiente multi-stop para zona de utilidad neta */}
             <linearGradient id="pbrGradUtilidad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#0F766E" stopOpacity="0.28" />
               <stop offset="60%" stopColor="#14B8A6" stopOpacity="0.14" />
               <stop offset="100%" stopColor="#2DD4BF" stopOpacity="0.04" />
             </linearGradient>
 
-            {/* Gradiente para zona de déficit operativo */}
             <linearGradient id="pbrGradDeficit" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#EF4444" stopOpacity="0.18" />
               <stop offset="70%" stopColor="#F87171" stopOpacity="0.08" />
               <stop offset="100%" stopColor="#FCA5A5" stopOpacity="0.02" />
             </linearGradient>
 
-            {/* Sombra de punto de equilibrio */}
             <filter id="pbrPuntoSombra" x="-30%" y="-30%" width="160%" height="160%">
               <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#0F766E" floodOpacity="0.4" />
             </filter>
@@ -182,7 +323,7 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
           {/* Área sombreada de utilidad neta posterior al PE */}
           {areaUtilidad && <path d={areaUtilidad} fill="url(#pbrGradUtilidad)" />}
 
-          {/* Grilla horizontal de precisión financiera */}
+          {/* Grilla horizontal de montos */}
           {yTicks.map((val, idx) => (
             <g key={idx}>
               <line
@@ -291,11 +432,9 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
                 strokeDasharray="4 4"
               />
 
-              {/* Anillo de pulso visual */}
               <circle cx={peX} cy={peY} r="12" fill="#0F766E" fillOpacity="0.12" />
               <circle cx={peX} cy={peY} r="8" fill="#0F766E" stroke="#FFFFFF" strokeWidth="2.5" filter="url(#pbrPuntoSombra)" />
 
-              {/* Pin flotante con etiqueta técnica */}
               <g transform={`translate(${Math.min(peX + 10, width - padding.right - 140)}, ${Math.max(peY - 32, padding.top + 6)})`}>
                 <rect
                   x="0"
@@ -365,7 +504,7 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
           ))}
         </svg>
 
-        {/* Tooltip Dinámico Flotante */}
+        {/* Tooltip Dinámico Flotante en Inline */}
         {activePoint && (
           <div
             style={{
@@ -412,6 +551,8 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
           color: 'var(--color-muted-foreground)',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
           gap: '8px',
           padding: '10px 14px',
           backgroundColor: '#FAFAFA',
@@ -419,15 +560,654 @@ export default function GraficoPuntoEquilibrio({ datos = [], puntoEquilibrioUnid
           border: '1px solid var(--color-border)',
         }}
       >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="16" x2="12" y2="12" />
-          <line x1="12" y1="8" x2="12.01" y2="8" />
-        </svg>
-        <span>
-          A partir de <strong style={{ color: 'var(--color-foreground)' }}>{puntoEquilibrioUnidades.toLocaleString('es-CL')} unidades</strong> comercializadas, los ingresos cubren íntegramente la estructura de costos fijos y el negocio entra en zona de beneficio operacional neta.
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          <span>
+            A partir de <strong style={{ color: 'var(--color-foreground)' }}>{puntoEquilibrioUnidades.toLocaleString('es-CL')} unidades</strong> comercializadas, los ingresos cubren íntegramente la estructura de costos fijos y el negocio entra en zona de beneficio operacional neta.
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setModalAbierto(true)}
+          style={{
+            fontSize: '11.5px',
+            fontWeight: 600,
+            color: 'var(--color-primary)',
+            background: 'transparent',
+            border: 'none',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            padding: '2px 4px',
+          }}
+        >
+          Moverte por el gráfico a detalle &rarr;
+        </button>
       </div>
+
+      {/* ========================================================================= */}
+      {/* MODAL DETALLADO E INTERACTIVO: EXPLORAR EN DETALLE & MOVERTE POR EL GRÁFICO */}
+      {/* ========================================================================= */}
+      {modalAbierto && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            backgroundColor: 'rgba(15, 23, 42, 0.75)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            animation: 'fadeIn 0.2s ease',
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '14px',
+              border: '1px solid #CBD5E1',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              width: '100%',
+              maxWidth: '1020px',
+              maxHeight: '94vh',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              padding: '22px 26px',
+            }}
+          >
+            {/* Cabecera del Modal */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #E2E8F0', paddingBottom: '14px' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span
+                    style={{
+                      fontSize: '10.5px',
+                      fontWeight: 700,
+                      color: '#0F766E',
+                      backgroundColor: '#CCFBF1',
+                      border: '1px solid #99F6E4',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                    }}
+                  >
+                    Simulador Visual en Tiempo Real
+                  </span>
+                  <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
+                    Resolución Ampliada 960x460
+                  </span>
+                </div>
+                <h2 className="heading-tight" style={{ fontSize: '20px', fontWeight: 700, color: '#0F172A', margin: '6px 0 2px 0' }}>
+                  Explorador de Punto de Equilibrio & Proyección de Resultados
+                </h2>
+                <p style={{ fontSize: '13px', color: '#475569', margin: 0 }}>
+                  Desliza la barra interactiva para recorrer la curva y comprobar ingresos, costos y ganancias en cada nivel de venta.
+                </p>
+              </div>
+
+              {/* Botón de Cerrar */}
+              <button
+                type="button"
+                onClick={() => setModalAbierto(false)}
+                title="Cerrar ventana (Esc)"
+                style={{
+                  height: '36px',
+                  width: '36px',
+                  borderRadius: '8px',
+                  border: '1px solid #E2E8F0',
+                  backgroundColor: '#F8FAFC',
+                  color: '#475569',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Controles de Escala / Zoom y Botones de Salto Rápido */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '12px',
+                backgroundColor: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                borderRadius: '10px',
+                padding: '10px 14px',
+              }}
+            >
+              {/* Selector de Escala de Proyección */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                  Ampliación del Rango:
+                </span>
+                <div style={{ display: 'inline-flex', gap: '4px' }}>
+                  {[
+                    { id: 1.0, label: '1.0x (Estándar)' },
+                    { id: 1.5, label: '1.5x (Ampliación)' },
+                    { id: 2.0, label: '2.0x (Gran Escala)' },
+                  ].map((z) => (
+                    <button
+                      key={z.id}
+                      type="button"
+                      onClick={() => setEscalaZoom(z.id)}
+                      style={{
+                        padding: '4px 10px',
+                        fontSize: '11px',
+                        fontWeight: escalaZoom === z.id ? 700 : 500,
+                        borderRadius: '6px',
+                        border: `1px solid ${escalaZoom === z.id ? '#0F766E' : '#CBD5E1'}`,
+                        backgroundColor: escalaZoom === z.id ? '#0F766E' : '#FFFFFF',
+                        color: escalaZoom === z.id ? '#FFFFFF' : '#334155',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {z.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Saltos Rápidos de Simulación */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                  Saltar a:
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setUnidadesScrubber(0)}
+                  style={{
+                    padding: '3px 8px',
+                    fontSize: '11px',
+                    borderRadius: '5px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    color: '#334155',
+                    cursor: 'pointer',
+                  }}
+                >
+                  0 un. (Base)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUnidadesScrubber(puntoEquilibrioUnidades)}
+                  style={{
+                    padding: '3px 8px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    borderRadius: '5px',
+                    border: '1px solid #99F6E4',
+                    backgroundColor: '#CCFBF1',
+                    color: '#0F766E',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Equilibrio ({puntoEquilibrioUnidades} un.)
+                </button>
+                {metaConSueldoUnidades > 0 && metaConSueldoUnidades <= maxUnidadesModal && (
+                  <button
+                    type="button"
+                    onClick={() => setUnidadesScrubber(metaConSueldoUnidades)}
+                    style={{
+                      padding: '3px 8px',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      borderRadius: '5px',
+                      border: '1px solid #BAE6FD',
+                      backgroundColor: '#E0F2FE',
+                      color: '#0369A1',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Meta Sueldo ({metaConSueldoUnidades} un.)
+                  </button>
+                )}
+                {ventasEstimadas > 0 && ventasEstimadas <= maxUnidadesModal && (
+                  <button
+                    type="button"
+                    onClick={() => setUnidadesScrubber(ventasEstimadas)}
+                    style={{
+                      padding: '3px 8px',
+                      fontSize: '11px',
+                      borderRadius: '5px',
+                      border: '1px solid #CBD5E1',
+                      backgroundColor: '#FFFFFF',
+                      color: '#0F172A',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Venta Actual ({ventasEstimadas} un.)
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* CONTROL DESLIZANTE DE VOLUMEN (EL SCRUBBER: 'MOVERTE POR EL GRÁFICO') */}
+            <div
+              style={{
+                backgroundColor: '#F0FDFA',
+                border: '1.5px solid #5EEAD4',
+                borderRadius: '10px',
+                padding: '14px 18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                <label style={{ fontSize: '13px', fontWeight: 700, color: '#0F766E', letterSpacing: '0.02em' }}>
+                  MOVERTE POR EL GRÁFICO: Desliza las unidades para inspeccionar cada punto
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontSize: '12px', color: '#475569' }}>
+                    Nivel simulado:
+                  </span>
+                  <span
+                    className="tabular-nums"
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 800,
+                      color: '#0F766E',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #99F6E4',
+                      padding: '2px 10px',
+                      borderRadius: '6px',
+                    }}
+                  >
+                    {unidadesScrubber.toLocaleString('es-CL')} unidades
+                  </span>
+                </div>
+              </div>
+
+              <input
+                type="range"
+                min="0"
+                max={maxUnidadesModal}
+                step="1"
+                value={unidadesScrubber}
+                onChange={(e) => setUnidadesScrubber(Number(e.target.value))}
+                style={{
+                  width: '100%',
+                  cursor: 'pointer',
+                  accentColor: '#0F766E',
+                  height: '8px',
+                }}
+              />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748B' }}>
+                <span>0 unidades</span>
+                <span>Punto de Equilibrio: {puntoEquilibrioUnidades} un.</span>
+                <span>Máximo proyectado: {maxUnidadesModal} un.</span>
+              </div>
+            </div>
+
+            {/* GRÁFICO SVG AMPLIADO DE ALTA DEFINICIÓN */}
+            <div
+              style={{
+                width: '100%',
+                borderRadius: '10px',
+                border: '1px solid #E2E8F0',
+                backgroundColor: '#FFFFFF',
+                position: 'relative',
+                padding: '16px 10px',
+                boxSizing: 'border-box',
+                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.03)',
+              }}
+            >
+              <svg
+                viewBox={`0 0 ${modalW} ${modalH}`}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  overflow: 'visible',
+                }}
+              >
+                <defs>
+                  <linearGradient id="modalGradUtilidad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#0F766E" stopOpacity="0.32" />
+                    <stop offset="70%" stopColor="#14B8A6" stopOpacity="0.12" />
+                    <stop offset="100%" stopColor="#2DD4BF" stopOpacity="0.02" />
+                  </linearGradient>
+
+                  <linearGradient id="modalGradDeficit" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#DC2626" stopOpacity="0.22" />
+                    <stop offset="70%" stopColor="#F87171" stopOpacity="0.09" />
+                    <stop offset="100%" stopColor="#FCA5A5" stopOpacity="0.02" />
+                  </linearGradient>
+                </defs>
+
+                {/* Zonas sombreadas */}
+                {modalAreaDeficit && <path d={modalAreaDeficit} fill="url(#modalGradDeficit)" />}
+                {modalAreaUtilidad && <path d={modalAreaUtilidad} fill="url(#modalGradUtilidad)" />}
+
+                {/* Grilla horizontal de montos */}
+                {modalYTicks.map((val, idx) => (
+                  <g key={idx}>
+                    <line
+                      x1={modalPad.left}
+                      y1={getModalY(val)}
+                      x2={modalW - modalPad.right}
+                      y2={getModalY(val)}
+                      stroke="#E2E8F0"
+                      strokeDasharray="4 4"
+                      strokeWidth="0.85"
+                    />
+                    <text
+                      x={modalPad.left - 12}
+                      y={getModalY(val) + 4}
+                      textAnchor="end"
+                      fill="#64748B"
+                      fontSize="11"
+                      fontWeight="500"
+                      className="tabular-nums"
+                    >
+                      {formatCompactCLP(val)}
+                    </text>
+                  </g>
+                ))}
+
+                {/* Línea horizontal de Costos Fijos Base */}
+                <line
+                  x1={modalPad.left}
+                  y1={getModalY(cfEfectivo)}
+                  x2={modalW - modalPad.right}
+                  y2={getModalY(cfEfectivo)}
+                  stroke="#94A3B8"
+                  strokeDasharray="6 4"
+                  strokeWidth="1.5"
+                />
+                <text
+                  x={modalPad.left + 8}
+                  y={getModalY(cfEfectivo) - 6}
+                  fill="#64748B"
+                  fontSize="10"
+                  fontWeight="600"
+                >
+                  COSTOS FIJOS BASE: {formatCLP(cfEfectivo)}
+                </text>
+
+                {/* Ejes y marcas de unidades */}
+                {puntosSerieModal.map((p, idx) => (
+                  <g key={idx}>
+                    <line
+                      x1={getModalX(p.unidades)}
+                      y1={modalPad.top}
+                      x2={getModalX(p.unidades)}
+                      y2={modalH - modalPad.bottom}
+                      stroke="#F1F5F9"
+                      strokeWidth="1"
+                    />
+                    <text
+                      x={getModalX(p.unidades)}
+                      y={modalH - modalPad.bottom + 20}
+                      textAnchor="middle"
+                      fill="#64748B"
+                      fontSize="11"
+                      fontWeight="500"
+                      className="tabular-nums"
+                    >
+                      {p.unidades}
+                    </text>
+                  </g>
+                ))}
+
+                {/* Curvas continuas */}
+                <path
+                  d={modalPathCostos}
+                  fill="none"
+                  stroke="#DC2626"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d={modalPathIngresos}
+                  fill="none"
+                  stroke="#0F766E"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+
+                {/* Punto de Equilibrio Marcador */}
+                {puntoEquilibrioUnidades > 0 && puntoEquilibrioUnidades <= maxUnidadesModal && (
+                  <g>
+                    <line
+                      x1={peModalX}
+                      y1={modalPad.top}
+                      x2={peModalX}
+                      y2={modalH - modalPad.bottom}
+                      stroke="#0F766E"
+                      strokeWidth="1.6"
+                      strokeDasharray="4 4"
+                    />
+                    <circle cx={peModalX} cy={peModalY} r="10" fill="#0F766E" fillOpacity="0.2" />
+                    <circle cx={peModalX} cy={peModalY} r="6" fill="#0F766E" stroke="#FFFFFF" strokeWidth="2" />
+                    <g transform={`translate(${Math.min(peModalX + 10, modalW - modalPad.right - 130)}, ${Math.max(peModalY - 28, modalPad.top + 6)})`}>
+                      <rect x="0" y="0" width="124" height="24" rx="4" fill="#0F766E" />
+                      <text x="62" y="16" textAnchor="middle" fill="#FFFFFF" fontSize="10.5" fontWeight="700">
+                        P.E. {puntoEquilibrioUnidades} un.
+                      </text>
+                    </g>
+                  </g>
+                )}
+
+                {/* CURSOR VERTICAL DINÁMICO DEL SCRUBBER ('MOVERTE POR EL GRÁFICO') */}
+                {(() => {
+                  const scrubX = getModalX(unidadesScrubber);
+                  const scrubIngresoY = getModalY(valIngresoScrubber);
+                  const scrubCostoY = getModalY(valCostoTotalScrubber);
+
+                  return (
+                    <g pointerEvents="none">
+                      {/* Línea vertical del cursor */}
+                      <line
+                        x1={scrubX}
+                        y1={modalPad.top}
+                        x2={scrubX}
+                        y2={modalH - modalPad.bottom}
+                        stroke={estaEnGanancia ? '#0F766E' : '#DC2626'}
+                        strokeWidth="2"
+                        strokeDasharray="3 3"
+                      />
+
+                      {/* Marcador en curva de Ingresos */}
+                      <circle
+                        cx={scrubX}
+                        cy={scrubIngresoY}
+                        r="6"
+                        fill="#0F766E"
+                        stroke="#FFFFFF"
+                        strokeWidth="2"
+                      />
+
+                      {/* Marcador en curva de Costos */}
+                      <circle
+                        cx={scrubX}
+                        cy={scrubCostoY}
+                        r="6"
+                        fill="#DC2626"
+                        stroke="#FFFFFF"
+                        strokeWidth="2"
+                      />
+
+                      {/* Etiqueta superior del cursor */}
+                      <g transform={`translate(${Math.min(Math.max(scrubX - 70, modalPad.left), modalW - modalPad.right - 140)}, ${modalPad.top - 12})`}>
+                        <rect
+                          x="0"
+                          y="0"
+                          width="140"
+                          height="24"
+                          rx="4"
+                          fill={estaEnGanancia ? '#0F766E' : '#DC2626'}
+                        />
+                        <text
+                          x="70"
+                          y="16"
+                          textAnchor="middle"
+                          fill="#FFFFFF"
+                          fontSize="10.5"
+                          fontWeight="700"
+                        >
+                          {unidadesScrubber} un. • {estaEnGanancia ? '+' : ''}{formatCLP(valResultadoScrubber)}
+                        </text>
+                      </g>
+                    </g>
+                  );
+                })()}
+
+                {/* Etiquetas de los ejes */}
+                <text
+                  x={modalW - modalPad.right}
+                  y={modalH - modalPad.bottom + 42}
+                  textAnchor="end"
+                  fill="#94A3B8"
+                  fontSize="11"
+                  fontWeight="700"
+                  letterSpacing="0.04em"
+                >
+                  VOLUMEN DE VENTAS (UNIDADES)
+                </text>
+
+                <text
+                  x={modalPad.left}
+                  y={modalPad.top - 20}
+                  textAnchor="start"
+                  fill="#94A3B8"
+                  fontSize="11"
+                  fontWeight="700"
+                  letterSpacing="0.04em"
+                >
+                  MONTO TOTAL ($ CLP)
+                </text>
+              </svg>
+            </div>
+
+            {/* PANEL DE MÉTRICAS EN TIEMPO REAL DEL VOLUMEN SIMULADO */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '12px',
+              }}
+            >
+              {/* Tarjeta 1: Unidades Simuladas & Cobertura */}
+              <div style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '12px' }}>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#64748B', display: 'block', textTransform: 'uppercase' }}>
+                  Volumen Seleccionado
+                </span>
+                <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A' }}>
+                  {unidadesScrubber.toLocaleString('es-CL')} un.
+                </span>
+                <div style={{ fontSize: '11.5px', color: '#475569', marginTop: '2px' }}>
+                  Cobertura del Equilibrio: <strong>{porcentajeCoberturaPE}%</strong>
+                </div>
+              </div>
+
+              {/* Tarjeta 2: Ingresos Proyectados */}
+              <div style={{ backgroundColor: '#F0FDFA', border: '1px solid #CCFBF1', borderRadius: '8px', padding: '12px' }}>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#0F766E', display: 'block', textTransform: 'uppercase' }}>
+                  Ingresos Totales (Venta)
+                </span>
+                <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 800, color: '#0F766E' }}>
+                  {formatCLP(valIngresoScrubber)}
+                </span>
+                <div style={{ fontSize: '11.5px', color: '#0F766E', marginTop: '2px' }}>
+                  Precio Unitario: {formatCLP(pEfectivo)}
+                </div>
+              </div>
+
+              {/* Tarjeta 3: Costos Totales */}
+              <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '8px', padding: '12px' }}>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#DC2626', display: 'block', textTransform: 'uppercase' }}>
+                  Costos Totales (CF + CV)
+                </span>
+                <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 800, color: '#DC2626' }}>
+                  {formatCLP(valCostoTotalScrubber)}
+                </span>
+                <div style={{ fontSize: '11.5px', color: '#7F1D1D', marginTop: '2px' }}>
+                  Fijos: {formatCLP(cfEfectivo)} | Variables: {formatCLP(valCostoVarScrubber)}
+                </div>
+              </div>
+
+              {/* Tarjeta 4: Resultado Operacional Neto */}
+              <div
+                style={{
+                  backgroundColor: estaEnGanancia ? '#ECFDF5' : '#FEF2F2',
+                  border: `1.5px solid ${estaEnGanancia ? '#10B981' : '#EF4444'}`,
+                  borderRadius: '8px',
+                  padding: '12px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: 700,
+                    color: estaEnGanancia ? '#047857' : '#B91C1C',
+                    display: 'block',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {estaEnGanancia ? 'Zona de Ganancia Neta' : 'Zona de Déficit Operativo'}
+                </span>
+                <span
+                  className="tabular-nums"
+                  style={{
+                    fontSize: '18px',
+                    fontWeight: 800,
+                    color: estaEnGanancia ? '#047857' : '#B91C1C',
+                  }}
+                >
+                  {estaEnGanancia ? '+' : ''}{formatCLP(valResultadoScrubber)}
+                </span>
+                <div style={{ fontSize: '11.5px', color: estaEnGanancia ? '#065F46' : '#991B1B', marginTop: '2px' }}>
+                  Margen Contribución: {formatCLP(valMargenContribucionScrubber)}
+                </div>
+              </div>
+            </div>
+
+            {/* Pie del Modal con Botón de Cierre */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '8px', borderTop: '1px solid #E2E8F0' }}>
+              <button
+                type="button"
+                onClick={() => setModalAbierto(false)}
+                className="btn-bacan-secondary"
+                style={{
+                  padding: '8px 20px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  borderRadius: '6px',
+                  backgroundColor: '#0F172A',
+                  color: '#FFFFFF',
+                  border: 'none',
+                }}
+              >
+                Cerrar Explorador
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

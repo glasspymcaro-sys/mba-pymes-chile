@@ -5,6 +5,7 @@ import DashboardPrincipal from './views/DashboardPrincipal.jsx';
 import CarruselInsumos3D from './components/carousel3d/CarruselInsumos3D.jsx';
 import GestionCostosFijosSimple from './components/costs/GestionCostosFijosSimple.jsx';
 import FooterEjecutivo from './components/layout/FooterEjecutivo.jsx';
+import CentroHistorialCatalogo from './components/history/CentroHistorialCatalogo.jsx';
 import AuthModal from './components/auth/AuthModal.jsx';
 import Logo from './components/illustrations/Logo.jsx';
 import { formatCLP } from './utils/formatters.js';
@@ -20,6 +21,7 @@ function ContenidoPrincipal() {
     insumos,
     insumosAsignados,
     costosFijos,
+    recetas,
     recetaEnOlla,
     agregarInsumo,
     editarInsumo,
@@ -215,7 +217,7 @@ function ContenidoPrincipal() {
               <polyline points="2 17 12 22 22 17" />
               <polyline points="2 12 12 17 22 12" />
             </svg>
-            Recetas & Biblioteca 3D
+            Costeo & Insumos
             <span
               className="tabular-nums"
               style={{
@@ -255,6 +257,32 @@ function ContenidoPrincipal() {
               }}
             >
               {costosFijos.length}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setVista('historial')}
+            className={vista === 'historial' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
+            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
+            title="Historial de recetas guardadas, catálogo y materias primas"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Historial & Catálogo
+            <span
+              className="tabular-nums"
+              style={{
+                fontSize: '10.5px',
+                padding: '1px 6px',
+                borderRadius: '5px',
+                backgroundColor: vista === 'historial' ? 'rgba(255,255,255,0.22)' : '#E2E8F0',
+                color: vista === 'historial' ? '#FFFFFF' : '#09090B',
+                fontWeight: 800,
+              }}
+            >
+              {recetas?.length || 0}
             </span>
           </button>
 
@@ -369,7 +397,7 @@ function ContenidoPrincipal() {
                   fontSize: '11px',
                 }}
               >
-                <span>Abrir Ollita & Biblioteca 3D</span>
+                <span>Abrir Costeo de Ingredientes</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6" />
                 </svg>
@@ -397,6 +425,10 @@ function ContenidoPrincipal() {
           )}
 
           {vista === 'costos_fijos' && <GestionCostosFijosSimple />}
+
+          {vista === 'historial' && (
+            <CentroHistorialCatalogo onCargarReceta={() => setVista('insumos')} />
+          )}
         </ErrorBoundary>
       </main>
 
@@ -435,11 +467,11 @@ function ContenidoPrincipal() {
           className={`app-mobile-nav-item ${vista === 'insumos' ? 'active' : ''}`}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-            <line x1="12" y1="22.08" x2="12" y2="12" />
+            <polygon points="12 2 2 7 12 12 22 7 12 2" />
+            <polyline points="2 17 12 22 22 17" />
+            <polyline points="2 12 12 17 22 12" />
           </svg>
-          <span>Receta 3D</span>
+          <span>Costeo</span>
         </button>
 
         <button
@@ -456,6 +488,18 @@ function ContenidoPrincipal() {
             <line x1="3" y1="18" x2="3.01" y2="18" />
           </svg>
           <span>Costos Fijos</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setVista('historial')}
+          className={`app-mobile-nav-item ${vista === 'historial' ? 'active' : ''}`}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <span>Historial</span>
         </button>
       </nav>
 

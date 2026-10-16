@@ -70,14 +70,14 @@ export default function VisorEscenaPBR3D({
               borderRadius: '4px',
             }}
           >
-            Motor PBR 3D • {perfil === 'restaurant' ? 'Cocina' : perfil === 'minimarket' ? 'Góndola' : 'Proyecto'}
+            Presentación Visual • {perfil === 'restaurant' ? 'Cocina' : perfil === 'minimarket' ? 'Góndola' : 'Servicio'}
           </span>
           <h3 className="heading-tight" style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0 }}>
             {nombreProducto || 'Unidad de Costeo Activa'}
           </h3>
         </div>
 
-        {/* Selector de Iluminación / Material PBR */}
+        {/* Selector de Iluminación / Vista */}
         <div
           style={{
             display: 'inline-flex',
@@ -89,9 +89,9 @@ export default function VisorEscenaPBR3D({
           }}
         >
           {[
-            { id: 'estudio', label: 'PBR Estudio' },
-            { id: 'cad', label: 'Retícula CAD' },
-            { id: 'termico', label: 'Contraste Rim' },
+            { id: 'estudio', label: 'Estudio' },
+            { id: 'cad', label: 'Técnica' },
+            { id: 'termico', label: 'Contraste' },
           ].map((m) => (
             <button
               key={m.id}
@@ -128,7 +128,7 @@ export default function VisorEscenaPBR3D({
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          title="Deslice el cursor para orbitar la cámara 3D y evaluar la geometría"
+          title="Mueva el cursor sobre la imagen para cambiar el ángulo de vista"
           style={{
             position: 'relative',
             minHeight: '210px',
@@ -227,7 +227,7 @@ export default function VisorEscenaPBR3D({
               pointerEvents: 'none',
             }}
           >
-            PITCH {rotacion.x}° • YAW {rotacion.y}°
+            ÁNGULO X {rotacion.x}° • Y {rotacion.y}°
           </div>
         </div>
 
@@ -299,7 +299,7 @@ export default function VisorEscenaPBR3D({
             </div>
           ) : (
             <div style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
-              Sin insumos asignados en el ensamblaje actual. Diríjase a Insumos & Costos Directos para arrastrar componentes.
+              Sin insumos asignados en la receta actual. Diríjase a Insumos & Costos Directos para agregar componentes.
             </div>
           )}
         </div>

@@ -141,7 +141,7 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
             Mix de Ventas Visual y Cuota de Equilibrio por Producto
           </span>
           <span style={{ fontSize: '11px', color: '#475569', fontWeight: 600 }}>
-            Haz clic en cualquier producto para cargarlo en la Ollita/Escandallo 3D
+            Haz clic en cualquier producto para abrirlo en el Costeo de Ingredientes
           </span>
         </div>
 
@@ -349,7 +349,7 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
                             className="btn-bacan-secondary"
                             style={{ height: '26px', padding: '0 8px', fontSize: '10.5px' }}
                           >
-                            Ver en 3D
+                            Ver Detalles
                           </button>
                         </div>
                       </div>

@@ -76,7 +76,7 @@ export default function FooterEjecutivo({
             </div>
 
             <p style={{ fontSize: '12.5px', color: 'var(--color-muted-foreground)', lineHeight: 1.55, margin: 0 }}>
-              Plataforma de ingeniería de costos, escandallo tridimensional interactivo y cálculo determinista de umbral de rentabilidad para PyMEs.
+              Plataforma de ingeniería de costos, catálogo interactivo y cálculo determinista de umbral de rentabilidad para PyMEs.
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginTop: '2px' }}>
@@ -97,7 +97,7 @@ export default function FooterEjecutivo({
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
                   <circle cx="12" cy="12" r="8" />
                 </svg>
-                Motor 3D SVG Activo (0ms)
+                Ilustraciones & Fotos Activas
               </span>
 
               <span
@@ -189,8 +189,9 @@ export default function FooterEjecutivo({
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {[
                 { id: 'punto_equilibrio', label: '1. Punto de Equilibrio' },
-                { id: 'insumos', label: '2. Insumos & Escandallo 3D' },
+                { id: 'insumos', label: '2. Costeo & Insumos' },
                 { id: 'costos_fijos', label: '3. Estructura Fija' },
+                { id: 'historial', label: '4. Historial & Catálogo' },
               ].map((nav) => (
                 <button
                   key={nav.id}

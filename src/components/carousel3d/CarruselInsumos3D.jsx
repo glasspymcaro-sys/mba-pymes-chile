@@ -9,6 +9,7 @@ import {
   CATALOGO_MAESTRO_INSUMOS,
   clasificarTipologiaInsumo,
 } from '../../lib/bibliotecaInsumos3D.js';
+import { comprimirImagen } from '../../utils/imageUtils.js';
 
 export default function CarruselInsumos3D({
   rubro = 'restaurant',
@@ -266,13 +267,13 @@ export default function CarruselInsumos3D({
           <TarritoBasura3D tamaño={62} abierto={zonaHover === 'basura'} itemsEnBasura={itemsDescartadosCount} />
           <div>
             <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-danger)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Stand de Descarte (Basura)
+              Papelera / Eliminar Insumo
             </span>
             <h4 className="heading-tight" style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
               Arrastra aquí cualquier insumo del carrusel para eliminarlo
             </h4>
             <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
-              Al soltar el producto sobre el tarrito, se removerá inmediatamente del inventario y del escandallo.
+              Al soltar el insumo sobre la papelera, se removerá inmediatamente del catálogo y de las recetas.
             </span>
           </div>
         </div>
@@ -295,7 +296,7 @@ export default function CarruselInsumos3D({
         )}
       </div>
 
-      {/* 3. Generador de Insumos con Biblioteca Completa de Tipologías 3D SVG */}
+      {/* 3. Generador de Insumos con Catálogo de Ilustraciones y Fotos */}
       <div
         style={{
           backgroundColor: 'var(--color-surface)',
@@ -311,7 +312,7 @@ export default function CarruselInsumos3D({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Biblioteca Vectorial Nativa • 16 Tipologías 3D Animadas (Sin Límites de API)
+              Catálogo de Materias Primas • Ilustraciones & Fotos
             </span>
             <h3 className="heading-tight" style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
               Generar Insumo
@@ -340,7 +341,7 @@ export default function CarruselInsumos3D({
               />
               <div>
                 <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
-                  {imagenNueva ? 'Foto Personalizada' : 'Tipología 3D Asignada'}
+                  {imagenNueva ? 'Foto Personalizada' : 'Ilustración Asignada'}
                 </span>
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-primary)' }}>
                   {imagenNueva ? 'Foto Subida por Usuario' : tipologiaDetectada.nombre}
@@ -353,12 +354,15 @@ export default function CarruselInsumos3D({
               accept="image/*"
               ref={fileInputCrearRef}
               style={{ display: 'none' }}
-              onChange={(e) => {
+              onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => setImagenNueva(ev.target?.result);
-                reader.readAsDataURL(file);
+                try {
+                  const dataUrl = await comprimirImagen(file, 500, 500, 0.85);
+                  if (dataUrl) setImagenNueva(dataUrl);
+                } catch (err) {
+                  console.warn('Error comprimiendo foto:', err);
+                }
               }}
             />
 
@@ -447,7 +451,7 @@ export default function CarruselInsumos3D({
 
           <div>
             <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', letterSpacing: '0.04em' }}>
-              TIPOLOGÍA CLAVE 3D
+              CATEGORÍA / ILUSTRACIÓN
             </label>
             <select
               value={tipologiaManual}
@@ -571,7 +575,7 @@ export default function CarruselInsumos3D({
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Catálogo Rápido de Biblioteca 3D (Clic para agregar al inventario):
+              Catálogo Rápido de Insumos (Clic para agregar al inventario):
             </span>
 
             {/* Filtro por Familia de Tipología */}
@@ -679,7 +683,7 @@ export default function CarruselInsumos3D({
               Galería de Insumos Activos ({insumosFiltrados.length})
             </h3>
             <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
-              Arrastra con el cursor hacia los lados o lleva cualquier insumo directo a la Ollita 3D
+              Arrastra con el cursor hacia los lados o lleva cualquier insumo directo al Generador de Recetas
             </span>
           </div>
 
@@ -1092,7 +1096,7 @@ export default function CarruselInsumos3D({
               />
               <div style={{ flex: 1 }}>
                 <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  {editImagen ? 'Foto Personalizada' : 'Figura SVG 3D Animada'}
+                  {editImagen ? 'Foto Personalizada' : 'Ilustración Asignada'}
                 </span>
                 <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '6px' }}>
                   {editImagen
@@ -1106,12 +1110,15 @@ export default function CarruselInsumos3D({
                   accept="image/*"
                   ref={fileInputEditRef}
                   style={{ display: 'none' }}
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = (ev) => setEditImagen(ev.target?.result);
-                    reader.readAsDataURL(file);
+                    try {
+                      const dataUrl = await comprimirImagen(file, 500, 500, 0.85);
+                      if (dataUrl) setEditImagen(dataUrl);
+                    } catch (err) {
+                      console.warn('Error comprimiendo foto:', err);
+                    }
                   }}
                 />
 

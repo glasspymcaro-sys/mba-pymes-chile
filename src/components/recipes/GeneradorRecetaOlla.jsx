@@ -5,6 +5,7 @@ import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
 import TechnicalEmptyStateSVG from '../svg3d/TechnicalEmptyStateSVG.jsx';
 import { FIGURAS_PRODUCTOS_RECETAS_JSON } from '../../lib/bibliotecaInsumos3D.js';
 import { formatCLP } from '../../utils/formatters.js';
+import { comprimirImagen } from '../../utils/imageUtils.js';
 
 export default function GeneradorRecetaOlla({
   onDropEnStand,
@@ -43,12 +44,25 @@ export default function GeneradorRecetaOlla({
     setTimeout(() => setMensajeGuardado(false), 2500);
   };
 
+  const handleCambioFoto = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const dataUrl = await comprimirImagen(file, 600, 600, 0.85);
+      if (dataUrl) {
+        setImagenRecetaEnOlla(dataUrl);
+      }
+    } catch (err) {
+      console.warn('Error al procesar foto:', err);
+    }
+  };
+
   const tituloSeccion =
     perfil === 'restaurant'
-      ? 'Generador Profesional de Recetas (Plato 3D & Escandallo)'
+      ? 'Generador de Recetas & Armador de Platos'
       : perfil === 'minimarket'
-      ? 'Armador de Packs & Costo de Reposición (Catálogo 3D)'
-      : 'Estructurador de Servicios & Proyectos (Matriz 3D)';
+      ? 'Armador de Packs & Catálogo Comercial'
+      : 'Estructurador de Proyectos & Servicios';
 
   const subtituloSeccion =
     perfil === 'restaurant'
@@ -74,7 +88,7 @@ export default function GeneradorRecetaOlla({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            Control de Gestión • Escandallo & Costos Directos
+            Control de Gestión • Costeo de Ingredientes & Precio
           </span>
           <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
             {tituloSeccion}
@@ -249,10 +263,10 @@ export default function GeneradorRecetaOlla({
               {ingredientes.length} {ingredientes.length === 1 ? 'insumo integrado' : 'insumos integrados'}
             </span>
             <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '8px' }}>
-              Arrastra insumos del carrusel o sube una imagen real del producto
+              Arrastra insumos del catálogo o sube una foto real de tu producto
             </span>
 
-            {/* Controles: Selector de Figura 3D JSON & Botón de Subida de Imagen */}
+            {/* Controles: Selector de Ilustración & Botón de Subida de Foto */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                 <select
@@ -271,9 +285,9 @@ export default function GeneradorRecetaOlla({
                     cursor: 'pointer',
                     outline: 'none',
                   }}
-                  title="Seleccionar modelo vectorial 3D para el producto"
+                  title="Seleccionar ilustración representativa para el producto"
                 >
-                  <option value="">Auto-detectar 3D según nombre...</option>
+                  <option value="">Auto-detectar ilustración según nombre...</option>
                   {Object.values(FIGURAS_PRODUCTOS_RECETAS_JSON).map((fig) => (
                     <option key={fig.id} value={fig.id}>
                       {fig.nombre} ({fig.categoria})
@@ -288,15 +302,7 @@ export default function GeneradorRecetaOlla({
                   accept="image/*"
                   ref={fileInputRef}
                   style={{ display: 'none' }}
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                      setImagenRecetaEnOlla(ev.target?.result);
-                    };
-                    reader.readAsDataURL(file);
-                  }}
+                  onChange={handleCambioFoto}
                 />
 
                 <button
@@ -340,7 +346,7 @@ export default function GeneradorRecetaOlla({
                       fontWeight: 500,
                       cursor: 'pointer',
                     }}
-                    title="Volver a representación vectorial 3D"
+                    title="Volver a ilustración prediseñada"
                   >
                     Quitar Foto
                   </button>
@@ -350,7 +356,7 @@ export default function GeneradorRecetaOlla({
           </div>
         </div>
 
-        {/* Lado B (7 col): Escandallo Detallado de Ingredientes de la Receta */}
+        {/* Lado B (7 col): Desglose Detallado de Ingredientes de la Receta */}
         <div
           className="bento-col-7"
           style={{
@@ -371,8 +377,8 @@ export default function GeneradorRecetaOlla({
           {ingredientes.length === 0 ? (
             <TechnicalEmptyStateSVG
               tipo="receta"
-              titulo="Ollita de formulación sin insumos activos"
-              descripcion="Arrastre materias primas desde el carrusel inferior hacia el stand 3D (ej: pan, carne, tomate) para calcular el escandallo en tiempo real."
+              titulo="Receta sin ingredientes todavía"
+              descripcion="Arrastra materias primas desde el catálogo inferior (ej: pan, carne, tomate) para calcular el costo directo en tiempo real."
             />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '280px', overflowY: 'auto' }}>

@@ -139,6 +139,11 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
           <GraficoPuntoEquilibrio
             datos={datosGrafico}
             puntoEquilibrioUnidades={puntoEquilibrioUnidades}
+            precioUnitario={precioEfectivo}
+            costoVariableUnitario={costoVarEfectivo}
+            costoFijoTotal={costoFijoEfectivo}
+            sueldoObjetivo={sueldoObjetivo}
+            ventasEstimadas={ventasEfectivas}
           />
         </div>
 
