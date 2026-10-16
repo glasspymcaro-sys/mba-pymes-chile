@@ -215,6 +215,8 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
       <VisorEscenaPBR3D
         perfil={perfil}
         nombreProducto={recetaEnOlla?.nombre || 'Formulación Directa'}
+        figuraId={recetaEnOlla?.figuraId}
+        imagenPersonalizada={recetaEnOlla?.imagenPersonalizada}
         insumosAsignados={insumosAsignados}
         costoVariableConsolidado={costoVariableConsolidado}
         precioVentaConsolidado={precioEfectivo}

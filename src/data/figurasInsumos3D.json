@@ -1,0 +1,491 @@
+{
+  "schemaVersion": "3.0-JSON-3D-INSUMOS",
+  "descripcion": "Biblioteca de 16 Tipologías Maestras de Insumos y Materias Primas en Formato JSON 3D",
+  "tipologias": {
+    "verdura_hoja": {
+      "id": "verdura_hoja",
+      "nombre": "Verduras de Hoja & Hortalizas Verdes 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "vh_grad",
+          "tipo": "radialGradient",
+          "cx": "35%", "cy": "30%", "r": "70%",
+          "stops": [
+            { "offset": "0%", "color": "#6EE7B7" },
+            { "offset": "55%", "color": "#10B981" },
+            { "offset": "100%", "color": "#065F46" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "path", "d": "M 60 22 C 88 22 98 50 88 78 C 80 94 68 96 60 96 C 52 96 40 94 32 78 C 22 50 32 22 60 22 Z", "fill": "url(#vh_grad)", "stroke": "#A7F3D0", "strokeWidth": 1.5 },
+            { "tipo": "path", "d": "M 60 32 L 60 90", "stroke": "#D1FAE5", "strokeWidth": 3.5, "strokeLinecap": "round" },
+            { "tipo": "path", "d": "M 60 50 L 44 40", "stroke": "#D1FAE5", "strokeWidth": 2.5, "strokeLinecap": "round" },
+            { "tipo": "path", "d": "M 60 64 L 78 52", "stroke": "#D1FAE5", "strokeWidth": 2.5, "strokeLinecap": "round" },
+            { "tipo": "path", "d": "M 60 76 L 44 66", "stroke": "#D1FAE5", "strokeWidth": 2.5, "strokeLinecap": "round" },
+            { "tipo": "circle", "cx": 46, "cy": 44, "r": 3.5, "fill": "#FFFFFF", "opacity": 0.65, "clase": "insumo-3d-pulse" }
+          ]
+        }
+      ]
+    },
+    "verdura_fruto": {
+      "id": "verdura_fruto",
+      "nombre": "Verduras de Fruto & Tomates Frescos 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "vf_grad",
+          "tipo": "radialGradient",
+          "cx": "35%", "cy": "30%", "r": "68%",
+          "stops": [
+            { "offset": "0%", "color": "#FCA5A5" },
+            { "offset": "45%", "color": "#EF4444" },
+            { "offset": "100%", "color": "#7F1D1D" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "circle", "cx": 60, "cy": 64, "r": 30, "fill": "url(#vf_grad)", "stroke": "#FECACA", "strokeWidth": 1.2 },
+            { "tipo": "ellipse", "cx": 48, "cy": 52, "rx": 8, "ry": 13, "fill": "#FFFFFF", "opacity": 0.35 },
+            { "tipo": "polygon", "points": "60,30 54,40 42,36 52,44 48,52 60,46 72,52 68,44 78,36 66,40", "fill": "#059669" },
+            { "tipo": "circle", "cx": 48, "cy": 48, "r": 3, "fill": "#FFFFFF", "clase": "insumo-3d-pulse" }
+          ]
+        }
+      ]
+    },
+    "verdura_raiz_bulbo": {
+      "id": "verdura_raiz_bulbo",
+      "nombre": "Raíces, Bulbos, Tubérculos & Hongos 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "vr_grad",
+          "tipo": "radialGradient",
+          "cx": "38%", "cy": "35%", "r": "65%",
+          "stops": [
+            { "offset": "0%", "color": "#FDBA74" },
+            { "offset": "55%", "color": "#EA580C" },
+            { "offset": "100%", "color": "#7C2D12" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "path", "d": "M 60 24 C 66 36 88 48 88 70 C 88 86 76 94 60 94 C 44 94 32 86 32 70 C 32 48 54 36 60 24 Z", "fill": "url(#vr_grad)", "stroke": "#FFEDD5", "strokeWidth": 1.5 },
+            { "tipo": "path", "d": "M 48 46 Q 42 68 52 88", "fill": "none", "stroke": "#FED7AA", "strokeWidth": 2, "opacity": 0.65 },
+            { "tipo": "path", "d": "M 72 46 Q 78 68 68 88", "fill": "none", "stroke": "#FED7AA", "strokeWidth": 2, "opacity": 0.65 }
+          ]
+        }
+      ]
+    },
+    "palta_oleaginosa": {
+      "id": "palta_oleaginosa",
+      "nombre": "Paltas Hass, Aceitunas & Oleaginosas 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "po_pulpa",
+          "tipo": "radialGradient",
+          "cx": "45%", "cy": "45%", "r": "55%",
+          "stops": [
+            { "offset": "0%", "color": "#ECFCCB" },
+            { "offset": "65%", "color": "#BEF264" },
+            { "offset": "100%", "color": "#15803D" }
+          ]
+        },
+        {
+          "id": "po_cuesco",
+          "tipo": "radialGradient",
+          "cx": "38%", "cy": "35%", "r": "60%",
+          "stops": [
+            { "offset": "0%", "color": "#D97706" },
+            { "offset": "60%", "color": "#78350F" },
+            { "offset": "100%", "color": "#451A03" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "path", "d": "M 60 22 C 76 22 86 48 86 70 C 86 88 74 96 60 96 C 46 96 34 88 34 70 C 34 48 44 22 60 22 Z", "fill": "#14532D" },
+            { "tipo": "path", "d": "M 60 26 C 73 26 82 49 82 69 C 82 85 72 92 60 92 C 48 92 38 85 38 69 C 38 49 47 26 60 26 Z", "fill": "url(#po_pulpa)" },
+            { "tipo": "circle", "cx": 60, "cy": 68, "r": 14, "fill": "url(#po_cuesco)" },
+            { "tipo": "circle", "cx": 55, "cy": 63, "r": 4, "fill": "#FEF3C7", "opacity": 0.55, "clase": "insumo-3d-pulse" }
+          ]
+        }
+      ]
+    },
+    "fruta_fresca": {
+      "id": "fruta_fresca",
+      "nombre": "Frutas Seleccionadas & Cítricos 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "ff_grad",
+          "tipo": "radialGradient",
+          "cx": "35%", "cy": "30%", "r": "68%",
+          "stops": [
+            { "offset": "0%", "color": "#FDA4AF" },
+            { "offset": "50%", "color": "#E11D48" },
+            { "offset": "100%", "color": "#881337" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "path", "d": "M 60 38 C 44 28 28 42 30 64 C 32 84 46 96 60 92 C 74 96 88 84 90 64 C 92 42 76 28 60 38 Z", "fill": "url(#ff_grad)", "stroke": "#FFE4E6", "strokeWidth": 1.2 },
+            { "tipo": "path", "d": "M 60 38 Q 62 24 68 20", "fill": "none", "stroke": "#78350F", "strokeWidth": 3.5, "strokeLinecap": "round" },
+            { "tipo": "path", "d": "M 62 26 Q 76 20 80 30 Q 68 36 62 26 Z", "fill": "#10B981" },
+            { "tipo": "ellipse", "cx": 46, "cy": 54, "rx": 6, "ry": 12, "fill": "#FFFFFF", "opacity": 0.35 }
+          ]
+        }
+      ]
+    },
+    "panaderia_masa": {
+      "id": "panaderia_masa",
+      "nombre": "Panadería Artesanal, Masas & Harinas 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "pm_grad",
+          "tipo": "radialGradient",
+          "cx": "40%", "cy": "30%", "r": "65%",
+          "stops": [
+            { "offset": "0%", "color": "#FDE68A" },
+            { "offset": "50%", "color": "#D97706" },
+            { "offset": "100%", "color": "#78350F" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 38, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "path", "d": "M 24 72 C 24 36 96 36 96 72 C 96 88 80 94 60 94 C 40 94 24 88 24 72 Z", "fill": "url(#pm_grad)", "stroke": "#FEF3C7", "strokeWidth": 1.5 },
+            { "tipo": "path", "d": "M 44 52 Q 50 42 56 54", "fill": "none", "stroke": "#78350F", "strokeWidth": 2.5, "strokeLinecap": "round" },
+            { "tipo": "path", "d": "M 60 48 Q 66 38 72 50", "fill": "none", "stroke": "#78350F", "strokeWidth": 2.5, "strokeLinecap": "round" },
+            { "tipo": "circle", "cx": 50, "cy": 46, "r": 2, "fill": "#FFFBEB" },
+            { "tipo": "circle", "cx": 68, "cy": 44, "r": 2, "fill": "#FFFBEB" }
+          ]
+        }
+      ]
+    },
+    "carne_roja_embutido": {
+      "id": "carne_roja_embutido",
+      "nombre": "Cortes de Carne, Vacuno & Embutidos 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "cr_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#F87171" },
+            { "offset": "55%", "color": "#DC2626" },
+            { "offset": "100%", "color": "#7F1D1D" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 38, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "path", "d": "M 24 64 Q 36 38 78 42 Q 100 54 94 74 Q 76 92 38 86 Q 18 78 24 64 Z", "fill": "url(#cr_grad)", "stroke": "#FECACA", "strokeWidth": 2 },
+            { "tipo": "ellipse", "cx": 50, "cy": 62, "rx": 10, "ry": 6.5, "fill": "#FFF1F2", "stroke": "#FDA4AF", "strokeWidth": 2 },
+            { "tipo": "circle", "cx": 50, "cy": 62, "r": 3.5, "fill": "#FB7185" }
+          ]
+        }
+      ]
+    },
+    "ave_pescado_marisco": {
+      "id": "ave_pescado_marisco",
+      "nombre": "Aves, Filetes de Salmón & Mariscos 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "ap_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#FDA4AF" },
+            { "offset": "55%", "color": "#FB7185" },
+            { "offset": "100%", "color": "#BE123C" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 38, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "path", "d": "M 28 70 Q 44 38 88 46 L 94 74 Q 58 92 28 70 Z", "fill": "url(#ap_grad)", "stroke": "#FFE4E6", "strokeWidth": 2 },
+            { "tipo": "path", "d": "M 46 54 Q 56 68 48 80", "fill": "none", "stroke": "#FFF1F2", "strokeWidth": 2.5 },
+            { "tipo": "path", "d": "M 64 50 Q 74 66 66 80", "fill": "none", "stroke": "#FFF1F2", "strokeWidth": 2.5 }
+          ]
+        }
+      ]
+    },
+    "lacteo_queso_huevo": {
+      "id": "lacteo_queso_huevo",
+      "nombre": "Quesos Maduros, Lácteos & Huevos 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "lq_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#FEF08A" },
+            { "offset": "100%", "color": "#F59E0B" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 38, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "polygon", "points": "26,70 84,36 96,72", "fill": "url(#lq_grad)", "stroke": "#FFFBEB", "strokeWidth": 1.5 },
+            { "tipo": "polygon", "points": "26,70 96,72 96,88 26,86", "fill": "#D97706" },
+            { "tipo": "circle", "cx": 58, "cy": 62, "r": 5, "fill": "#B45309", "opacity": 0.7 },
+            { "tipo": "circle", "cx": 76, "cy": 56, "r": 3.5, "fill": "#B45309", "opacity": 0.7 },
+            { "tipo": "circle", "cx": 48, "cy": 78, "r": 4, "fill": "#92400E", "opacity": 0.8 }
+          ]
+        }
+      ]
+    },
+    "fritura_snack": {
+      "id": "fritura_snack",
+      "nombre": "Papas Fritas, Guarniciones & Snacks 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "fs_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#EF4444" },
+            { "offset": "100%", "color": "#991B1B" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "rect", "x": 40, "y": 28, "width": 9, "height": 38, "rx": 3, "fill": "#FBBF24", "stroke": "#D97706", "strokeWidth": 1 },
+            { "tipo": "rect", "x": 51, "y": 22, "width": 9, "height": 42, "rx": 3, "fill": "#FDE047", "stroke": "#D97706", "strokeWidth": 1 },
+            { "tipo": "rect", "x": 62, "y": 24, "width": 9, "height": 40, "rx": 3, "fill": "#FBBF24", "stroke": "#D97706", "strokeWidth": 1 },
+            { "tipo": "rect", "x": 73, "y": 30, "width": 9, "height": 36, "rx": 3, "fill": "#F59E0B", "stroke": "#B45309", "strokeWidth": 1 },
+            { "tipo": "polygon", "points": "34,54 86,54 78,92 42,92", "fill": "url(#fs_grad)", "stroke": "#FECACA", "strokeWidth": 1.5 }
+          ]
+        }
+      ]
+    },
+    "abarrote_grano_condimento": {
+      "id": "abarrote_grano_condimento",
+      "nombre": "Abarrotes, Granos, Aceites & Despensa 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "ag_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#FDE68A" },
+            { "offset": "100%", "color": "#B45309" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "rect", "x": 36, "y": 32, "width": 48, "height": 60, "rx": 8, "fill": "url(#ag_grad)", "stroke": "#FEF3C7", "strokeWidth": 2 },
+            { "tipo": "rect", "x": 44, "y": 48, "width": 32, "height": 24, "rx": 4, "fill": "#FFFFFF" },
+            { "tipo": "circle", "cx": 60, "cy": 60, "r": 6, "fill": "#10B981" }
+          ]
+        }
+      ]
+    },
+    "bebida_lacteo_liquido": {
+      "id": "bebida_lacteo_liquido",
+      "nombre": "Bebidas, Lácteos Líquidos & Botellas 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "bl_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#93C5FD" },
+            { "offset": "50%", "color": "#2563EB" },
+            { "offset": "100%", "color": "#1E3A8A" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 32, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "rect", "x": 50, "y": 20, "width": 20, "height": 10, "rx": 3, "fill": "#EF4444" },
+            { "tipo": "rect", "x": 40, "y": 30, "width": 40, "height": 62, "rx": 10, "fill": "url(#bl_grad)", "stroke": "#DBEAFE", "strokeWidth": 1.5 },
+            { "tipo": "rect", "x": 44, "y": 50, "width": 32, "height": 20, "rx": 3, "fill": "#FFFFFF", "opacity": 0.9 }
+          ]
+        }
+      ]
+    },
+    "cafe_infusion_cacao": {
+      "id": "cafe_infusion_cacao",
+      "nombre": "Café en Grano, Té, Infusiones & Cacao 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "ci_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#92400E" },
+            { "offset": "100%", "color": "#451A03" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "rect", "x": 36, "y": 30, "width": 48, "height": 62, "rx": 8, "fill": "url(#ci_grad)", "stroke": "#FCD34D", "strokeWidth": 1.5 },
+            { "tipo": "ellipse", "cx": 60, "cy": 60, "rx": 12, "ry": 16, "fill": "#F59E0B" },
+            { "tipo": "path", "d": "M 60 46 Q 56 60 60 74", "fill": "none", "stroke": "#451A03", "strokeWidth": 2.5 }
+          ]
+        }
+      ]
+    },
+    "ferreteria_herramienta": {
+      "id": "ferreteria_herramienta",
+      "nombre": "Ferretería, Fijaciones, Empaque & Insumos Técnicos 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "fh_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#E4E4E7" },
+            { "offset": "50%", "color": "#71717A" },
+            { "offset": "100%", "color": "#27272A" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 34, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "polygon", "points": "38,38 60,26 82,38 60,50", "fill": "#E4E4E7", "stroke": "#52525B", "strokeWidth": 1.5 },
+            { "tipo": "rect", "x": 48, "y": 48, "width": 24, "height": 42, "rx": 4, "fill": "url(#fh_grad)" },
+            { "tipo": "path", "d": "M 48 58 L 72 62 M 48 68 L 72 72 M 48 78 L 72 82", "stroke": "#18181B", "strokeWidth": 2.5 }
+          ]
+        }
+      ]
+    },
+    "servicios_consultoria_diseno": {
+      "id": "servicios_consultoria_diseno",
+      "nombre": "Horas-Hombre Consultoría, Diseño & Gestión 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "sc_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#5EEAD4" },
+            { "offset": "55%", "color": "#0D9488" },
+            { "offset": "100%", "color": "#115E59" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 36, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "polygon", "points": "28,52 60,34 92,52 60,70", "fill": "url(#sc_grad)", "stroke": "#CCFBF1", "strokeWidth": 1.5 },
+            { "tipo": "polygon", "points": "28,52 60,70 60,92 28,74", "fill": "#0F766E" },
+            { "tipo": "polygon", "points": "60,70 92,52 92,74 60,92", "fill": "#134E4A" },
+            { "tipo": "circle", "cx": 60, "cy": 52, "r": 6, "fill": "#FFFFFF", "clase": "insumo-3d-pulse" }
+          ]
+        }
+      ]
+    },
+    "servicios_software_cloud": {
+      "id": "servicios_software_cloud",
+      "nombre": "Ingeniería de Software, Cloud & Licencias 3D",
+      "viewBox": "0 0 120 120",
+      "gradientes": [
+        {
+          "id": "ss_grad",
+          "tipo": "linearGradient",
+          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "stops": [
+            { "offset": "0%", "color": "#A5B4FC" },
+            { "offset": "55%", "color": "#4F46E5" },
+            { "offset": "100%", "color": "#312E81" }
+          ]
+        }
+      ],
+      "capas": [
+        { "tipo": "ellipse", "cx": 60, "cy": 98, "rx": 36, "ry": 9, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "group",
+          "clase": "insumo-3d-float",
+          "hijos": [
+            { "tipo": "rect", "x": 30, "y": 32, "width": 60, "height": 18, "rx": 5, "fill": "url(#ss_grad)", "stroke": "#E0E7FF", "strokeWidth": 1.5 },
+            { "tipo": "rect", "x": 30, "y": 54, "width": 60, "height": 18, "rx": 5, "fill": "url(#ss_grad)", "stroke": "#E0E7FF", "strokeWidth": 1.5 },
+            { "tipo": "rect", "x": 30, "y": 76, "width": 60, "height": 16, "rx": 5, "fill": "#312E81" },
+            { "tipo": "circle", "cx": 42, "cy": 41, "r": 3, "fill": "#5EEAD4", "clase": "insumo-3d-pulse" },
+            { "tipo": "circle", "cx": 42, "cy": 63, "r": 3, "fill": "#5EEAD4", "clase": "insumo-3d-pulse" }
+          ]
+        }
+      ]
+    }
+  }
+}

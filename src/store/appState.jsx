@@ -381,6 +381,14 @@ export function AppStateProvider({ children }) {
     });
   };
 
+  const setImagenRecetaEnOlla = (imagenDataUrl) => {
+    setRecetaEnOlla((prev) => ({ ...prev, imagenPersonalizada: imagenDataUrl }));
+  };
+
+  const setFiguraProductoIdEnOlla = (figuraId) => {
+    setRecetaEnOlla((prev) => ({ ...prev, figuraId }));
+  };
+
   const vaciarOlla = () => {
     setRecetaEnOlla({
       id: 'rec_' + Date.now(),
@@ -567,6 +575,8 @@ export function AppStateProvider({ children }) {
       cambiarCantidadIngrediente,
       setNombreRecetaEnOlla,
       setPrecioRecetaEnOlla,
+      setImagenRecetaEnOlla,
+      setFiguraProductoIdEnOlla,
       guardarRecetaActiva,
       cargarRecetaEnOlla,
       vaciarOlla,

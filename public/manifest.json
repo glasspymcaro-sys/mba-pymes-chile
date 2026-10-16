@@ -1,0 +1,22 @@
+{
+  "short_name": "MBA PyMEs",
+  "name": "MBA PyMEs - Gestión Estratégica & Punto de Equilibrio",
+  "description": "Suite ejecutiva de ingeniería de costos, simulación de precios y punto de equilibrio para empresas.",
+  "icons": [
+    {
+      "src": "/src/assets/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/src/assets/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0F766E",
+  "theme_color": "#0F766E",
+  "display": "standalone",
+  "orientation": "portrait"
+}

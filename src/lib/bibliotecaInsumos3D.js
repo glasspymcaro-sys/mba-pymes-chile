@@ -1,9 +1,13 @@
 /**
- * BIBLIOTECA MAESTRA DE INSUMOS Y TIPOLOGÍAS 3D EN SVG PURO (MVP PYMES CHILE)
+ * BIBLIOTECA MAESTRA DE INSUMOS, PRODUCTOS Y RECETAS 3D BASADA EN ARCHIVOS .JSON
  * Motor 100% autónomo libre de llaves API externas y sin límites de generación.
- * Clasifica semánticamente cualquier insumo o producto en 16 tipologías maestras 3D animadas
- * y provee un catálogo completo de insumos preconfigurados por rubro.
+ * Carga las definiciones vectoriales 3D desde archivos .json dedicados (figurasInsumos3D.json y figurasProductosRecetas3D.json).
  */
+import figurasInsumosData from '../data/figurasInsumos3D.json' with { type: 'json' };
+import figurasProductosData from '../data/figurasProductosRecetas3D.json' with { type: 'json' };
+
+export const FIGURAS_INSUMOS_JSON = figurasInsumosData.tipologias;
+export const FIGURAS_PRODUCTOS_RECETAS_JSON = figurasProductosData.figuras;
 
 export const TIPOLOGIAS_3D = {
   verdura_hoja: {
@@ -329,13 +333,15 @@ export function obtenerJsonDescriptorInsumo(nombreInsumo = 'Insumo', rubro = 're
       ? TIPOLOGIAS_3D[tipologiaForzada]
       : clasificarTipologiaInsumo(nombreInsumo, rubro);
 
+  const specJson = FIGURAS_INSUMOS_JSON[infoTipologia.id] || FIGURAS_INSUMOS_JSON.verdura_hoja;
+
   return {
-    schemaVersion: '2.0-JSON-3D-PBR',
+    ...specJson,
+    schemaVersion: '3.0-JSON-3D-PBR',
     insumo: nombreInsumo || 'Insumo',
     rubro,
     tipologiaId: infoTipologia.id,
     tipologiaNombre: infoTipologia.nombre,
-    viewBox: '0 0 120 120',
     paletaOptica: {
       colorPrimario: infoTipologia.colorPrimario,
       colorSecundario: infoTipologia.colorSecundario,
@@ -346,10 +352,35 @@ export function obtenerJsonDescriptorInsumo(nombreInsumo = 'Insumo', rubro = 're
       rimLight: { azimuth: 210, elevation: 65, intensity: 0.75 },
       contactShadow: { cx: 60, cy: 96, rx: 32, ry: 9, opacity: 0.18 },
     },
-    animacion3D: {
-      levitacion: 'float3DInsumo 3.4s ease-in-out infinite',
-      pulsoSombra: 'shadowPulse3D 3.4s ease-in-out infinite',
-    },
   };
 }
+
+/**
+ * Clasifica automáticamente cualquier Producto Final o Receta en su figura 3D JSON de alta gama
+ */
+export function clasificarFiguraProductoReceta(nombreProducto = '', rubro = 'restaurant', figuraForzada = '') {
+  if (figuraForzada && FIGURAS_PRODUCTOS_RECETAS_JSON[figuraForzada]) {
+    return FIGURAS_PRODUCTOS_RECETAS_JSON[figuraForzada];
+  }
+
+  const texto = (nombreProducto || '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+  for (const fig of Object.values(FIGURAS_PRODUCTOS_RECETAS_JSON)) {
+    for (const kw of fig.keywords || []) {
+      const kwNorm = kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (texto.includes(kwNorm)) {
+        return fig;
+      }
+    }
+  }
+
+  if (rubro === 'minimarket') return FIGURAS_PRODUCTOS_RECETAS_JSON.canasta_retail_desayuno;
+  if (rubro === 'services') return FIGURAS_PRODUCTOS_RECETAS_JSON.consultoria_estrategica_mba;
+  return FIGURAS_PRODUCTOS_RECETAS_JSON.hamburguesa_gourmet;
+}
+
 

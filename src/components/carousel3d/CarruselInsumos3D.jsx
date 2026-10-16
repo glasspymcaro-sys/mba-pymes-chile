@@ -24,6 +24,8 @@ export default function CarruselInsumos3D({
   const [costoNuevo, setCostoNuevo] = useState('');
   const [unidadNueva, setUnidadNueva] = useState('un');
   const [tipologiaManual, setTipologiaManual] = useState('auto');
+  const [imagenNueva, setImagenNueva] = useState(null);
+  const fileInputCrearRef = useRef(null);
 
   // Explorador de Biblioteca 3D por categoría
   const [categoriaBiblioteca, setCategoriaBiblioteca] = useState('todas');
@@ -38,6 +40,8 @@ export default function CarruselInsumos3D({
   const [editCosto, setEditCosto] = useState('');
   const [editUnidad, setEditUnidad] = useState('un');
   const [editTipologia, setEditTipologia] = useState('auto');
+  const [editImagen, setEditImagen] = useState(null);
+  const fileInputEditRef = useRef(null);
 
   // Estados de Drag & Drop y animación
   const [itemArrastrado, setItemArrastrado] = useState(null);
@@ -101,12 +105,14 @@ export default function CarruselInsumos3D({
       costoUnitario: costo,
       unidadMedida: unidadNueva,
       tipologia: tipoFinal,
+      imagenPersonalizada: imagenNueva,
       fechaCreacion: new Date().toISOString(),
     });
 
     setNombreNuevo('');
     setCostoNuevo('');
     setTipologiaManual('auto');
+    setImagenNueva(null);
   };
 
   // Agregar desde la Biblioteca Maestra en 1 clic
@@ -139,6 +145,7 @@ export default function CarruselInsumos3D({
       costoUnitario: val,
       unidadMedida: editUnidad,
       tipologia: tipoEditFinal,
+      imagenPersonalizada: editImagen,
     });
 
     setInsumoEditando(null);
@@ -311,32 +318,95 @@ export default function CarruselInsumos3D({
             </h3>
           </div>
 
-          {/* Indicador de Tipología Clave Detectada en Vivo */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '6px 12px',
-              borderRadius: '8px',
-              backgroundColor: '#FAFAFA',
-              border: '1px solid var(--color-border)',
-            }}
-          >
-            <InsumoFigura3D
-              nombre={nombreNuevo || 'Lechuga'}
-              tipologia={tipologiaDetectada.id}
-              tamaño={38}
-              rubro={rubro}
-            />
-            <div>
-              <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
-                Tipología 3D Asignada
-              </span>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-primary)' }}>
-                {tipologiaDetectada.nombre}
-              </span>
+          {/* Indicador de Tipología Clave Detectada en Vivo & Subida de Foto */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '6px 12px',
+                borderRadius: '8px',
+                backgroundColor: '#FAFAFA',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              <InsumoFigura3D
+                nombre={nombreNuevo || 'Lechuga'}
+                tipologia={tipologiaDetectada.id}
+                imagenPersonalizada={imagenNueva}
+                tamaño={38}
+                rubro={rubro}
+              />
+              <div>
+                <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
+                  {imagenNueva ? 'Foto Personalizada' : 'Tipología 3D Asignada'}
+                </span>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-primary)' }}>
+                  {imagenNueva ? 'Foto Subida por Usuario' : tipologiaDetectada.nombre}
+                </span>
+              </div>
             </div>
+
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputCrearRef}
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => setImagenNueva(ev.target?.result);
+                reader.readAsDataURL(file);
+              }}
+            />
+
+            <button
+              type="button"
+              onClick={() => fileInputCrearRef.current?.click()}
+              style={{
+                height: '32px',
+                padding: '0 10px',
+                borderRadius: '6px',
+                border: '1px solid var(--color-border)',
+                backgroundColor: imagenNueva ? 'var(--color-brand-50)' : '#FFFFFF',
+                color: imagenNueva ? 'var(--color-primary)' : 'var(--color-foreground)',
+                fontSize: '11px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              {imagenNueva ? 'Cambiar Foto' : 'Subir Foto Insumo'}
+            </button>
+
+            {imagenNueva && (
+              <button
+                type="button"
+                onClick={() => setImagenNueva(null)}
+                style={{
+                  height: '32px',
+                  padding: '0 8px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#FFFFFF',
+                  color: 'var(--color-danger)',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                }}
+              >
+                Quitar Foto
+              </button>
+            )}
           </div>
         </div>
 
@@ -824,6 +894,7 @@ export default function CarruselInsumos3D({
                         setEditCosto(String(item.costoUnitario));
                         setEditUnidad(item.unidadMedida || 'un');
                         setEditTipologia(item.tipologia || 'auto');
+                        setEditImagen(item.imagenPersonalizada || null);
                       }}
                       title="Editar insumo"
                       style={{
@@ -845,11 +916,12 @@ export default function CarruselInsumos3D({
                     </button>
                   </div>
 
-                  {/* Figura 3D Animada en SVG Puro */}
+                  {/* Figura 3D Animada en SVG Puro o Foto Subida */}
                   <div style={{ margin: '14px 0 6px 0', pointerEvents: 'none' }}>
                     <InsumoFigura3D
                       nombre={item.nombre}
                       tipologia={item.tipologia}
+                      imagenPersonalizada={item.imagenPersonalizada}
                       tamaño={74}
                       rubro={rubro}
                       animando={siendoArrastrado}
@@ -1014,17 +1086,70 @@ export default function CarruselInsumos3D({
               <InsumoFigura3D
                 nombre={editNombre}
                 tipologia={editTipologia !== 'auto' ? editTipologia : null}
+                imagenPersonalizada={editImagen}
                 tamaño={56}
                 rubro={rubro}
               />
               <div style={{ flex: 1 }}>
                 <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Figura SVG 3D Animada
+                  {editImagen ? 'Foto Personalizada' : 'Figura SVG 3D Animada'}
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
-                  {(editTipologia !== 'auto' && TIPOLOGIAS_3D[editTipologia]?.nombre) ||
-                    clasificarTipologiaInsumo(editNombre, rubro).nombre}
+                <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '6px' }}>
+                  {editImagen
+                    ? 'Imagen subida por el usuario'
+                    : (editTipologia !== 'auto' && TIPOLOGIAS_3D[editTipologia]?.nombre) ||
+                      clasificarTipologiaInsumo(editNombre, rubro).nombre}
                 </span>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputEditRef}
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = (ev) => setEditImagen(ev.target?.result);
+                    reader.readAsDataURL(file);
+                  }}
+                />
+
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <button
+                    type="button"
+                    onClick={() => fileInputEditRef.current?.click()}
+                    style={{
+                      padding: '4px 8px',
+                      fontSize: '11px',
+                      borderRadius: '4px',
+                      border: '1px solid var(--color-border)',
+                      backgroundColor: '#FFFFFF',
+                      cursor: 'pointer',
+                      fontWeight: 600,
+                      color: 'var(--color-foreground)',
+                    }}
+                  >
+                    {editImagen ? 'Cambiar Foto' : 'Subir Foto'}
+                  </button>
+                  {editImagen && (
+                    <button
+                      type="button"
+                      onClick={() => setEditImagen(null)}
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        borderRadius: '4px',
+                        border: '1px solid var(--color-border)',
+                        backgroundColor: '#FFFFFF',
+                        cursor: 'pointer',
+                        color: 'var(--color-danger)',
+                      }}
+                    >
+                      Quitar Foto
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 

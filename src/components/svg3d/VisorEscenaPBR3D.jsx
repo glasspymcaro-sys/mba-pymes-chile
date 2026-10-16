@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import OllitaCocina3D from './OllitaCocina3D.jsx';
-import EstanteRetail3D from './EstanteRetail3D.jsx';
-import MesaServicios3D from './MesaServicios3D.jsx';
+import ProductoRecetaFigura3D from './ProductoRecetaFigura3D.jsx';
 import InsumoFigura3D from './InsumoFigura3D.jsx';
 import { formatCLP } from '../../utils/formatters.js';
 
@@ -13,6 +11,8 @@ import { formatCLP } from '../../utils/formatters.js';
 export default function VisorEscenaPBR3D({
   perfil = 'restaurant',
   nombreProducto = 'Formulación Directa',
+  figuraId = '',
+  imagenPersonalizada = null,
   insumosAsignados = [],
   costoVariableConsolidado = 0,
   precioVentaConsolidado = 0,
@@ -200,9 +200,14 @@ export default function VisorEscenaPBR3D({
               alignItems: 'center',
             }}
           >
-            {perfil === 'restaurant' && <OllitaCocina3D tamaño={110} insumosEnOlla={insumosAsignados} />}
-            {perfil === 'minimarket' && <EstanteRetail3D tamaño={110} itemsEnEstante={insumosAsignados} />}
-            {perfil === 'services' && <MesaServicios3D tamaño={110} itemsEnMesa={insumosAsignados} />}
+            <ProductoRecetaFigura3D
+              nombreProducto={nombreProducto}
+              rubro={perfil}
+              figuraId={figuraId}
+              imagenPersonalizada={imagenPersonalizada}
+              insumosEnReceta={insumosAsignados}
+              tamaño={124}
+            />
           </div>
 
           {/* Telemetría de Cámara 3D en esquina */}

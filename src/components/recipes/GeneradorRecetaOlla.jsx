@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAppState } from '../../store/appState.jsx';
-import OllitaCocina3D from '../svg3d/OllitaCocina3D.jsx';
-import EstanteRetail3D from '../svg3d/EstanteRetail3D.jsx';
-import MesaServicios3D from '../svg3d/MesaServicios3D.jsx';
+import ProductoRecetaFigura3D from '../svg3d/ProductoRecetaFigura3D.jsx';
 import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
 import TechnicalEmptyStateSVG from '../svg3d/TechnicalEmptyStateSVG.jsx';
+import { FIGURAS_PRODUCTOS_RECETAS_JSON } from '../../lib/bibliotecaInsumos3D.js';
 import { formatCLP } from '../../utils/formatters.js';
 
 export default function GeneradorRecetaOlla({
@@ -20,6 +19,8 @@ export default function GeneradorRecetaOlla({
     costoVariableConsolidado,
     setNombreRecetaEnOlla,
     setPrecioRecetaEnOlla,
+    setImagenRecetaEnOlla,
+    setFiguraProductoIdEnOlla,
     cambiarCantidadIngrediente,
     eliminarIngredienteDeOlla,
     guardarRecetaActiva,
@@ -27,6 +28,7 @@ export default function GeneradorRecetaOlla({
     vaciarOlla,
   } = useAppState();
 
+  const fileInputRef = useRef(null);
   const [mensajeGuardado, setMensajeGuardado] = useState(false);
 
   const ingredientes = recetaEnOlla?.ingredientes || [];
@@ -43,10 +45,10 @@ export default function GeneradorRecetaOlla({
 
   const tituloSeccion =
     perfil === 'restaurant'
-      ? 'Generador Profesional de Recetas (Ollita de Cocina)'
+      ? 'Generador Profesional de Recetas (Plato 3D & Escandallo)'
       : perfil === 'minimarket'
-      ? 'Armador de Packs & Costo de Reposición (Góndola)'
-      : 'Estructurador de Servicios & Proyectos (Mesa de Trabajo)';
+      ? 'Armador de Packs & Costo de Reposición (Catálogo 3D)'
+      : 'Estructurador de Servicios & Proyectos (Matriz 3D)';
 
   const subtituloSeccion =
     perfil === 'restaurant'
@@ -210,7 +212,7 @@ export default function GeneradorRecetaOlla({
 
       {/* 3. Escenario de Armado Bento 5 / 7: Stand 3D + Lista de Ingredientes en la Receta */}
       <div className="bento-grid-12" style={{ alignItems: 'start' }}>
-        {/* Lado A (5 col): Zona de Cocción / Ollita 3D con Drop Zone */}
+        {/* Lado A (5 col): Stand 3D Interactivo con Soporte Vectorial JSON y Carga de Fotos */}
         <div
           className="bento-col-5"
           onDragOver={onDragOverStand}
@@ -220,49 +222,131 @@ export default function GeneradorRecetaOlla({
             border: `1.5px dashed ${zonaHover === 'stand' ? 'var(--color-primary)' : 'var(--color-border-subtle)'}`,
             backgroundColor: zonaHover === 'stand' ? 'var(--color-brand-50)' : '#FAFAFA',
             borderRadius: '10px',
-            padding: '24px 16px',
+            padding: '18px 14px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '12px',
+            gap: '10px',
             textAlign: 'center',
             transition: 'all 0.2s ease',
-            minHeight: '250px',
+            minHeight: '270px',
             boxShadow: zonaHover === 'stand' ? '0 0 0 3px rgba(15,118,110,0.12)' : 'none',
           }}
         >
-          {perfil === 'restaurant' && (
-            <OllitaCocina3D
-              tamaño={118}
-              insumosEnOlla={ingredientes}
-              animando={zonaHover === 'stand'}
-            />
-          )}
+          <ProductoRecetaFigura3D
+            nombreProducto={recetaEnOlla?.nombre}
+            rubro={perfil}
+            figuraId={recetaEnOlla?.figuraId}
+            imagenPersonalizada={recetaEnOlla?.imagenPersonalizada}
+            insumosEnReceta={ingredientes}
+            tamaño={136}
+            animando={zonaHover === 'stand'}
+          />
 
-          {perfil === 'minimarket' && (
-            <EstanteRetail3D
-              tamaño={118}
-              itemsEnEstante={ingredientes}
-              animando={zonaHover === 'stand'}
-            />
-          )}
-
-          {perfil === 'services' && (
-            <MesaServicios3D
-              tamaño={118}
-              itemsEnMesa={ingredientes}
-              animando={zonaHover === 'stand'}
-            />
-          )}
-
-          <div style={{ marginTop: '4px' }}>
-            <span className="tabular-nums" style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--color-foreground)', display: 'block' }}>
+          <div style={{ width: '100%', marginTop: '2px' }}>
+            <span className="tabular-nums" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-foreground)', display: 'block' }}>
               {ingredientes.length} {ingredientes.length === 1 ? 'insumo integrado' : 'insumos integrados'}
             </span>
-            <span style={{ fontSize: '11.5px', color: 'var(--color-muted-foreground)' }}>
-              Arrastra los insumos del carrusel y suéltalos aquí
+            <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '8px' }}>
+              Arrastra insumos del carrusel o sube una imagen real del producto
             </span>
+
+            {/* Controles: Selector de Figura 3D JSON & Botón de Subida de Imagen */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
+              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                <select
+                  value={recetaEnOlla?.figuraId || ''}
+                  onChange={(e) => setFiguraProductoIdEnOlla(e.target.value)}
+                  style={{
+                    flex: 1,
+                    height: '30px',
+                    padding: '0 8px',
+                    borderRadius: '5px',
+                    border: '1px solid var(--color-border)',
+                    backgroundColor: '#FFFFFF',
+                    fontSize: '11px',
+                    fontWeight: 500,
+                    color: 'var(--color-foreground)',
+                    cursor: 'pointer',
+                    outline: 'none',
+                  }}
+                  title="Seleccionar modelo vectorial 3D para el producto"
+                >
+                  <option value="">Auto-detectar 3D según nombre...</option>
+                  {Object.values(FIGURAS_PRODUCTOS_RECETAS_JSON).map((fig) => (
+                    <option key={fig.id} value={fig.id}>
+                      {fig.nombre} ({fig.categoria})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                      setImagenRecetaEnOlla(ev.target?.result);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{
+                    height: '28px',
+                    padding: '0 10px',
+                    borderRadius: '5px',
+                    border: '1px solid var(--color-border)',
+                    backgroundColor: recetaEnOlla?.imagenPersonalizada ? 'var(--color-brand-50)' : '#FFFFFF',
+                    color: recetaEnOlla?.imagenPersonalizada ? 'var(--color-primary)' : 'var(--color-foreground)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                  {recetaEnOlla?.imagenPersonalizada ? 'Cambiar Foto Real' : 'Subir Foto de Producto'}
+                </button>
+
+                {recetaEnOlla?.imagenPersonalizada && (
+                  <button
+                    type="button"
+                    onClick={() => setImagenRecetaEnOlla(null)}
+                    style={{
+                      height: '28px',
+                      padding: '0 8px',
+                      borderRadius: '5px',
+                      border: '1px solid var(--color-border)',
+                      backgroundColor: '#FFFFFF',
+                      color: 'var(--color-danger)',
+                      fontSize: '11px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                    }}
+                    title="Volver a representación vectorial 3D"
+                  >
+                    Quitar Foto
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
