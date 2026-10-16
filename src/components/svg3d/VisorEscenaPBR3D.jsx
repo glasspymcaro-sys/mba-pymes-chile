@@ -284,7 +284,7 @@ export default function VisorEscenaPBR3D({
                     boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
                   }}
                 >
-                  <InsumoFigura3D nombre={item.nombre} tamaño={22} imagenFalUrl={item.imagenFalUrl} rubro={perfil} />
+                  <InsumoFigura3D nombre={item.nombre} tamaño={22} imagenFalUrl={item.imagenFalUrl} rubro={perfil} tipologia={item.tipologia} />
                   <span style={{ fontSize: '11.5px', fontWeight: 500, color: 'var(--color-foreground)' }}>
                     {item.cantidad > 1 ? <strong className="tabular-nums">{item.cantidad}x </strong> : null}
                     {item.nombre}

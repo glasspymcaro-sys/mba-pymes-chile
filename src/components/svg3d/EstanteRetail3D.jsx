@@ -116,7 +116,7 @@ export default function EstanteRetail3D({ tamaño = 120, itemsEnEstante = [], al
               }}
               title={ing.nombre}
             >
-              <InsumoFigura3D nombre={ing.nombre} tamaño={30} imagenFalUrl={ing.imagenFalUrl} rubro="minimarket" />
+              <InsumoFigura3D nombre={ing.nombre} tamaño={30} imagenFalUrl={ing.imagenFalUrl} rubro="minimarket" tipologia={ing.tipologia} />
             </div>
           ))}
         </div>

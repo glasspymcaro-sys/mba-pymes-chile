@@ -2,29 +2,33 @@ import React, { createContext, useContext, useState, useMemo, useEffect, useRef,
 import { supabase } from '../lib/supabase.js';
 import { cargarDatosUsuario, sincronizarTodoElNegocio } from '../services/dbService.js';
 import { ACTIVOS_3D_CATALOGO, construirUrlActivo3D } from '../lib/fal3d.js';
+import { clasificarTipologiaInsumo } from '../lib/bibliotecaInsumos3D.js';
 
 const INSUMOS_DEFAULT = {
   restaurant: [
-    { id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan brioche artesanal'] },
-    { id: 'ins_2', nombre: 'Carne Vacuno Lomo (200g)', costoUnitario: 2400, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['carne vacuno lomo (200g)'] },
-    { id: 'ins_3', nombre: 'Tomates Frescos (100g)', costoUnitario: 350, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['tomates frescos (100g)'] },
-    { id: 'ins_4', nombre: 'Queso Cheddar Fundido', costoUnitario: 450, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['queso cheddar fundido'] },
-    { id: 'ins_5', nombre: 'Lechuga Hidropónica', costoUnitario: 250, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['lechuga hidropónica'] },
-    { id: 'ins_6', nombre: 'Papas Fritas Porción', costoUnitario: 650, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['papas fritas porción'] },
-    { id: 'ins_7', nombre: 'Manzanas Rojas', costoUnitario: 1200, unidadMedida: 'kg', imagenFalUrl: ACTIVOS_3D_CATALOGO['manzanas rojas'] },
+    { id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, unidadMedida: 'un', tipologia: 'panaderia_masa', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan brioche artesanal'] },
+    { id: 'ins_2', nombre: 'Carne Vacuno Lomo (200g)', costoUnitario: 2400, unidadMedida: 'un', tipologia: 'carne_roja_embutido', imagenFalUrl: ACTIVOS_3D_CATALOGO['carne vacuno lomo (200g)'] },
+    { id: 'ins_3', nombre: 'Tomates Frescos (100g)', costoUnitario: 350, unidadMedida: 'un', tipologia: 'verdura_fruto', imagenFalUrl: ACTIVOS_3D_CATALOGO['tomates frescos (100g)'] },
+    { id: 'ins_4', nombre: 'Queso Cheddar Fundido', costoUnitario: 450, unidadMedida: 'un', tipologia: 'lacteo_queso_huevo', imagenFalUrl: ACTIVOS_3D_CATALOGO['queso cheddar fundido'] },
+    { id: 'ins_5', nombre: 'Lechuga Hidropónica', costoUnitario: 250, unidadMedida: 'un', tipologia: 'verdura_hoja', imagenFalUrl: ACTIVOS_3D_CATALOGO['lechuga hidropónica'] },
+    { id: 'ins_6', nombre: 'Papas Fritas Porción', costoUnitario: 650, unidadMedida: 'un', tipologia: 'fritura_snack', imagenFalUrl: ACTIVOS_3D_CATALOGO['papas fritas porción'] },
+    { id: 'ins_7', nombre: 'Manzanas Rojas', costoUnitario: 1200, unidadMedida: 'kg', tipologia: 'fruta_fresca', imagenFalUrl: ACTIVOS_3D_CATALOGO['manzanas rojas'] },
+    { id: 'ins_8', nombre: 'Palta Hass Cremosa', costoUnitario: 650, unidadMedida: 'un', tipologia: 'palta_oleaginosa', imagenFalUrl: construirUrlActivo3D('Palta Hass Cremosa', 'restaurant') },
+    { id: 'ins_9', nombre: 'Cebolla Morada Pluma', costoUnitario: 240, unidadMedida: 'un', tipologia: 'verdura_raiz_bulbo', imagenFalUrl: construirUrlActivo3D('Cebolla Morada Pluma', 'restaurant') },
   ],
   minimarket: [
-    { id: 'ins_mini_1', nombre: 'Bebida Botella 1.5L', costoUnitario: 950, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['bebida botella 1.5l'] },
-    { id: 'ins_mini_2', nombre: 'Pan de Molde Familiar', costoUnitario: 1400, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan de molde familiar'] },
-    { id: 'ins_mini_3', nombre: 'Leche Entera 1L', costoUnitario: 820, unidadMedida: 'lt', imagenFalUrl: ACTIVOS_3D_CATALOGO['leche entera 1l'] },
-    { id: 'ins_mini_4', nombre: 'Tornillos Yeso Cartón 100u', costoUnitario: 1900, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['tornillos yeso cartón 100u'] },
-    { id: 'ins_mini_5', nombre: 'Café Grano Tostado 250g', costoUnitario: 2600, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['café grano tostado 250g'] },
+    { id: 'ins_mini_1', nombre: 'Bebida Botella 1.5L', costoUnitario: 950, unidadMedida: 'un', tipologia: 'bebida_lacteo_liquido', imagenFalUrl: ACTIVOS_3D_CATALOGO['bebida botella 1.5l'] },
+    { id: 'ins_mini_2', nombre: 'Pan de Molde Familiar', costoUnitario: 1400, unidadMedida: 'un', tipologia: 'panaderia_masa', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan de molde familiar'] },
+    { id: 'ins_mini_3', nombre: 'Leche Entera 1L', costoUnitario: 820, unidadMedida: 'lt', tipologia: 'bebida_lacteo_liquido', imagenFalUrl: ACTIVOS_3D_CATALOGO['leche entera 1l'] },
+    { id: 'ins_mini_4', nombre: 'Tornillos Yeso Cartón 100u', costoUnitario: 1900, unidadMedida: 'un', tipologia: 'ferreteria_herramienta', imagenFalUrl: ACTIVOS_3D_CATALOGO['tornillos yeso cartón 100u'] },
+    { id: 'ins_mini_5', nombre: 'Café Grano Tostado 250g', costoUnitario: 2600, unidadMedida: 'un', tipologia: 'cafe_infusion_cacao', imagenFalUrl: ACTIVOS_3D_CATALOGO['café grano tostado 250g'] },
+    { id: 'ins_mini_6', nombre: 'Arroz Grado 1 Selección', costoUnitario: 1150, unidadMedida: 'kg', tipologia: 'abarrote_grano_condimento', imagenFalUrl: construirUrlActivo3D('Arroz Grado 1 Selección', 'minimarket') },
   ],
   services: [
-    { id: 'ins_srv_1', nombre: 'Consultor Senior MBA', costoUnitario: 18000, unidadMedida: 'hr', imagenFalUrl: ACTIVOS_3D_CATALOGO['consultor senior mba'] },
-    { id: 'ins_srv_2', nombre: 'Desarrollador FullStack', costoUnitario: 14000, unidadMedida: 'hr', imagenFalUrl: ACTIVOS_3D_CATALOGO['desarrollador fullstack'] },
-    { id: 'ins_srv_3', nombre: 'Licencia Software Cloud', costoUnitario: 6500, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['licencia software cloud'] },
-    { id: 'ins_srv_4', nombre: 'Diseñador UI/UX', costoUnitario: 11000, unidadMedida: 'hr', imagenFalUrl: ACTIVOS_3D_CATALOGO['diseñador ui/ux'] },
+    { id: 'ins_srv_1', nombre: 'Consultor Senior MBA', costoUnitario: 18000, unidadMedida: 'hr', tipologia: 'servicios_consultoria_diseno', imagenFalUrl: ACTIVOS_3D_CATALOGO['consultor senior mba'] },
+    { id: 'ins_srv_2', nombre: 'Desarrollador FullStack', costoUnitario: 14000, unidadMedida: 'hr', tipologia: 'servicios_software_cloud', imagenFalUrl: ACTIVOS_3D_CATALOGO['desarrollador fullstack'] },
+    { id: 'ins_srv_3', nombre: 'Licencia Software Cloud', costoUnitario: 6500, unidadMedida: 'un', tipologia: 'servicios_software_cloud', imagenFalUrl: ACTIVOS_3D_CATALOGO['licencia software cloud'] },
+    { id: 'ins_srv_4', nombre: 'Diseñador UI/UX', costoUnitario: 11000, unidadMedida: 'hr', tipologia: 'servicios_consultoria_diseno', imagenFalUrl: ACTIVOS_3D_CATALOGO['diseñador ui/ux'] },
   ],
 };
 
@@ -35,11 +39,11 @@ const RECETAS_DEFAULT = {
       nombre: 'Hamburguesa Artesanal Completa',
       precioVenta: 8900,
       ingredientes: [
-        { idAsignado: 'ing_1', id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan brioche artesanal'] },
-        { idAsignado: 'ing_2', id: 'ins_2', nombre: 'Carne Vacuno Lomo (200g)', costoUnitario: 2400, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['carne vacuno lomo (200g)'] },
-        { idAsignado: 'ing_3', id: 'ins_3', nombre: 'Tomates Frescos (100g)', costoUnitario: 350, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['tomates frescos (100g)'] },
-        { idAsignado: 'ing_4', id: 'ins_4', nombre: 'Queso Cheddar Fundido', costoUnitario: 450, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['queso cheddar fundido'] },
-        { idAsignado: 'ing_5', id: 'ins_5', nombre: 'Lechuga Hidropónica', costoUnitario: 250, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['lechuga hidropónica'] },
+        { idAsignado: 'ing_1', id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, cantidad: 1, unidadMedida: 'un', tipologia: 'panaderia_masa', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan brioche artesanal'] },
+        { idAsignado: 'ing_2', id: 'ins_2', nombre: 'Carne Vacuno Lomo (200g)', costoUnitario: 2400, cantidad: 1, unidadMedida: 'un', tipologia: 'carne_roja_embutido', imagenFalUrl: ACTIVOS_3D_CATALOGO['carne vacuno lomo (200g)'] },
+        { idAsignado: 'ing_3', id: 'ins_3', nombre: 'Tomates Frescos (100g)', costoUnitario: 350, cantidad: 1, unidadMedida: 'un', tipologia: 'verdura_fruto', imagenFalUrl: ACTIVOS_3D_CATALOGO['tomates frescos (100g)'] },
+        { idAsignado: 'ing_4', id: 'ins_4', nombre: 'Queso Cheddar Fundido', costoUnitario: 450, cantidad: 1, unidadMedida: 'un', tipologia: 'lacteo_queso_huevo', imagenFalUrl: ACTIVOS_3D_CATALOGO['queso cheddar fundido'] },
+        { idAsignado: 'ing_5', id: 'ins_5', nombre: 'Lechuga Hidropónica', costoUnitario: 250, cantidad: 1, unidadMedida: 'un', tipologia: 'verdura_hoja', imagenFalUrl: ACTIVOS_3D_CATALOGO['lechuga hidropónica'] },
       ],
     },
     {
@@ -47,8 +51,8 @@ const RECETAS_DEFAULT = {
       nombre: 'Tarta Tibia de Manzanas',
       precioVenta: 4500,
       ingredientes: [
-        { idAsignado: 'ing_6', id: 'ins_7', nombre: 'Manzanas Rojas', costoUnitario: 1200, cantidad: 1, unidadMedida: 'kg', imagenFalUrl: ACTIVOS_3D_CATALOGO['manzanas rojas'] },
-        { idAsignado: 'ing_7', id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan brioche artesanal'] },
+        { idAsignado: 'ing_6', id: 'ins_7', nombre: 'Manzanas Rojas', costoUnitario: 1200, cantidad: 1, unidadMedida: 'kg', tipologia: 'fruta_fresca', imagenFalUrl: ACTIVOS_3D_CATALOGO['manzanas rojas'] },
+        { idAsignado: 'ing_7', id: 'ins_1', nombre: 'Pan Brioche Artesanal', costoUnitario: 800, cantidad: 1, unidadMedida: 'un', tipologia: 'panaderia_masa', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan brioche artesanal'] },
       ],
     },
   ],
@@ -58,9 +62,9 @@ const RECETAS_DEFAULT = {
       nombre: 'Pack Desayuno Familiar Express',
       precioVenta: 6990,
       ingredientes: [
-        { idAsignado: 'ing_m1', id: 'ins_mini_2', nombre: 'Pan de Molde Familiar', costoUnitario: 1400, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan de molde familiar'] },
-        { idAsignado: 'ing_m2', id: 'ins_mini_3', nombre: 'Leche Entera 1L', costoUnitario: 820, cantidad: 2, unidadMedida: 'lt', imagenFalUrl: ACTIVOS_3D_CATALOGO['leche entera 1l'] },
-        { idAsignado: 'ing_m3', id: 'ins_mini_5', nombre: 'Café Grano Tostado 250g', costoUnitario: 2600, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['café grano tostado 250g'] },
+        { idAsignado: 'ing_m1', id: 'ins_mini_2', nombre: 'Pan de Molde Familiar', costoUnitario: 1400, cantidad: 1, unidadMedida: 'un', tipologia: 'panaderia_masa', imagenFalUrl: ACTIVOS_3D_CATALOGO['pan de molde familiar'] },
+        { idAsignado: 'ing_m2', id: 'ins_mini_3', nombre: 'Leche Entera 1L', costoUnitario: 820, cantidad: 2, unidadMedida: 'lt', tipologia: 'bebida_lacteo_liquido', imagenFalUrl: ACTIVOS_3D_CATALOGO['leche entera 1l'] },
+        { idAsignado: 'ing_m3', id: 'ins_mini_5', nombre: 'Café Grano Tostado 250g', costoUnitario: 2600, cantidad: 1, unidadMedida: 'un', tipologia: 'cafe_infusion_cacao', imagenFalUrl: ACTIVOS_3D_CATALOGO['café grano tostado 250g'] },
       ],
     },
   ],
@@ -70,9 +74,9 @@ const RECETAS_DEFAULT = {
       nombre: 'Auditoría Estratégica & TI Mensual',
       precioVenta: 55000,
       ingredientes: [
-        { idAsignado: 'ing_s1', id: 'ins_srv_1', nombre: 'Consultor Senior MBA', costoUnitario: 18000, cantidad: 1, unidadMedida: 'hr', imagenFalUrl: ACTIVOS_3D_CATALOGO['consultor senior mba'] },
-        { idAsignado: 'ing_s2', id: 'ins_srv_2', nombre: 'Desarrollador FullStack', costoUnitario: 14000, cantidad: 1, unidadMedida: 'hr', imagenFalUrl: ACTIVOS_3D_CATALOGO['desarrollador fullstack'] },
-        { idAsignado: 'ing_s3', id: 'ins_srv_3', nombre: 'Licencia Software Cloud', costoUnitario: 6500, cantidad: 1, unidadMedida: 'un', imagenFalUrl: ACTIVOS_3D_CATALOGO['licencia software cloud'] },
+        { idAsignado: 'ing_s1', id: 'ins_srv_1', nombre: 'Consultor Senior MBA', costoUnitario: 18000, cantidad: 1, unidadMedida: 'hr', tipologia: 'servicios_consultoria_diseno', imagenFalUrl: ACTIVOS_3D_CATALOGO['consultor senior mba'] },
+        { idAsignado: 'ing_s2', id: 'ins_srv_2', nombre: 'Desarrollador FullStack', costoUnitario: 14000, cantidad: 1, unidadMedida: 'hr', tipologia: 'servicios_software_cloud', imagenFalUrl: ACTIVOS_3D_CATALOGO['desarrollador fullstack'] },
+        { idAsignado: 'ing_s3', id: 'ins_srv_3', nombre: 'Licencia Software Cloud', costoUnitario: 6500, cantidad: 1, unidadMedida: 'un', tipologia: 'servicios_software_cloud', imagenFalUrl: ACTIVOS_3D_CATALOGO['licencia software cloud'] },
       ],
     },
   ],
@@ -174,8 +178,10 @@ export function AppStateProvider({ children }) {
 
   // Mutadores de Insumos
   const agregarInsumo = (nuevoItem) => {
+    const tipologiaDetectada = nuevoItem.tipologia || clasificarTipologiaInsumo(nuevoItem.nombre, perfil).id;
     const itemCon3D = {
       ...nuevoItem,
+      tipologia: tipologiaDetectada,
       imagenFalUrl: nuevoItem.imagenFalUrl || construirUrlActivo3D(nuevoItem.nombre, perfil),
     };
     setInsumos((prev) => [itemCon3D, ...prev]);

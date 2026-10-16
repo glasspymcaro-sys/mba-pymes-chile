@@ -116,7 +116,7 @@ export default function MesaServicios3D({ tamaño = 120, itemsEnMesa = [], alHac
               }}
               title={ing.nombre}
             >
-              <InsumoFigura3D nombre={ing.nombre} tamaño={30} imagenFalUrl={ing.imagenFalUrl} rubro="services" />
+              <InsumoFigura3D nombre={ing.nombre} tamaño={30} imagenFalUrl={ing.imagenFalUrl} rubro="services" tipologia={ing.tipologia} />
             </div>
           ))}
         </div>

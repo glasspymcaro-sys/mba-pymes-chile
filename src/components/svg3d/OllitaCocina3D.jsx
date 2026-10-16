@@ -215,7 +215,7 @@ export default function OllitaCocina3D({ tamaño = 120, insumosEnOlla = [], alHa
               }}
               title={`${ing.nombre} (${ing.cantidad || 1} ${ing.unidadMedida || 'un'})`}
             >
-              <InsumoFigura3D nombre={ing.nombre} tamaño={32} imagenFalUrl={ing.imagenFalUrl} rubro="restaurant" />
+              <InsumoFigura3D nombre={ing.nombre} tamaño={32} imagenFalUrl={ing.imagenFalUrl} rubro="restaurant" tipologia={ing.tipologia} />
             </div>
           ))}
           {insumosEnOlla.length > 4 && (

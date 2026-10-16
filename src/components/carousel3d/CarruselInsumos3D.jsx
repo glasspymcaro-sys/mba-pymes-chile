@@ -4,29 +4,11 @@ import TarritoBasura3D from '../svg3d/TarritoBasura3D.jsx';
 import GeneradorRecetaOlla from '../recipes/GeneradorRecetaOlla.jsx';
 import TechnicalEmptyStateSVG from '../svg3d/TechnicalEmptyStateSVG.jsx';
 import { formatCLP } from '../../utils/formatters.js';
-import { construirUrlActivo3D } from '../../lib/fal3d.js';
-
-const SUGERENCIAS_RAPIDAS = {
-  restaurant: [
-    { nombre: 'Palta Hass Fresca', costoUnitario: 600, unidadMedida: 'un' },
-    { nombre: 'Tocino Ahumado Crocante', costoUnitario: 550, unidadMedida: 'un' },
-    { nombre: 'Huevo de Campo', costoUnitario: 220, unidadMedida: 'un' },
-    { nombre: 'Cebolla Caramelizada', costoUnitario: 250, unidadMedida: 'un' },
-    { nombre: 'Café Espresso Grano', costoUnitario: 420, unidadMedida: 'un' },
-  ],
-  minimarket: [
-    { nombre: 'Arroz Grado 1 Selección', costoUnitario: 1150, unidadMedida: 'kg' },
-    { nombre: 'Aceite Maravilla 1L', costoUnitario: 1890, unidadMedida: 'lt' },
-    { nombre: 'Queso Laminado 250g', costoUnitario: 2100, unidadMedida: 'un' },
-    { nombre: 'Jugo Natural Botella 1L', costoUnitario: 1250, unidadMedida: 'lt' },
-  ],
-  services: [
-    { nombre: 'Especialista Cloud & DevOps', costoUnitario: 16500, unidadMedida: 'hr' },
-    { nombre: 'Auditoría de Seguridad QA', costoUnitario: 14500, unidadMedida: 'hr' },
-    { nombre: 'Servidor Base de Datos', costoUnitario: 8500, unidadMedida: 'un' },
-    { nombre: 'Analista Financiero Senior', costoUnitario: 15500, unidadMedida: 'hr' },
-  ],
-};
+import {
+  TIPOLOGIAS_3D,
+  CATALOGO_MAESTRO_INSUMOS,
+  clasificarTipologiaInsumo,
+} from '../../lib/bibliotecaInsumos3D.js';
 
 export default function CarruselInsumos3D({
   rubro = 'restaurant',
@@ -37,12 +19,16 @@ export default function CarruselInsumos3D({
   onEliminarInsumo,
   onAsignarCostoDirecto,
 }) {
-  // Formulario de alta de insumos
+  // Formulario de alta de insumos con previsualización 3D en vivo y selector de tipología
   const [nombreNuevo, setNombreNuevo] = useState('');
   const [costoNuevo, setCostoNuevo] = useState('');
   const [unidadNueva, setUnidadNueva] = useState('un');
+  const [tipologiaManual, setTipologiaManual] = useState('auto');
 
-  // Filtros de búsqueda y estado
+  // Explorador de Biblioteca 3D por categoría
+  const [categoriaBiblioteca, setCategoriaBiblioteca] = useState('todas');
+
+  // Filtros de búsqueda y estado en el carrusel
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('todos'); // 'todos' | 'en_receta' | 'disponibles'
 
@@ -51,6 +37,7 @@ export default function CarruselInsumos3D({
   const [editNombre, setEditNombre] = useState('');
   const [editCosto, setEditCosto] = useState('');
   const [editUnidad, setEditUnidad] = useState('un');
+  const [editTipologia, setEditTipologia] = useState('auto');
 
   // Estados de Drag & Drop y animación
   const [itemArrastrado, setItemArrastrado] = useState(null);
@@ -62,6 +49,12 @@ export default function CarruselInsumos3D({
   const [isDraggingScroll, setIsDraggingScroll] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
+
+  // Tipología detectada en tiempo real mientras el usuario escribe
+  const tipologiaDetectada =
+    tipologiaManual !== 'auto' && TIPOLOGIAS_3D[tipologiaManual]
+      ? TIPOLOGIAS_3D[tipologiaManual]
+      : clasificarTipologiaInsumo(nombreNuevo, rubro);
 
   const handleMouseDown = (e) => {
     if (e.target.closest('[data-draggable-card]') || e.target.closest('button') || e.target.closest('input')) return;
@@ -90,37 +83,40 @@ export default function CarruselInsumos3D({
     });
   };
 
-  // Crear insumo con activo 3D SVG real e instantáneo
+  // Crear insumo con figura 3D SVG animada desde la biblioteca
   const handleCrearInsumo = (e) => {
     e.preventDefault();
     const nombre = nombreNuevo.trim();
     const costo = Number(costoNuevo) || 0;
     if (!nombre || costo <= 0) return;
 
-    const imagenFalUrl = construirUrlActivo3D(nombre, rubro);
+    const tipoFinal =
+      tipologiaManual !== 'auto'
+        ? tipologiaManual
+        : clasificarTipologiaInsumo(nombre, rubro).id;
 
     onAgregarInsumo({
       id: 'insumo_' + Date.now() + '_' + Math.random().toString(36).substring(2, 5),
       nombre,
       costoUnitario: costo,
       unidadMedida: unidadNueva,
-      imagenFalUrl,
+      tipologia: tipoFinal,
       fechaCreacion: new Date().toISOString(),
     });
 
     setNombreNuevo('');
     setCostoNuevo('');
+    setTipologiaManual('auto');
   };
 
-  // Agregar desde chip de sugerencia rápida en 1 clic
-  const handleAgregarRapido = (sugerencia) => {
-    const imagenFalUrl = construirUrlActivo3D(sugerencia.nombre, rubro);
+  // Agregar desde la Biblioteca Maestra en 1 clic
+  const handleAgregarDesdeBiblioteca = (itemBib) => {
     onAgregarInsumo({
       id: 'insumo_' + Date.now() + '_' + Math.random().toString(36).substring(2, 5),
-      nombre: sugerencia.nombre,
-      costoUnitario: sugerencia.costoUnitario,
-      unidadMedida: sugerencia.unidadMedida,
-      imagenFalUrl,
+      nombre: itemBib.nombre,
+      costoUnitario: itemBib.costoUnitario,
+      unidadMedida: itemBib.unidadMedida,
+      tipologia: itemBib.tipologia,
       fechaCreacion: new Date().toISOString(),
     });
   };
@@ -132,12 +128,17 @@ export default function CarruselInsumos3D({
     const val = Number(editCosto) || 0;
     if (!editNombre.trim() || val <= 0) return;
 
+    const tipoEditFinal =
+      editTipologia !== 'auto'
+        ? editTipologia
+        : clasificarTipologiaInsumo(editNombre.trim(), rubro).id;
+
     onEditarInsumo({
       ...insumoEditando,
       nombre: editNombre.trim(),
       costoUnitario: val,
       unidadMedida: editUnidad,
-      imagenFalUrl: construirUrlActivo3D(editNombre.trim(), rubro),
+      tipologia: tipoEditFinal,
     });
 
     setInsumoEditando(null);
@@ -207,7 +208,15 @@ export default function CarruselInsumos3D({
     return true;
   });
 
-  const sugerenciasActuales = SUGERENCIAS_RAPIDAS[rubro] || SUGERENCIAS_RAPIDAS.restaurant;
+  // Filtrar elementos de la biblioteca maestra según selección
+  const itemsBibliotecaFiltrados = CATALOGO_MAESTRO_INSUMOS.filter((item) => {
+    if (categoriaBiblioteca === 'todas') {
+      return item.rubro === rubro || categoriaBiblioteca === 'todas';
+    }
+    return item.tipologia === categoriaBiblioteca;
+  });
+
+  const listaTipologias = Object.values(TIPOLOGIAS_3D);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -279,7 +288,7 @@ export default function CarruselInsumos3D({
         )}
       </div>
 
-      {/* 3. Formulario para Generar Insumo Nuevo + Plantillas Rápidas */}
+      {/* 3. Generador de Insumos con Biblioteca Completa de Tipologías 3D SVG */}
       <div
         style={{
           backgroundColor: 'var(--color-surface)',
@@ -289,63 +298,54 @@ export default function CarruselInsumos3D({
           padding: '20px 24px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '14px',
+          gap: '16px',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Alta de Materias Primas • Activo 3D Instantáneo
+              Biblioteca Vectorial Nativa • 16 Tipologías 3D Animadas (Sin Límites de API)
             </span>
             <h3 className="heading-tight" style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
               Generar Insumo
             </h3>
           </div>
 
-          {/* Plantillas Rápidas de 1 Clic */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)', fontWeight: 500 }}>
-              Carga rápida:
-            </span>
-            {sugerenciasActuales.map((sug, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleAgregarRapido(sug)}
-                className="btn-eng-secondary"
-                title={`Agregar ${sug.nombre} (${formatCLP(sug.costoUnitario)})`}
-                style={{
-                  padding: '4px 9px',
-                  borderRadius: '5px',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  backgroundColor: '#FAFAFA',
-                  color: 'var(--color-foreground)',
-                  border: '1px solid var(--color-border)',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}
-              >
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-                <span>{sug.nombre}</span>
-                <span className="tabular-nums" style={{ color: 'var(--color-muted-foreground)' }}>
-                  ({formatCLP(sug.costoUnitario)})
-                </span>
-              </button>
-            ))}
+          {/* Indicador de Tipología Clave Detectada en Vivo */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '6px 12px',
+              borderRadius: '8px',
+              backgroundColor: '#FAFAFA',
+              border: '1px solid var(--color-border)',
+            }}
+          >
+            <InsumoFigura3D
+              nombre={nombreNuevo || 'Lechuga'}
+              tipologia={tipologiaDetectada.id}
+              tamaño={38}
+              rubro={rubro}
+            />
+            <div>
+              <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
+                Tipología 3D Asignada
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-primary)' }}>
+                {tipologiaDetectada.nombre}
+              </span>
+            </div>
           </div>
         </div>
 
+        {/* Formulario Principal con Selector de Tipología Clave */}
         <form
           onSubmit={handleCrearInsumo}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr)) auto',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr)) auto',
             gap: '12px',
             alignItems: 'flex-end',
           }}
@@ -358,7 +358,7 @@ export default function CarruselInsumos3D({
               type="text"
               value={nombreNuevo}
               onChange={(e) => setNombreNuevo(e.target.value)}
-              placeholder="Ej: Pan, Lechuga, Tomate..."
+              placeholder="Ej: Lechuga, Zanahoria, Pollo, Pan..."
               required
               style={{
                 width: '100%',
@@ -373,6 +373,36 @@ export default function CarruselInsumos3D({
                 outline: 'none',
               }}
             />
+          </div>
+
+          <div>
+            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', letterSpacing: '0.04em' }}>
+              TIPOLOGÍA CLAVE 3D
+            </label>
+            <select
+              value={tipologiaManual}
+              onChange={(e) => setTipologiaManual(e.target.value)}
+              style={{
+                width: '100%',
+                height: '36px',
+                padding: '0 10px',
+                borderRadius: '6px',
+                border: '1px solid var(--color-border)',
+                backgroundColor: '#FFFFFF',
+                fontSize: '12.5px',
+                color: 'var(--color-foreground)',
+                boxSizing: 'border-box',
+                outline: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <option value="auto">Detección Automática ({tipologiaDetectada.nombre.split('&')[0].trim()})</option>
+              {listaTipologias.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.nombre}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -458,6 +488,109 @@ export default function CarruselInsumos3D({
             <span>Generar insumo</span>
           </button>
         </form>
+
+        {/* Explorador de la Biblioteca Completa de Insumos 3D por Tipología */}
+        <div
+          style={{
+            borderTop: '1px solid var(--color-border)',
+            paddingTop: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Catálogo Rápido de Biblioteca 3D (Clic para agregar al inventario):
+            </span>
+
+            {/* Filtro por Familia de Tipología */}
+            <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+              {[
+                { id: 'todas', label: 'Todos MVP' },
+                { id: 'verdura_hoja', label: 'Verduras Hoja' },
+                { id: 'verdura_fruto', label: 'Verduras Fruto' },
+                { id: 'verdura_raiz_bulbo', label: 'Raíces y Bulbos' },
+                { id: 'palta_oleaginosa', label: 'Paltas y Olivas' },
+                { id: 'fruta_fresca', label: 'Frutas' },
+                { id: 'carne_roja_embutido', label: 'Carnes' },
+                { id: 'ave_pescado_marisco', label: 'Aves y Pescados' },
+                { id: 'panaderia_masa', label: 'Pan y Masas' },
+                { id: 'lacteo_queso_huevo', label: 'Quesos y Huevos' },
+                { id: 'abarrote_grano_condimento', label: 'Abarrotes' },
+                { id: 'bebida_lacteo_liquido', label: 'Bebidas y Leche' },
+                { id: 'ferreteria_herramienta', label: 'Ferretería y Envases' },
+                { id: 'servicios_consultoria_diseno', label: 'Consultoría' },
+                { id: 'servicios_software_cloud', label: 'Software & Cloud' },
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setCategoriaBiblioteca(cat.id)}
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: '5px',
+                    fontSize: '10.5px',
+                    fontWeight: categoriaBiblioteca === cat.id ? 600 : 500,
+                    backgroundColor: categoriaBiblioteca === cat.id ? 'var(--color-brand-50)' : '#F4F4F5',
+                    color: categoriaBiblioteca === cat.id ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
+                    border: `1px solid ${categoriaBiblioteca === cat.id ? 'var(--color-brand-200)' : 'transparent'}`,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Cinta de Insumos de la Biblioteca 3D */}
+          <div
+            className="no-scrollbar"
+            style={{
+              display: 'flex',
+              gap: '8px',
+              overflowX: 'auto',
+              paddingBottom: '4px',
+            }}
+          >
+            {itemsBibliotecaFiltrados.map((sug, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleAgregarDesdeBiblioteca(sug)}
+                className="btn-eng-secondary"
+                title={`Agregar ${sug.nombre} (${formatCLP(sug.costoUnitario)} / ${sug.unidadMedida})`}
+                style={{
+                  padding: '5px 10px 5px 6px',
+                  borderRadius: '7px',
+                  fontSize: '11.5px',
+                  fontWeight: 500,
+                  backgroundColor: '#FAFAFA',
+                  color: 'var(--color-foreground)',
+                  border: '1px solid var(--color-border)',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '7px',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                }}
+              >
+                <InsumoFigura3D
+                  nombre={sug.nombre}
+                  tipologia={sug.tipologia}
+                  tamaño={26}
+                  rubro={rubro}
+                />
+                <span>{sug.nombre}</span>
+                <span className="tabular-nums" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>
+                  {formatCLP(sug.costoUnitario)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* 4. Carrusel Desplazable con el Cursor, Filtros y Buscador */}
@@ -473,7 +606,7 @@ export default function CarruselInsumos3D({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
           <div>
             <h3 className="heading-tight tabular-nums" style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0 }}>
-              Galería de Insumos ({insumosFiltrados.length})
+              Galería de Insumos Activos ({insumosFiltrados.length})
             </h3>
             <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
               Arrastra con el cursor hacia los lados o lleva cualquier insumo directo a la Ollita 3D
@@ -606,7 +739,7 @@ export default function CarruselInsumos3D({
           <TechnicalEmptyStateSVG
             tipo="busqueda"
             titulo="Sin coincidencias en el inventario de insumos"
-            descripcion="Verifique el término de búsqueda o registre una nueva materia prima en el generador superior."
+            descripcion="Verifique el término de búsqueda o seleccione un insumo del catálogo de la biblioteca 3D superior."
           />
         ) : (
           <div
@@ -629,6 +762,9 @@ export default function CarruselInsumos3D({
             {insumosFiltrados.map((item) => {
               const estaEnReceta = insumosAsignados.some((asig) => asig.id === item.id);
               const siendoArrastrado = itemArrastrado?.id === item.id;
+              const infoTipo =
+                (item.tipologia && TIPOLOGIAS_3D[item.tipologia]) ||
+                clasificarTipologiaInsumo(item.nombre, rubro);
 
               return (
                 <div
@@ -638,7 +774,7 @@ export default function CarruselInsumos3D({
                   onDragStart={(e) => handleDragStart(e, item)}
                   onDragEnd={handleDragEnd}
                   style={{
-                    flex: '0 0 200px',
+                    flex: '0 0 205px',
                     backgroundColor: '#FFFFFF',
                     border: `1px solid ${siendoArrastrado ? 'var(--color-primary)' : estaEnReceta ? 'var(--color-brand-200)' : 'var(--color-border)'}`,
                     borderRadius: '10px',
@@ -687,6 +823,7 @@ export default function CarruselInsumos3D({
                         setEditNombre(item.nombre);
                         setEditCosto(String(item.costoUnitario));
                         setEditUnidad(item.unidadMedida || 'un');
+                        setEditTipologia(item.tipologia || 'auto');
                       }}
                       title="Editar insumo"
                       style={{
@@ -708,16 +845,30 @@ export default function CarruselInsumos3D({
                     </button>
                   </div>
 
-                  {/* Figura 3D Garantizada */}
-                  <div style={{ margin: '14px 0 8px 0', pointerEvents: 'none' }}>
+                  {/* Figura 3D Animada en SVG Puro */}
+                  <div style={{ margin: '14px 0 6px 0', pointerEvents: 'none' }}>
                     <InsumoFigura3D
                       nombre={item.nombre}
+                      tipologia={item.tipologia}
                       tamaño={74}
-                      imagenFalUrl={item.imagenFalUrl}
                       rubro={rubro}
                       animando={siendoArrastrado}
                     />
                   </div>
+
+                  {/* Etiqueta de Tipología Clave */}
+                  <span
+                    style={{
+                      fontSize: '9.5px',
+                      fontWeight: 600,
+                      color: 'var(--color-muted-foreground)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em',
+                      marginBottom: '2px',
+                    }}
+                  >
+                    {infoTipo.nombre.split('&')[0].trim()}
+                  </span>
 
                   <h4
                     style={{
@@ -818,7 +969,7 @@ export default function CarruselInsumos3D({
         )}
       </div>
 
-      {/* 5. Modal de Edición de Insumo */}
+      {/* 5. Modal de Edición de Insumo y Tipología */}
       {insumoEditando && (
         <div
           style={{
@@ -838,14 +989,14 @@ export default function CarruselInsumos3D({
               borderRadius: '10px',
               border: '1px solid var(--color-border)',
               padding: '22px',
-              maxWidth: '380px',
+              maxWidth: '400px',
               width: '100%',
               boxShadow: 'var(--shadow-popover)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <h3 className="heading-tight" style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0 }}>
-                Editar Insumo
+                Editar Insumo y Tipología 3D
               </h3>
               <button
                 onClick={() => setInsumoEditando(null)}
@@ -862,15 +1013,17 @@ export default function CarruselInsumos3D({
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 12px', backgroundColor: '#FAFAFA', borderRadius: '8px', border: '1px solid var(--color-border)', marginBottom: '14px' }}>
               <InsumoFigura3D
                 nombre={editNombre}
+                tipologia={editTipologia !== 'auto' ? editTipologia : null}
                 tamaño={56}
                 rubro={rubro}
               />
               <div style={{ flex: 1 }}>
                 <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Vista Previa 3D en Tiempo Real
+                  Figura SVG 3D Animada
                 </span>
                 <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
-                  La figura 3D se adapta automáticamente al nombre del insumo.
+                  {(editTipologia !== 'auto' && TIPOLOGIAS_3D[editTipologia]?.nombre) ||
+                    clasificarTipologiaInsumo(editNombre, rubro).nombre}
                 </span>
               </div>
             </div>
@@ -896,6 +1049,33 @@ export default function CarruselInsumos3D({
                     outline: 'none',
                   }}
                 />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
+                  TIPOLOGÍA CLAVE 3D
+                </label>
+                <select
+                  value={editTipologia}
+                  onChange={(e) => setEditTipologia(e.target.value)}
+                  style={{
+                    width: '100%',
+                    height: '36px',
+                    padding: '0 10px',
+                    borderRadius: '6px',
+                    border: '1px solid var(--color-border)',
+                    fontSize: '13px',
+                    boxSizing: 'border-box',
+                    outline: 'none',
+                  }}
+                >
+                  <option value="auto">Automática según nombre</option>
+                  {listaTipologias.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>

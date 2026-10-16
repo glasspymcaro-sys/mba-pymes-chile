@@ -198,6 +198,50 @@ h1, h2, h3, .heading-tight {
   animation: spin3D 1s linear infinite;
 }
 
+/* Animaciones 3D Nativas para la Biblioteca de Figuras SVG */
+@keyframes float3DInsumo {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(1.5deg);
+  }
+}
+
+@keyframes shadowPulse3D {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(0.86);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulseHighlight3D {
+  0%, 100% {
+    opacity: 0.95;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.insumo-3d-float {
+  transform-origin: 60px 60px;
+  animation: float3DInsumo 3.4s ease-in-out infinite;
+}
+
+.insumo-3d-shadow {
+  transform-origin: 60px 96px;
+  animation: shadowPulse3D 3.4s ease-in-out infinite;
+}
+
+.insumo-3d-pulse {
+  animation: pulseHighlight3D 2.2s ease-in-out infinite;
+}
+
 /* Ocultar barra de scroll pero permitir deslizamiento */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

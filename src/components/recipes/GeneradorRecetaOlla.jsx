@@ -313,7 +313,7 @@ export default function GeneradorRecetaOlla({
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
                       <div style={{ flexShrink: 0, width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <InsumoFigura3D nombre={item.nombre} tamaño={32} imagenFalUrl={item.imagenFalUrl} rubro={perfil} />
+                        <InsumoFigura3D nombre={item.nombre} tamaño={32} imagenFalUrl={item.imagenFalUrl} rubro={perfil} tipologia={item.tipologia} />
                       </div>
 
                       <div style={{ minWidth: 0 }}>
