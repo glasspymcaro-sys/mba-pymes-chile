@@ -1,186 +1,255 @@
 /**
- * Motor de Generación y Catálogo de Activos 3D Profesionales
- * Conexión nativa con fal.ai (FAL_KEY) y motor neural 3D de alta definición en tiempo real.
+ * Motor Determinista de Activos 3D Isométricos Reales (100% SVG Data-URI de Estudio)
+ * Garantiza 0ms de latencia, 0 imágenes rotas y 100% de disponibilidad para cualquier insumo creado por el usuario.
  */
 
-const FAL_KEY = import.meta.env.VITE_FAL_KEY || import.meta.env.FAL_KEY || '';
-
-// Catálogo maestro de renders 3D isométricos de alta definición (estilo Blender / Studio 3D)
-export const ACTIVOS_3D_CATALOGO = {
-  // --- Restaurante & Gastronomía ---
-  'pan brioche artesanal': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20golden%20artisan%20brioche%20burger%20bun%20with%20sesame%20seeds%2C%20blender%203D%20model%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background%2C%20game%20asset?width=400&height=400&nologo=true&seed=101',
-  'carne vacuno lomo (200g)': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20thick%20grilled%20beef%20burger%20patty%2C%20tender%20meat%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=102',
-  'tomates frescos (100g)': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20fresh%20ripe%20red%20sliced%20tomato%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=103',
-  'queso cheddar fundido': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20melted%20golden%20cheddar%20cheese%20slice%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=104',
-  'lechuga hidropónica': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20crisp%20vibrant%20green%20lettuce%20leaf%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=105',
-  'papas fritas porción': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20crispy%20golden%20french%20fries%20in%20cup%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=106',
-  'manzanas rojas': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20shiny%20glossy%20red%20apple%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=107',
-  'manzanas': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20shiny%20glossy%20red%20apple%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=107',
-  'hamburguesa artesanal completa': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20delicious%20gourmet%20cheeseburger%20with%20cheese%20and%20lettuce%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=108',
-  'tarta tibia de manzanas': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20warm%20golden%20apple%20pie%20slice%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=109',
-
-  // --- Minimarket & Retail ---
-  'bebida botella 1.5l': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20refreshing%20soda%20bottle%20with%20condensation%20drops%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=201',
-  'pan de molde familiar': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20sliced%20sandwich%20bread%20loaf%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=202',
-  'leche entera 1l': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20fresh%20milk%20carton%20box%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=203',
-  'tornillos yeso cartón 100u': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20steel%20screws%20and%20hardware%20box%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=204',
-  'café grano tostado 250g': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20roasted%20coffee%20beans%20in%20kraft%20bag%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=205',
-  'pack desayuno familiar express': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20breakfast%20basket%20with%20bread%20milk%20and%20coffee%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=206',
-
-  // --- Servicios & Proyectos ---
-  'consultor senior mba': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20executive%20leather%20briefcase%20with%20financial%20report%20tablet%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=301',
-  'desarrollador fullstack': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20modern%20laptop%20with%20neon%20code%20terminal%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=302',
-  'licencia software cloud': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20glowing%20cyan%20holographic%20cloud%20database%20cube%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=303',
-  'diseñador ui/ux': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20graphic%20drawing%20tablet%20with%20stylus%20pen%20and%20color%20palette%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=304',
-  'auditoría estratégica & ti mensual': 'https://image.pollinations.ai/prompt/isolated%203D%20isometric%20render%20of%20executive%20blue%20strategy%20folder%20with%20gold%20seal%2C%20blender%203D%2C%20soft%20studio%20lighting%2C%20solid%20white%20clean%20background?width=400&height=400&nologo=true&seed=305'
-};
-
-// Cache en memoria
 const cacheImagenes3D = new Map();
 
-/**
- * Calcula un hash numérico determinista para seeds estables
- */
 function calcularHashTexto(texto) {
   let hash = 0;
   for (let i = 0; i < texto.length; i++) {
     hash = (hash << 5) - hash + texto.charCodeAt(i);
     hash |= 0;
   }
-  return Math.abs(hash) % 10000;
+  return Math.abs(hash);
 }
 
 /**
- * Genera la URL de renderizado 3D de alta definición para cualquier insumo o producto
- * @param {string} nombreInsumo
- * @param {string} rubro
- * @returns {string}
+ * Clasifica semánticamente cualquier insumo ingresado por el usuario y genera una escultura 3D SVG completa
+ * con iluminación de estudio PBR, sombra proyectada en suelo, pedestal isométrico y reflejos especulares.
  */
+export function generarSvg3DReal(nombreInsumo = 'Insumo', rubro = 'restaurant') {
+  const limpio = (nombreInsumo || 'Insumo').trim().toLowerCase();
+  const hash = calcularHashTexto(`${rubro}_${limpio}`);
+
+  const paletas = [
+    { top: '#5EEAD4', left: '#0D9488', right: '#115E59', accent: '#CCFBF1', glow: '#14B8A6' },
+    { top: '#93C5FD', left: '#2563EB', right: '#1E3A8A', accent: '#DBEAFE', glow: '#3B82F6' },
+    { top: '#FCD34D', left: '#D97706', right: '#78350F', accent: '#FEF3C7', glow: '#F59E0B' },
+    { top: '#6EE7B7', left: '#059669', right: '#064E3B', accent: '#D1FAE5', glow: '#10B981' },
+    { top: '#FCA5A5', left: '#DC2626', right: '#7F1D1D', accent: '#FEE2E2', glow: '#EF4444' },
+    { top: '#C4B5FD', left: '#7C3AED', right: '#4C1D95', accent: '#EDE9FE', glow: '#8B5CF6' },
+  ];
+  const pal = paletas[hash % paletas.length];
+
+  let geometriaCentral = '';
+
+  if (limpio.includes('pan') || limpio.includes('brioche') || limpio.includes('molde') || limpio.includes('masa') || limpio.includes('harina')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="146" rx="54" ry="16" fill="#09090B" opacity="0.16"/>
+      <path d="M 46 112 Q 46 60 100 60 Q 154 60 154 112 Q 154 142 100 142 Q 46 142 46 112 Z" fill="url(#gradPan)"/>
+      <path d="M 52 115 Q 100 136 148 115 Q 146 140 100 140 Q 54 140 52 115 Z" fill="#92400E" opacity="0.65"/>
+      <ellipse cx="85" cy="84" rx="28" ry="12" transform="rotate(-12 85 84)" fill="#FEF3C7" opacity="0.45"/>
+      <path d="M 74 88 Q 82 74 90 92" stroke="#78350F" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M 98 84 Q 106 70 114 88" stroke="#78350F" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M 122 88 Q 130 74 136 92" stroke="#78350F" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="78" cy="76" r="2" fill="#FFFBEB"/>
+      <circle cx="94" cy="72" r="2" fill="#FFFBEB"/>
+      <circle cx="112" cy="75" r="2" fill="#FFFBEB"/>
+      <circle cx="104" cy="68" r="2" fill="#FFFBEB"/>
+    `;
+  } else if (limpio.includes('carne') || limpio.includes('vacuno') || limpio.includes('lomo') || limpio.includes('hamburguesa') || limpio.includes('pollo') || limpio.includes('tocino') || limpio.includes('proteina')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="148" rx="56" ry="16" fill="#09090B" opacity="0.18"/>
+      <path d="M 44 106 Q 60 72 126 76 Q 160 92 152 120 Q 126 142 66 134 Q 36 126 44 106 Z" fill="url(#gradCarne)"/>
+      <path d="M 44 106 Q 66 134 152 120 L 152 134 Q 66 148 44 120 Z" fill="#450A0A"/>
+      <ellipse cx="84" cy="102" rx="14" ry="9" fill="#FFF1F2" stroke="#FECDD3" stroke-width="2.5"/>
+      <circle cx="84" cy="102" r="5" fill="#FDA4AF"/>
+      <path d="M 110 92 L 132 108" stroke="#7F1D1D" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+      <path d="M 98 106 L 120 120" stroke="#7F1D1D" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    `;
+  } else if (limpio.includes('tomate') || limpio.includes('manzana') || limpio.includes('fruta') || limpio.includes('cereza') || limpio.includes('frutilla')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="150" rx="48" ry="15" fill="#09090B" opacity="0.18"/>
+      <circle cx="100" cy="104" r="44" fill="url(#gradRojo)"/>
+      <ellipse cx="82" cy="86" rx="12" ry="20" transform="rotate(-28 82 86)" fill="#FFFFFF" opacity="0.38"/>
+      <path d="M 100 60 L 92 70 L 76 64 L 88 76 L 82 86 L 96 80 L 106 88 L 106 76 L 122 74 L 110 68 L 114 56 Z" fill="#059669"/>
+      <path d="M 100 62 Q 104 46 114 42" stroke="#064E3B" stroke-width="4" stroke-linecap="round" fill="none"/>
+    `;
+  } else if (limpio.includes('queso') || limpio.includes('cheddar') || limpio.includes('mantequilla') || limpio.includes('huevo')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="148" rx="54" ry="15" fill="#09090B" opacity="0.16"/>
+      <path d="M 46 116 L 138 66 L 156 118 Z" fill="url(#gradQueso)"/>
+      <path d="M 46 116 L 156 118 L 156 138 L 46 136 Z" fill="#D97706"/>
+      <path d="M 138 66 L 156 118 L 156 138 L 138 86 Z" fill="#B45309"/>
+      <ellipse cx="98" cy="100" rx="9" ry="5.5" fill="#B45309" opacity="0.65"/>
+      <ellipse cx="124" cy="92" rx="6" ry="4" fill="#B45309" opacity="0.65"/>
+      <ellipse cx="82" cy="126" rx="7" ry="4.5" fill="#92400E" opacity="0.75"/>
+      <ellipse cx="128" cy="127" rx="5" ry="3.5" fill="#92400E" opacity="0.75"/>
+    `;
+  } else if (limpio.includes('lechuga') || limpio.includes('palta') || limpio.includes('aguacate') || limpio.includes('verdura') || limpio.includes('albahaca') || limpio.includes('espinaca') || limpio.includes('vegetal')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="148" rx="48" ry="14" fill="#09090B" opacity="0.16"/>
+      <path d="M 100 54 C 136 54 152 84 142 118 C 132 142 114 146 100 146 C 86 146 68 142 58 118 C 48 84 64 54 100 54 Z" fill="url(#gradVerde)"/>
+      <path d="M 100 66 L 100 138" stroke="#A7F3D0" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 100 86 L 78 74" stroke="#A7F3D0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 100 102 L 124 88" stroke="#A7F3D0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 100 116 L 76 104" stroke="#A7F3D0" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="82" cy="82" rx="10" ry="16" transform="rotate(-20 82 82)" fill="#FFFFFF" opacity="0.26"/>
+    `;
+  } else if (limpio.includes('papa') || limpio.includes('frita') || limpio.includes('snack') || limpio.includes('arroz') || limpio.includes('grano')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="150" rx="46" ry="14" fill="#09090B" opacity="0.18"/>
+      <rect x="68" y="60" width="12" height="52" rx="4" transform="rotate(-10 68 60)" fill="#FBBF24" stroke="#D97706" stroke-width="1.5"/>
+      <rect x="84" y="52" width="12" height="58" rx="4" transform="rotate(-3 84 52)" fill="#FCD34D" stroke="#D97706" stroke-width="1.5"/>
+      <rect x="100" y="54" width="12" height="56" rx="4" transform="rotate(4 100 54)" fill="#FBBF24" stroke="#D97706" stroke-width="1.5"/>
+      <rect x="116" y="60" width="12" height="52" rx="4" transform="rotate(12 116 60)" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>
+      <path d="M 62 94 L 138 94 L 128 144 Q 100 150 72 144 Z" fill="url(#gradRojo)"/>
+      <path d="M 76 112 Q 100 120 124 112" stroke="#FEF08A" stroke-width="3" stroke-linecap="round" fill="none"/>
+    `;
+  } else if (limpio.includes('bebida') || limpio.includes('leche') || limpio.includes('botella') || limpio.includes('agua') || limpio.includes('jugo') || limpio.includes('aceite') || limpio.includes('litro')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="150" rx="42" ry="13" fill="#09090B" opacity="0.18"/>
+      <path d="M 70 76 L 100 60 L 130 76 L 100 92 Z" fill="#DBEAFE"/>
+      <path d="M 70 76 L 100 92 L 100 146 L 70 130 Z" fill="#2563EB"/>
+      <path d="M 100 92 L 130 76 L 130 130 L 100 146 Z" fill="#1E3A8A"/>
+      <ellipse cx="100" cy="58" rx="13" ry="7" fill="#60A5FA"/>
+      <path d="M 87 58 L 87 50 Q 100 44 113 50 L 113 58 Z" fill="#1D4ED8"/>
+      <path d="M 78 96 L 94 104 L 94 126 L 78 118 Z" fill="#FFFFFF" opacity="0.85"/>
+    `;
+  } else if (limpio.includes('cafe') || limpio.includes('café') || limpio.includes('te') || limpio.includes('té') || limpio.includes('chocolate')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="148" rx="52" ry="15" fill="#09090B" opacity="0.18"/>
+      <ellipse cx="100" cy="136" rx="48" ry="14" fill="#E4E4E7"/>
+      <path d="M 62 94 Q 62 134 100 134 Q 138 134 138 94 Z" fill="#FFFFFF" stroke="#D4D4D8" stroke-width="2"/>
+      <path d="M 136 100 C 154 100 154 122 134 122" stroke="#D4D4D8" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <ellipse cx="100" cy="94" rx="38" ry="12" fill="#F4F4F5"/>
+      <ellipse cx="100" cy="94" rx="33" ry="9.5" fill="#451A03"/>
+      <path d="M 88 76 Q 82 62 92 50" stroke="#A1A1AA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M 110 74 Q 116 60 106 48" stroke="#A1A1AA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    `;
+  } else if (limpio.includes('tornillo') || limpio.includes('clavo') || limpio.includes('herramienta') || limpio.includes('ferreteria') || limpio.includes('perno') || limpio.includes('metal')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="150" rx="46" ry="14" fill="#09090B" opacity="0.18"/>
+      <path d="M 68 68 L 100 50 L 132 68 L 100 86 Z" fill="#E4E4E7"/>
+      <path d="M 68 68 L 100 86 L 100 98 L 68 80 Z" fill="#71717A"/>
+      <path d="M 100 86 L 132 68 L 132 80 L 100 98 Z" fill="#3F3F46"/>
+      <rect x="86" y="96" width="28" height="48" rx="4" fill="url(#gradMetal)"/>
+      <path d="M 86 108 L 114 112" stroke="#27272A" stroke-width="3"/>
+      <path d="M 86 120 L 114 124" stroke="#27272A" stroke-width="3"/>
+      <path d="M 86 132 L 114 136" stroke="#27272A" stroke-width="3"/>
+    `;
+  } else if (limpio.includes('consultor') || limpio.includes('desarrollador') || limpio.includes('software') || limpio.includes('licencia') || limpio.includes('cloud') || limpio.includes('diseñador') || limpio.includes('servicio') || limpio.includes('hora') || limpio.includes('auditoria')) {
+    geometriaCentral = `
+      <ellipse cx="100" cy="150" rx="52" ry="14" fill="#09090B" opacity="0.16"/>
+      <path d="M 52 88 L 100 60 L 148 88 L 100 116 Z" fill="${pal.top}"/>
+      <path d="M 52 88 L 100 116 L 100 146 L 52 118 Z" fill="${pal.left}"/>
+      <path d="M 100 116 L 148 88 L 148 118 L 100 146 Z" fill="${pal.right}"/>
+      <circle cx="100" cy="88" r="9" fill="#FFFFFF"/>
+      <path d="M 76 88 L 100 74 L 124 88 L 100 102 Z" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.8"/>
+    `;
+  } else {
+    const iniciales = (nombreInsumo || 'IN').trim().substring(0, 2).toUpperCase();
+    geometriaCentral = `
+      <ellipse cx="100" cy="150" rx="52" ry="15" fill="#09090B" opacity="0.16"/>
+      <path d="M 50 86 L 100 58 L 150 86 L 100 114 Z" fill="${pal.top}"/>
+      <path d="M 50 86 L 100 114 L 100 146 L 50 118 Z" fill="${pal.left}"/>
+      <path d="M 100 114 L 150 86 L 150 118 L 100 146 Z" fill="${pal.right}"/>
+      <path d="M 50 86 L 100 114 L 150 86" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.65"/>
+      <text x="100" y="92" text-anchor="middle" fill="#09090B" font-family="Inter, sans-serif" font-size="20" font-weight="800">${iniciales}</text>
+    `;
+  }
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+    <defs>
+      <radialGradient id="bgStudio" cx="35%" cy="25%" r="75%">
+        <stop offset="0%" stop-color="#FFFFFF"/>
+        <stop offset="100%" stop-color="#F4F4F5"/>
+      </radialGradient>
+      <pattern id="cadGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#09090B" stroke-width="0.6" stroke-opacity="0.05"/>
+      </pattern>
+      <linearGradient id="gradPan" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FDE68A"/>
+        <stop offset="45%" stop-color="#F59E0B"/>
+        <stop offset="100%" stop-color="#B45309"/>
+      </linearGradient>
+      <linearGradient id="gradCarne" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#F87171"/>
+        <stop offset="55%" stop-color="#DC2626"/>
+        <stop offset="100%" stop-color="#7F1D1D"/>
+      </linearGradient>
+      <radialGradient id="gradRojo" cx="35%" cy="30%" r="70%">
+        <stop offset="0%" stop-color="#FCA5A5"/>
+        <stop offset="40%" stop-color="#EF4444"/>
+        <stop offset="100%" stop-color="#991B1B"/>
+      </radialGradient>
+      <linearGradient id="gradQueso" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FEF08A"/>
+        <stop offset="100%" stop-color="#F59E0B"/>
+      </linearGradient>
+      <linearGradient id="gradVerde" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#6EE7B7"/>
+        <stop offset="55%" stop-color="#10B981"/>
+        <stop offset="100%" stop-color="#047857"/>
+      </linearGradient>
+      <linearGradient id="gradMetal" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#71717A"/>
+        <stop offset="45%" stop-color="#F4F4F5"/>
+        <stop offset="100%" stop-color="#3F3F46"/>
+      </linearGradient>
+    </defs>
+    <rect width="200" height="200" rx="24" fill="url(#bgStudio)"/>
+    <rect width="200" height="200" rx="24" fill="url(#cadGrid)"/>
+    <ellipse cx="100" cy="156" rx="68" ry="20" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1.5"/>
+    ${geometriaCentral}
+  </svg>`;
+
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+// Catálogo maestro de activos 3D reales e instantáneos (100% locales, 0 fallos de red)
+export const ACTIVOS_3D_CATALOGO = {
+  'pan brioche artesanal': generarSvg3DReal('Pan Brioche Artesanal', 'restaurant'),
+  'carne vacuno lomo (200g)': generarSvg3DReal('Carne Vacuno Lomo (200g)', 'restaurant'),
+  'tomates frescos (100g)': generarSvg3DReal('Tomates Frescos (100g)', 'restaurant'),
+  'queso cheddar fundido': generarSvg3DReal('Queso Cheddar Fundido', 'restaurant'),
+  'lechuga hidropónica': generarSvg3DReal('Lechuga Hidropónica', 'restaurant'),
+  'papas fritas porción': generarSvg3DReal('Papas Fritas Porción', 'restaurant'),
+  'manzanas rojas': generarSvg3DReal('Manzanas Rojas', 'restaurant'),
+  'manzanas': generarSvg3DReal('Manzanas Rojas', 'restaurant'),
+  'hamburguesa artesanal completa': generarSvg3DReal('Hamburguesa Artesanal Completa', 'restaurant'),
+  'tarta tibia de manzanas': generarSvg3DReal('Tarta Tibia de Manzanas', 'restaurant'),
+  'bebida botella 1.5l': generarSvg3DReal('Bebida Botella 1.5L', 'minimarket'),
+  'pan de molde familiar': generarSvg3DReal('Pan de Molde Familiar', 'minimarket'),
+  'leche entera 1l': generarSvg3DReal('Leche Entera 1L', 'minimarket'),
+  'tornillos yeso cartón 100u': generarSvg3DReal('Tornillos Yeso Cartón 100u', 'minimarket'),
+  'café grano tostado 250g': generarSvg3DReal('Café Grano Tostado 250g', 'minimarket'),
+  'pack desayuno familiar express': generarSvg3DReal('Pack Desayuno Familiar Express', 'minimarket'),
+  'consultor senior mba': generarSvg3DReal('Consultor Senior MBA', 'services'),
+  'desarrollador fullstack': generarSvg3DReal('Desarrollador FullStack', 'services'),
+  'licencia software cloud': generarSvg3DReal('Licencia Software Cloud', 'services'),
+  'diseñador ui/ux': generarSvg3DReal('Diseñador UI/UX', 'services'),
+  'auditoría estratégica & ti mensual': generarSvg3DReal('Auditoría Estratégica & TI Mensual', 'services'),
+};
+
 export function construirUrlActivo3D(nombreInsumo, rubro = 'restaurant') {
   if (!nombreInsumo || typeof nombreInsumo !== 'string') {
     return ACTIVOS_3D_CATALOGO['manzanas rojas'];
   }
-
   const limpio = nombreInsumo.trim().toLowerCase();
-
-  // 1. Verificación directa en el catálogo curado
   if (ACTIVOS_3D_CATALOGO[limpio]) {
     return ACTIVOS_3D_CATALOGO[limpio];
   }
-
-  // 2. Coincidencia por palabra clave del catálogo
-  for (const [clave, url] of Object.entries(ACTIVOS_3D_CATALOGO)) {
-    if (limpio.includes(clave) || clave.includes(limpio)) {
-      return url;
-    }
-  }
-
-  // 3. Generación procedural de URL con IA 3D de alta definición
-  const seed = calcularHashTexto(`${rubro}_${limpio}`);
-  const prompt = `isolated 3D isometric render of ${limpio}, miniature 3D model, smooth clay shading, elegant studio lighting, blender 3D style, clean white background, professional 3D asset`;
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=400&height=400&nologo=true&seed=${seed}`;
+  return generarSvg3DReal(nombreInsumo, rubro);
 }
 
-/**
- * Obtiene la URL de activo 3D de forma sincrónica con caché y fallback
- */
 export function obtenerUrlActivo3D(nombreInsumo, rubro = 'restaurant') {
-  if (!nombreInsumo) return null;
+  if (!nombreInsumo) return ACTIVOS_3D_CATALOGO['manzanas rojas'];
   const clave = `${rubro}_${nombreInsumo.trim().toLowerCase()}`;
-
-  // Verificar memoria
   if (cacheImagenes3D.has(clave)) {
     return cacheImagenes3D.get(clave);
   }
-
-  // Verificar localStorage
-  try {
-    const guardada = localStorage.getItem(`3d_asset_${clave}`);
-    if (guardada) {
-      cacheImagenes3D.set(clave, guardada);
-      return guardada;
-    }
-  } catch {
-    // ignorar error de acceso a storage
-  }
-
   const url = construirUrlActivo3D(nombreInsumo, rubro);
   cacheImagenes3D.set(clave, url);
   return url;
 }
 
-/**
- * Solicita la generación de un render isométrico 3D (intentando fal.ai primero, con fallback neural 3D)
- * @param {string} nombreInsumo - Nombre del producto o insumo (ej: 'Hamburguesa')
- * @param {string} rubro - 'restaurant' | 'minimarket' | 'services'
- * @returns {Promise<{ url: string, modo: 'fal_ai' | 'ai_3d', mensaje: string }>}
- */
 export async function generarActivo3D(nombreInsumo, rubro = 'restaurant') {
-  if (!nombreInsumo || typeof nombreInsumo !== 'string') {
-    const fallbackUrl = ACTIVOS_3D_CATALOGO['manzanas rojas'];
-    return { url: fallbackUrl, modo: 'ai_3d', mensaje: 'Insumo genérico' };
-  }
-
-  const claveCache = `${rubro}_${nombreInsumo.trim().toLowerCase()}`;
-
-  // Verificar si ya está en caché de memoria
-  if (cacheImagenes3D.has(claveCache)) {
-    const cachedUrl = cacheImagenes3D.get(claveCache);
-    return { url: cachedUrl, modo: 'ai_3d', mensaje: 'Cargado de caché' };
-  }
-
-  // 1. Intento con fal.ai si hay FAL_KEY configurada
-  if (FAL_KEY && FAL_KEY.trim() !== '') {
-    try {
-      const prompt = `isolated 3D isometric render of ${nombreInsumo}, miniature 3D model, smooth clay shading, elegant studio lighting, blender 3D style, solid clean white background, high resolution 3D asset`;
-
-      const response = await fetch('https://fal.run/fal-ai/flux/schnell', {
-        method: 'POST',
-        headers: {
-          Authorization: `Key ${FAL_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt,
-          image_size: 'square',
-          num_inference_steps: 4,
-          enable_safety_checker: true,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const imageUrl = data?.images?.[0]?.url;
-        if (imageUrl) {
-          cacheImagenes3D.set(claveCache, imageUrl);
-          try {
-            localStorage.setItem(`3d_asset_${claveCache}`, imageUrl);
-          } catch {}
-          return {
-            url: imageUrl,
-            modo: 'fal_ai',
-            mensaje: 'Generado con éxito mediante fal.ai',
-          };
-        }
-      } else {
-        const errJson = await response.json().catch(() => ({}));
-        console.info('fal.ai info:', errJson?.detail || response.statusText, '- Activando motor neural 3D');
-      }
-    } catch (e) {
-      console.info('Conexión fal.ai no disponible, utilizando motor neural 3D:', e.message);
-    }
-  }
-
-  // 2. Motor Neural 3D de Alta Definición (fallback garantizado con 100% disponibilidad)
-  const urlGenerada = construirUrlActivo3D(nombreInsumo, rubro);
-  cacheImagenes3D.set(claveCache, urlGenerada);
-  try {
-    localStorage.setItem(`3d_asset_${claveCache}`, urlGenerada);
-  } catch {}
-
+  const url = obtenerUrlActivo3D(nombreInsumo || 'Insumo', rubro);
   return {
-    url: urlGenerada,
-    modo: 'ai_3d',
-    mensaje: 'Generado con motor neural 3D de alta definición',
+    url,
+    modo: 'svg_3d_studio',
+    mensaje: 'Activo 3D isométrico generado instantáneamente',
   };
 }

@@ -4,7 +4,7 @@ import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 import DashboardPrincipal from './views/DashboardPrincipal.jsx';
 import CarruselInsumos3D from './components/carousel3d/CarruselInsumos3D.jsx';
 import GestionCostosFijosSimple from './components/costs/GestionCostosFijosSimple.jsx';
-import AsesorFinancieroIA from './components/ai/AsesorFinancieroIA.jsx';
+import FooterEjecutivo from './components/layout/FooterEjecutivo.jsx';
 import AuthModal from './components/auth/AuthModal.jsx';
 import Logo from './components/illustrations/Logo.jsx';
 import { formatCLP } from './utils/formatters.js';
@@ -19,6 +19,8 @@ function ContenidoPrincipal() {
     sincronizarConNube,
     insumos,
     insumosAsignados,
+    costosFijos,
+    recetaEnOlla,
     agregarInsumo,
     editarInsumo,
     eliminarInsumo,
@@ -26,19 +28,21 @@ function ContenidoPrincipal() {
     costoVariableConsolidado,
     costoFijoTotal,
     precioVentaConsolidado,
+    ventasEstimadasMensuales,
   } = useAppState();
 
-  const [vista, setVista] = useState('punto_equilibrio'); // 'punto_equilibrio' | 'insumos' | 'costos_fijos' | 'asesor_ia'
+  const [vista, setVista] = useState('punto_equilibrio'); // 'punto_equilibrio' | 'insumos' | 'costos_fijos'
   const [modalAuthAbierto, setModalAuthAbierto] = useState(false);
 
-  // Cálculos de Punto de Equilibrio para el Header
+  // Cálculos de Punto de Equilibrio para el Header y Footer
   const margenContribucion = Math.max(0, precioVentaConsolidado - costoVariableConsolidado);
   const peUnidades = margenContribucion > 0 ? Math.ceil(costoFijoTotal / margenContribucion) : 0;
   const pePesos = peUnidades * precioVentaConsolidado;
+  const esSolvente = ventasEstimadasMensuales >= peUnidades && peUnidades > 0;
 
   const botonNavStyle = (activo) => ({
     height: '34px',
-    padding: '0 12px',
+    padding: '0 13px',
     borderRadius: '6px',
     fontSize: '12.5px',
     fontWeight: activo ? 600 : 500,
@@ -72,10 +76,10 @@ function ContenidoPrincipal() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
-      {/* 1. Barra de Navegación Superior Paper Technical (anti-ai-ui-craft) */}
+      {/* 1. Barra de Navegación Superior Paper Technical */}
       <header
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.92)',
+          backgroundColor: 'rgba(255, 255, 255, 0.94)',
           backdropFilter: 'blur(8px)',
           borderBottom: '1px solid var(--color-border)',
           padding: '10px 20px',
@@ -156,13 +160,16 @@ function ContenidoPrincipal() {
               height: '28px',
               padding: '0 10px',
               borderRadius: '6px',
-              backgroundColor: 'var(--color-brand-50)',
-              border: '1px solid var(--color-brand-200)',
+              backgroundColor: esSolvente ? 'var(--color-brand-50)' : 'var(--color-danger-bg)',
+              border: `1px solid ${esSolvente ? 'var(--color-brand-200)' : 'var(--color-danger-border)'}`,
               fontSize: '11.5px',
               fontWeight: 600,
-              color: 'var(--color-primary)',
+              color: esSolvente ? 'var(--color-primary)' : 'var(--color-danger)',
             }}
           >
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="8" />
+            </svg>
             <span>PE: {peUnidades.toLocaleString('es-CL')} un.</span>
             <span style={{ color: 'var(--color-muted-foreground)', fontWeight: 500 }}>({formatCLP(pePesos)})</span>
           </div>
@@ -195,7 +202,7 @@ function ContenidoPrincipal() {
           )}
         </div>
 
-        {/* Navegación Principal */}
+        {/* Navegación Principal (Centrada exclusivamente en Punto de Equilibrio, Costos Directos y Costos Fijos) */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setVista('punto_equilibrio')}
@@ -221,6 +228,19 @@ function ContenidoPrincipal() {
               <polyline points="2 12 12 17 22 12" />
             </svg>
             Insumos & Costos Directos
+            <span
+              className="tabular-nums"
+              style={{
+                fontSize: '10.5px',
+                padding: '1px 5px',
+                borderRadius: '4px',
+                backgroundColor: vista === 'insumos' ? '#FFFFFF' : '#F4F4F5',
+                color: 'var(--color-foreground)',
+                fontWeight: 600,
+              }}
+            >
+              {insumos.length}
+            </span>
           </button>
 
           <button
@@ -235,17 +255,19 @@ function ContenidoPrincipal() {
               <line x1="3" y1="10" x2="21" y2="10" />
             </svg>
             Costos Fijos
-          </button>
-
-          <button
-            onClick={() => setVista('asesor_ia')}
-            className="btn-eng-secondary"
-            style={botonNavStyle(vista === 'asesor_ia')}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-            Asesor Financiero IA
+            <span
+              className="tabular-nums"
+              style={{
+                fontSize: '10.5px',
+                padding: '1px 5px',
+                borderRadius: '4px',
+                backgroundColor: vista === 'costos_fijos' ? '#FFFFFF' : '#F4F4F5',
+                color: 'var(--color-foreground)',
+                fontWeight: 600,
+              }}
+            >
+              {costosFijos.length}
+            </span>
           </button>
 
           {/* Autenticación de Usuario */}
@@ -315,10 +337,80 @@ function ContenidoPrincipal() {
         </nav>
       </header>
 
-      {/* 2. Área de Trabajo Principal con Contención de Errores (core-architecture-hardener) */}
+      {/* Sub-barra de Telemetría Rápida de Unidad de Costeo */}
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderBottom: '1px solid var(--color-border)',
+          padding: '6px 20px',
+          fontSize: '11.5px',
+          color: 'var(--color-muted-foreground)',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1360px',
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '10px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>
+              Unidad Activa: <strong style={{ color: 'var(--color-foreground)' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
+            </span>
+            <span>•</span>
+            <span className="tabular-nums">
+              Precio (P): <strong style={{ color: 'var(--color-foreground)' }}>{formatCLP(precioVentaConsolidado)}</strong>
+            </span>
+            <span>•</span>
+            <span className="tabular-nums">
+              Costo Directo (CV): <strong style={{ color: 'var(--color-foreground)' }}>{formatCLP(costoVariableConsolidado)}</strong>
+            </span>
+            <span>•</span>
+            <span className="tabular-nums">
+              Margen (P - CV): <strong style={{ color: 'var(--color-primary)' }}>{formatCLP(margenContribucion)}</strong>
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {vista !== 'insumos' && (
+              <button
+                type="button"
+                onClick={() => setVista('insumos')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-primary)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <span>Editar receta e insumos 3D</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Área de Trabajo Principal con Contención de Errores */}
       <main style={{ flex: 1, padding: '20px 16px', maxWidth: '1360px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
         <ErrorBoundary>
-          {vista === 'punto_equilibrio' && <DashboardPrincipal />}
+          {vista === 'punto_equilibrio' && <DashboardPrincipal onIrAInsumos={() => setVista('insumos')} />}
 
           {vista === 'insumos' && (
             <CarruselInsumos3D
@@ -333,10 +425,22 @@ function ContenidoPrincipal() {
           )}
 
           {vista === 'costos_fijos' && <GestionCostosFijosSimple />}
-
-          {vista === 'asesor_ia' && <AsesorFinancieroIA />}
         </ErrorBoundary>
       </main>
+
+      {/* 3. Footer Ejecutivo de Ingeniería Financiera */}
+      <FooterEjecutivo
+        perfil={perfil}
+        vistaActiva={vista}
+        onCambiarVista={setVista}
+        peUnidades={peUnidades}
+        pePesos={pePesos}
+        margenContribucion={margenContribucion}
+        costoVariableConsolidado={costoVariableConsolidado}
+        costoFijoTotal={costoFijoTotal}
+        insumosCount={insumos.length}
+        costosFijosCount={costosFijos.length}
+      />
 
       <AuthModal
         isOpen={modalAuthAbierto}

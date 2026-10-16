@@ -8,14 +8,13 @@ import { formatCLP } from '../utils/formatters.js';
 
 /**
  * Dashboard Principal de Punto de Equilibrio
- * Arquitectura endurecida (core-architecture-hardener: cero useEffect redundantes)
- * Layout Bento Grid Asimétrico de 12 columnas (anti-ai-ui-craft) + Visor 3D PBR (threejs-pbr-architect)
+ * Layout Bento Grid Asimétrico de 12 columnas + Visor 3D PBR + Matriz de Escenarios Operativos
  */
 export default function DashboardPrincipal() {
   const {
     perfil,
     precioVentaConsolidado,
-    setPrecioVentaConsolidado,
+    setPrecioRecetaEnOlla,
     costoVariableConsolidado,
     costoFijoTotal,
     ventasEstimadasMensuales,
@@ -24,7 +23,6 @@ export default function DashboardPrincipal() {
     recetaEnOlla,
   } = useAppState();
 
-  // Estado derivado limpio sin efectos secundarios redundantes (core-architecture-hardener)
   const precioEfectivo = Number(precioVentaConsolidado || 1000);
   const ventasEfectivas = Number(ventasEstimadasMensuales || 100);
   const costoVarEfectivo = Number(costoVariableConsolidado || 0);
@@ -55,6 +53,31 @@ export default function DashboardPrincipal() {
     });
   }
 
+  // Escenarios comparativos para la matriz ejecutiva
+  const escenarios = [
+    {
+      nombre: 'Escenario Conservador (-20%)',
+      unidades: Math.max(1, Math.round(ventasEfectivas * 0.8)),
+      destacado: false,
+    },
+    {
+      nombre: 'Umbral Punto de Equilibrio',
+      unidades: puntoEquilibrioUnidades,
+      destacado: false,
+      esPE: true,
+    },
+    {
+      nombre: 'Proyección Operativa Actual',
+      unidades: ventasEfectivas,
+      destacado: true,
+    },
+    {
+      nombre: 'Escenario Expansión (+25%)',
+      unidades: Math.round(ventasEfectivas * 1.25),
+      destacado: false,
+    },
+  ];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
       {/* 1. Bento Grid Asimétrico de KPIs Ejecutivos (4 + 4 + 2 + 2 columnas en Desktop) */}
@@ -62,6 +85,7 @@ export default function DashboardPrincipal() {
         <div className="bento-kpi-primary">
           <TarjetaMetrica
             titulo="Punto de Equilibrio Operacional"
+            icono="equilibrio"
             valor={`${puntoEquilibrioUnidades.toLocaleString('es-CL')} un.`}
             subtitulo={`Facturación mínima: ${formatCLP(ventasPuntoEquilibrioPesos)}`}
             tendencia={ventasEfectivas >= puntoEquilibrioUnidades ? 'Solvente' : 'Déficit'}
@@ -72,6 +96,7 @@ export default function DashboardPrincipal() {
         <div className="bento-kpi-secondary">
           <TarjetaMetrica
             titulo="Resultado Operacional (EBIT)"
+            icono="ebit"
             valor={formatCLP(resultadoOperacional)}
             subtitulo={`Margen neto s/ ingresos: ${margenPorcentual}%`}
             tendencia={resultadoOperacional >= 0 ? 'Ganancia' : 'Pérdida'}
@@ -82,6 +107,7 @@ export default function DashboardPrincipal() {
         <div className="bento-kpi-compact">
           <TarjetaMetrica
             titulo="Contribución Unit."
+            icono="margen"
             valor={formatCLP(margenContribucionUnitario)}
             subtitulo={`${precioEfectivo > 0 ? Math.round((margenContribucionUnitario / precioEfectivo) * 100) : 0}% s/ precio`}
             color="var(--color-primary)"
@@ -91,6 +117,7 @@ export default function DashboardPrincipal() {
         <div className="bento-kpi-compact">
           <TarjetaMetrica
             titulo="Carga Fija Mensual"
+            icono="fijos"
             valor={formatCLP(costoFijoEfectivo)}
             subtitulo="Estructura base"
           />
@@ -122,7 +149,7 @@ export default function DashboardPrincipal() {
           <SimuladorPrecio
             precioVenta={precioEfectivo}
             ventasEstimadas={ventasEfectivas}
-            onPrecioChange={(val) => setPrecioVentaConsolidado(val)}
+            onPrecioChange={(val) => setPrecioRecetaEnOlla(val)}
             onVentasChange={(val) => setVentasEstimadasMensuales(val)}
           />
 
@@ -202,6 +229,78 @@ export default function DashboardPrincipal() {
         precioVentaConsolidado={precioEfectivo}
         margenContribucionUnitario={margenContribucionUnitario}
       />
+
+      {/* 4. Matriz Ejecutiva de Escenarios de Sensibilidad */}
+      <div
+        style={{
+          backgroundColor: 'var(--color-surface)',
+          borderRadius: '10px',
+          border: '1px solid var(--color-border)',
+          boxShadow: 'var(--shadow-card)',
+          padding: '18px 20px',
+          overflowX: 'auto',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <line x1="3" y1="9" x2="21" y2="9" />
+              <line x1="9" y1="21" x2="9" y2="9" />
+            </svg>
+            <h3 className="heading-tight" style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0 }}>
+              Matriz Comparativa de Escenarios Operativos
+            </h3>
+          </div>
+          <span style={{ fontSize: '11.5px', color: 'var(--color-muted-foreground)' }}>
+            Simulación determinista sobre estructura de costos vigente
+          </span>
+        </div>
+
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px', textAlign: 'left' }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid var(--color-border)', color: 'var(--color-muted-foreground)', fontSize: '11px', textTransform: 'uppercase' }}>
+              <th style={{ padding: '8px 10px', fontWeight: 600 }}>Escenario</th>
+              <th style={{ padding: '8px 10px', fontWeight: 600, textAlign: 'right' }}>Volumen (Q)</th>
+              <th style={{ padding: '8px 10px', fontWeight: 600, textAlign: 'right' }}>Facturación</th>
+              <th style={{ padding: '8px 10px', fontWeight: 600, textAlign: 'right' }}>Costo Total (CF+CV)</th>
+              <th style={{ padding: '8px 10px', fontWeight: 600, textAlign: 'right' }}>Resultado EBIT</th>
+            </tr>
+          </thead>
+          <tbody className="tabular-nums">
+            {escenarios.map((esc, idx) => {
+              const ing = esc.unidades * precioEfectivo;
+              const cost = costoFijoEfectivo + esc.unidades * costoVarEfectivo;
+              const util = esc.esPE ? 0 : ing - cost;
+              return (
+                <tr
+                  key={idx}
+                  style={{
+                    borderBottom: idx < escenarios.length - 1 ? '1px solid var(--color-border)' : 'none',
+                    backgroundColor: esc.destacado ? 'var(--color-brand-50)' : 'transparent',
+                    fontWeight: esc.destacado ? 600 : 500,
+                  }}
+                >
+                  <td style={{ padding: '9px 10px', color: 'var(--color-foreground)' }}>{esc.nombre}</td>
+                  <td style={{ padding: '9px 10px', textAlign: 'right' }}>{esc.unidades.toLocaleString('es-CL')} un.</td>
+                  <td style={{ padding: '9px 10px', textAlign: 'right' }}>{formatCLP(ing)}</td>
+                  <td style={{ padding: '9px 10px', textAlign: 'right' }}>{formatCLP(cost)}</td>
+                  <td
+                    style={{
+                      padding: '9px 10px',
+                      textAlign: 'right',
+                      fontWeight: 700,
+                      color: util > 0 ? 'var(--color-success)' : util < 0 ? 'var(--color-danger)' : 'var(--color-primary)',
+                    }}
+                  >
+                    {formatCLP(util)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

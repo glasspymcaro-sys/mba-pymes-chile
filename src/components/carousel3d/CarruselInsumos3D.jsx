@@ -4,7 +4,29 @@ import TarritoBasura3D from '../svg3d/TarritoBasura3D.jsx';
 import GeneradorRecetaOlla from '../recipes/GeneradorRecetaOlla.jsx';
 import TechnicalEmptyStateSVG from '../svg3d/TechnicalEmptyStateSVG.jsx';
 import { formatCLP } from '../../utils/formatters.js';
-import { generarActivo3D, construirUrlActivo3D } from '../../lib/fal3d.js';
+import { construirUrlActivo3D } from '../../lib/fal3d.js';
+
+const SUGERENCIAS_RAPIDAS = {
+  restaurant: [
+    { nombre: 'Palta Hass Fresca', costoUnitario: 600, unidadMedida: 'un' },
+    { nombre: 'Tocino Ahumado Crocante', costoUnitario: 550, unidadMedida: 'un' },
+    { nombre: 'Huevo de Campo', costoUnitario: 220, unidadMedida: 'un' },
+    { nombre: 'Cebolla Caramelizada', costoUnitario: 250, unidadMedida: 'un' },
+    { nombre: 'Café Espresso Grano', costoUnitario: 420, unidadMedida: 'un' },
+  ],
+  minimarket: [
+    { nombre: 'Arroz Grado 1 Selección', costoUnitario: 1150, unidadMedida: 'kg' },
+    { nombre: 'Aceite Maravilla 1L', costoUnitario: 1890, unidadMedida: 'lt' },
+    { nombre: 'Queso Laminado 250g', costoUnitario: 2100, unidadMedida: 'un' },
+    { nombre: 'Jugo Natural Botella 1L', costoUnitario: 1250, unidadMedida: 'lt' },
+  ],
+  services: [
+    { nombre: 'Especialista Cloud & DevOps', costoUnitario: 16500, unidadMedida: 'hr' },
+    { nombre: 'Auditoría de Seguridad QA', costoUnitario: 14500, unidadMedida: 'hr' },
+    { nombre: 'Servidor Base de Datos', costoUnitario: 8500, unidadMedida: 'un' },
+    { nombre: 'Analista Financiero Senior', costoUnitario: 15500, unidadMedida: 'hr' },
+  ],
+};
 
 export default function CarruselInsumos3D({
   rubro = 'restaurant',
@@ -19,11 +41,10 @@ export default function CarruselInsumos3D({
   const [nombreNuevo, setNombreNuevo] = useState('');
   const [costoNuevo, setCostoNuevo] = useState('');
   const [unidadNueva, setUnidadNueva] = useState('un');
-  const [generando3D, setGenerando3D] = useState(false);
-  const [regenerandoId, setRegenerandoId] = useState(null);
 
-  // Filtro de búsqueda
+  // Filtros de búsqueda y estado
   const [busqueda, setBusqueda] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('todos'); // 'todos' | 'en_receta' | 'disponibles'
 
   // Edición de insumo
   const [insumoEditando, setInsumoEditando] = useState(null);
@@ -36,14 +57,13 @@ export default function CarruselInsumos3D({
   const [zonaHover, setZonaHover] = useState(null); // 'stand' | 'basura' | null
   const [itemsDescartadosCount, setItemsDescartadosCount] = useState(0);
 
-  // Desplazamiento del carrusel con cursor (drag-to-scroll solo sobre el contenedor o espacios vacíos)
+  // Desplazamiento del carrusel con cursor
   const carruselRef = useRef(null);
   const [isDraggingScroll, setIsDraggingScroll] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
 
   const handleMouseDown = (e) => {
-    // Si hace click en una tarjeta o sus elementos interactivos, no activar el scroll de carrusel
     if (e.target.closest('[data-draggable-card]') || e.target.closest('button') || e.target.closest('input')) return;
     setIsDraggingScroll(true);
     setStartX(e.pageX - carruselRef.current.offsetLeft);
@@ -62,26 +82,25 @@ export default function CarruselInsumos3D({
     setIsDraggingScroll(false);
   };
 
-  // Crear insumo con render 3D automático
-  const handleCrearInsumo = async (e) => {
+  const desplazarCarrusel = (direccion) => {
+    if (!carruselRef.current) return;
+    carruselRef.current.scrollBy({
+      left: direccion * 260,
+      behavior: 'smooth',
+    });
+  };
+
+  // Crear insumo con activo 3D SVG real e instantáneo
+  const handleCrearInsumo = (e) => {
     e.preventDefault();
     const nombre = nombreNuevo.trim();
     const costo = Number(costoNuevo) || 0;
     if (!nombre || costo <= 0) return;
 
-    setGenerando3D(true);
-    let imagenFalUrl = null;
-    try {
-      const res = await generarActivo3D(nombre, rubro);
-      imagenFalUrl = res.url;
-    } catch {
-      imagenFalUrl = construirUrlActivo3D(nombre, rubro);
-    } finally {
-      setGenerando3D(false);
-    }
+    const imagenFalUrl = construirUrlActivo3D(nombre, rubro);
 
     onAgregarInsumo({
-      id: 'insumo_' + Date.now(),
+      id: 'insumo_' + Date.now() + '_' + Math.random().toString(36).substring(2, 5),
       nombre,
       costoUnitario: costo,
       unidadMedida: unidadNueva,
@@ -93,23 +112,17 @@ export default function CarruselInsumos3D({
     setCostoNuevo('');
   };
 
-  // Regenerar modelo 3D con IA para un insumo existente
-  const handleRegenerar3D = async (item) => {
-    setRegenerandoId(item.id);
-    try {
-      const promptVariacion = `${item.nombre} ${Date.now() % 1000}`;
-      const res = await generarActivo3D(promptVariacion, rubro);
-      if (res?.url) {
-        onEditarInsumo({
-          ...item,
-          imagenFalUrl: res.url,
-        });
-      }
-    } catch (err) {
-      console.warn('Error al regenerar 3D:', err);
-    } finally {
-      setRegenerandoId(null);
-    }
+  // Agregar desde chip de sugerencia rápida en 1 clic
+  const handleAgregarRapido = (sugerencia) => {
+    const imagenFalUrl = construirUrlActivo3D(sugerencia.nombre, rubro);
+    onAgregarInsumo({
+      id: 'insumo_' + Date.now() + '_' + Math.random().toString(36).substring(2, 5),
+      nombre: sugerencia.nombre,
+      costoUnitario: sugerencia.costoUnitario,
+      unidadMedida: sugerencia.unidadMedida,
+      imagenFalUrl,
+      fechaCreacion: new Date().toISOString(),
+    });
   };
 
   // Guardar edición
@@ -124,7 +137,7 @@ export default function CarruselInsumos3D({
       nombre: editNombre.trim(),
       costoUnitario: val,
       unidadMedida: editUnidad,
-      imagenFalUrl: insumoEditando.imagenFalUrl,
+      imagenFalUrl: construirUrlActivo3D(editNombre.trim(), rubro),
     });
 
     setInsumoEditando(null);
@@ -133,7 +146,11 @@ export default function CarruselInsumos3D({
   // Drag & Drop
   const handleDragStart = (e, item) => {
     setItemArrastrado(item);
-    e.dataTransfer.setData('text/plain', item.id);
+    try {
+      e.dataTransfer.setData('text/plain', JSON.stringify(item));
+    } catch {
+      e.dataTransfer.setData('text/plain', item.id);
+    }
     e.dataTransfer.effectAllowed = 'move';
   };
 
@@ -149,9 +166,7 @@ export default function CarruselInsumos3D({
     if (!item) {
       try {
         const raw = e.dataTransfer.getData('text/plain');
-        if (raw) {
-          item = JSON.parse(raw);
-        }
+        if (raw) item = JSON.parse(raw);
       } catch {
         const id = e.dataTransfer.getData('text/plain');
         item = insumos.find((i) => i.id === id);
@@ -170,9 +185,7 @@ export default function CarruselInsumos3D({
     if (!item) {
       try {
         const raw = e.dataTransfer.getData('text/plain');
-        if (raw) {
-          item = JSON.parse(raw);
-        }
+        if (raw) item = JSON.parse(raw);
       } catch {
         const id = e.dataTransfer.getData('text/plain');
         item = insumos.find((i) => i.id === id);
@@ -185,12 +198,19 @@ export default function CarruselInsumos3D({
     }
   };
 
-  const insumosFiltrados = insumos.filter((item) =>
-    item.nombre.toLowerCase().includes(busqueda.trim().toLowerCase())
-  );
+  const insumosFiltrados = insumos.filter((item) => {
+    const coincideTexto = item.nombre.toLowerCase().includes(busqueda.trim().toLowerCase());
+    if (!coincideTexto) return false;
+    const estaEnReceta = insumosAsignados.some((asig) => asig.id === item.id);
+    if (filtroEstado === 'en_receta') return estaEnReceta;
+    if (filtroEstado === 'disponibles') return !estaEnReceta;
+    return true;
+  });
+
+  const sugerenciasActuales = SUGERENCIAS_RAPIDAS[rubro] || SUGERENCIAS_RAPIDAS.restaurant;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* 1. Generador Profesional de Recetas / Productos con la Ollita 3D */}
       <GeneradorRecetaOlla
         onDropEnStand={handleDropEnStand}
@@ -214,34 +234,36 @@ export default function CarruselInsumos3D({
         onDrop={handleDropEnBasura}
         style={{
           backgroundColor: zonaHover === 'basura' ? 'var(--color-danger-bg)' : 'var(--color-surface)',
-          border: `2px dashed ${zonaHover === 'basura' ? 'var(--color-danger)' : 'var(--color-border)'}`,
-          borderRadius: '12px',
+          border: `1.5px dashed ${zonaHover === 'basura' ? 'var(--color-danger)' : 'var(--color-border-subtle)'}`,
+          borderRadius: '10px',
           padding: '14px 20px',
           boxShadow: 'var(--shadow-card)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
           gap: '16px',
           transition: 'all 0.2s ease',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <TarritoBasura3D tamaño={65} abierto={zonaHover === 'basura'} itemsEnBasura={itemsDescartadosCount} />
+          <TarritoBasura3D tamaño={62} abierto={zonaHover === 'basura'} itemsEnBasura={itemsDescartadosCount} />
           <div>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-danger)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-danger)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Stand de Descarte (Basura)
             </span>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
+            <h4 className="heading-tight" style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
               Arrastra aquí cualquier insumo del carrusel para eliminarlo
             </h4>
             <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
-              Al soltar el producto sobre el tarrito, se eliminará del catálogo de la empresa.
+              Al soltar el producto sobre el tarrito, se removerá inmediatamente del inventario y del escandallo.
             </span>
           </div>
         </div>
 
         {itemsDescartadosCount > 0 && (
           <span
+            className="tabular-nums"
             style={{
               fontSize: '11px',
               fontWeight: 600,
@@ -257,23 +279,66 @@ export default function CarruselInsumos3D({
         )}
       </div>
 
-      {/* 3. Formulario para Generar Insumo Nuevo */}
+      {/* 3. Formulario para Generar Insumo Nuevo + Plantillas Rápidas */}
       <div
         style={{
           backgroundColor: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
-          borderRadius: '12px',
+          borderRadius: '10px',
           boxShadow: 'var(--shadow-card)',
           padding: '20px 24px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '14px',
         }}
       >
-        <div style={{ marginBottom: '14px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-foreground)', margin: 0 }}>
-            Generar Insumo
-          </h3>
-          <p style={{ fontSize: '12.5px', color: 'var(--color-muted-foreground)', margin: '2px 0 0 0' }}>
-            Añade nuevos ingredientes y materias primas a tu inventario de trabajo
-          </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              Alta de Materias Primas • Activo 3D Instantáneo
+            </span>
+            <h3 className="heading-tight" style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
+              Generar Insumo
+            </h3>
+          </div>
+
+          {/* Plantillas Rápidas de 1 Clic */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)', fontWeight: 500 }}>
+              Carga rápida:
+            </span>
+            {sugerenciasActuales.map((sug, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleAgregarRapido(sug)}
+                className="btn-eng-secondary"
+                title={`Agregar ${sug.nombre} (${formatCLP(sug.costoUnitario)})`}
+                style={{
+                  padding: '4px 9px',
+                  borderRadius: '5px',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  backgroundColor: '#FAFAFA',
+                  color: 'var(--color-foreground)',
+                  border: '1px solid var(--color-border)',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span>{sug.nombre}</span>
+                <span className="tabular-nums" style={{ color: 'var(--color-muted-foreground)' }}>
+                  ({formatCLP(sug.costoUnitario)})
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         <form
@@ -286,7 +351,7 @@ export default function CarruselInsumos3D({
           }}
         >
           <div>
-            <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
+            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', letterSpacing: '0.04em' }}>
               NOMBRE DEL INSUMO
             </label>
             <input
@@ -297,11 +362,12 @@ export default function CarruselInsumos3D({
               required
               style={{
                 width: '100%',
-                padding: '9px 12px',
+                height: '36px',
+                padding: '0 12px',
                 borderRadius: '6px',
                 border: '1px solid var(--color-border)',
-                backgroundColor: '#ffffff',
-                fontSize: '14px',
+                backgroundColor: '#FFFFFF',
+                fontSize: '13.5px',
                 color: 'var(--color-foreground)',
                 boxSizing: 'border-box',
                 outline: 'none',
@@ -310,11 +376,12 @@ export default function CarruselInsumos3D({
           </div>
 
           <div>
-            <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
+            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', letterSpacing: '0.04em' }}>
               COSTO UNITARIO ($ CLP)
             </label>
             <input
               type="number"
+              className="tabular-nums"
               value={costoNuevo}
               onChange={(e) => setCostoNuevo(e.target.value)}
               placeholder="Ej: 500"
@@ -322,11 +389,12 @@ export default function CarruselInsumos3D({
               min="1"
               style={{
                 width: '100%',
-                padding: '9px 12px',
+                height: '36px',
+                padding: '0 12px',
                 borderRadius: '6px',
                 border: '1px solid var(--color-border)',
-                backgroundColor: '#ffffff',
-                fontSize: '14px',
+                backgroundColor: '#FFFFFF',
+                fontSize: '13.5px',
                 color: 'var(--color-foreground)',
                 boxSizing: 'border-box',
                 outline: 'none',
@@ -335,7 +403,7 @@ export default function CarruselInsumos3D({
           </div>
 
           <div>
-            <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
+            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', letterSpacing: '0.04em' }}>
               UNIDAD DE MEDIDA
             </label>
             <select
@@ -343,11 +411,12 @@ export default function CarruselInsumos3D({
               onChange={(e) => setUnidadNueva(e.target.value)}
               style={{
                 width: '100%',
-                padding: '9px 12px',
+                height: '36px',
+                padding: '0 12px',
                 borderRadius: '6px',
                 border: '1px solid var(--color-border)',
-                backgroundColor: '#ffffff',
-                fontSize: '14px',
+                backgroundColor: '#FFFFFF',
+                fontSize: '13.5px',
                 color: 'var(--color-foreground)',
                 boxSizing: 'border-box',
                 outline: 'none',
@@ -364,98 +433,172 @@ export default function CarruselInsumos3D({
 
           <button
             type="submit"
-            disabled={generando3D}
+            className="btn-eng-primary"
             style={{
-              padding: '9px 18px',
-              minHeight: '40px',
+              height: '36px',
+              padding: '0 18px',
               borderRadius: '6px',
-              backgroundColor: generando3D ? 'var(--color-brand-600)' : 'var(--color-primary)',
-              color: '#ffffff',
+              backgroundColor: 'var(--color-primary)',
+              color: '#FFFFFF',
               border: 'none',
-              fontSize: '13px',
+              fontSize: '12.5px',
               fontWeight: 600,
-              cursor: generando3D ? 'wait' : 'pointer',
-              display: 'flex',
+              cursor: 'pointer',
+              display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
               whiteSpace: 'nowrap',
-              opacity: generando3D ? 0.85 : 1,
             }}
           >
-            {generando3D ? (
-              <>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin">
-                  <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="12" />
-                </svg>
-                <span>Renderizando 3D…</span>
-              </>
-            ) : (
-              <>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-                <span>Generar insumo</span>
-              </>
-            )}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>Generar insumo</span>
           </button>
         </form>
       </div>
 
-      {/* 4. Carrusel Desplazable con el Cursor y Buscador */}
+      {/* 4. Carrusel Desplazable con el Cursor, Filtros y Buscador */}
       <div
         style={{
           backgroundColor: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
-          borderRadius: '12px',
+          borderRadius: '10px',
           boxShadow: 'var(--shadow-card)',
           padding: '20px 24px',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-foreground)', margin: 0 }}>
+            <h3 className="heading-tight tabular-nums" style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0 }}>
               Galería de Insumos ({insumosFiltrados.length})
             </h3>
             <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
-              Haz clic y arrastra con el cursor hacia los lados para explorar todos los insumos
+              Arrastra con el cursor hacia los lados o lleva cualquier insumo directo a la Ollita 3D
             </span>
           </div>
 
-          {/* Campo de búsqueda */}
-          <div style={{ position: 'relative', width: '260px', maxWidth: '100%' }}>
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ position: 'absolute', left: '10px', top: '10px', color: 'var(--color-muted-foreground)' }}
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              type="text"
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              placeholder="Buscar insumo..."
+          {/* Controles Superiores: Filtros de Estado, Botones < > y Buscador */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <div
               style={{
-                width: '100%',
-                padding: '7px 10px 7px 32px',
+                display: 'inline-flex',
+                gap: '2px',
+                padding: '2px',
                 borderRadius: '6px',
+                backgroundColor: '#F4F4F5',
                 border: '1px solid var(--color-border)',
-                backgroundColor: '#ffffff',
-                fontSize: '13px',
-                color: 'var(--color-foreground)',
-                boxSizing: 'border-box',
-                outline: 'none',
               }}
-            />
+            >
+              {[
+                { id: 'todos', label: 'Todos' },
+                { id: 'en_receta', label: 'En Receta' },
+                { id: 'disponibles', label: 'Disponibles' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setFiltroEstado(tab.id)}
+                  style={{
+                    padding: '4px 9px',
+                    borderRadius: '4px',
+                    fontSize: '11.5px',
+                    fontWeight: filtroEstado === tab.id ? 600 : 500,
+                    backgroundColor: filtroEstado === tab.id ? '#FFFFFF' : 'transparent',
+                    color: filtroEstado === tab.id ? 'var(--color-foreground)' : 'var(--color-muted-foreground)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: filtroEstado === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Flechas de desplazamiento del carrusel */}
+            <div style={{ display: 'inline-flex', gap: '4px' }}>
+              <button
+                type="button"
+                onClick={() => desplazarCarrusel(-1)}
+                title="Desplazar a la izquierda"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#FFFFFF',
+                  color: 'var(--color-foreground)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => desplazarCarrusel(1)}
+                title="Desplazar a la derecha"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#FFFFFF',
+                  color: 'var(--color-foreground)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Campo de búsqueda */}
+            <div style={{ position: 'relative', width: '220px', maxWidth: '100%' }}>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ position: 'absolute', left: '10px', top: '9px', color: 'var(--color-muted-foreground)' }}
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="text"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder="Buscar insumo..."
+                style={{
+                  width: '100%',
+                  height: '32px',
+                  padding: '0 10px 0 30px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#FFFFFF',
+                  fontSize: '12.5px',
+                  color: 'var(--color-foreground)',
+                  boxSizing: 'border-box',
+                  outline: 'none',
+                }}
+              />
+            </div>
           </div>
         </div>
 
@@ -492,27 +635,20 @@ export default function CarruselInsumos3D({
                   key={item.id}
                   data-draggable-card="true"
                   draggable={true}
-                  onDragStart={(e) => {
-                    handleDragStart(e, item);
-                    try {
-                      e.dataTransfer.setData('text/plain', JSON.stringify(item));
-                    } catch {
-                      e.dataTransfer.setData('text/plain', item.id);
-                    }
-                  }}
+                  onDragStart={(e) => handleDragStart(e, item)}
                   onDragEnd={handleDragEnd}
                   style={{
                     flex: '0 0 200px',
-                    backgroundColor: '#ffffff',
-                    border: `1px solid ${siendoArrastrado ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                    backgroundColor: '#FFFFFF',
+                    border: `1px solid ${siendoArrastrado ? 'var(--color-primary)' : estaEnReceta ? 'var(--color-brand-200)' : 'var(--color-border)'}`,
                     borderRadius: '10px',
                     padding: '14px',
-                    boxShadow: siendoArrastrado ? '0 8px 24px rgba(15,118,110,0.25)' : 'var(--shadow-card)',
+                    boxShadow: siendoArrastrado ? '0 8px 24px rgba(15,118,110,0.22)' : 'var(--shadow-card)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     position: 'relative',
-                    opacity: siendoArrastrado ? 0.4 : 1,
+                    opacity: siendoArrastrado ? 0.45 : 1,
                     transform: siendoArrastrado ? 'scale(0.96)' : 'scale(1)',
                     transition: 'border 0.15s ease, opacity 0.15s ease, transform 0.15s ease',
                     cursor: 'grab',
@@ -529,7 +665,7 @@ export default function CarruselInsumos3D({
                           color: 'var(--color-success)',
                           backgroundColor: 'var(--color-success-bg)',
                           border: '1px solid var(--color-success-border)',
-                          padding: '2px 5px',
+                          padding: '2px 6px',
                           borderRadius: '4px',
                         }}
                       >
@@ -542,38 +678,8 @@ export default function CarruselInsumos3D({
                     )}
                   </div>
 
-                  {/* Botones Superiores: Regenerar 3D & Editar */}
-                  <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', alignItems: 'center', gap: '2px' }}>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRegenerar3D(item);
-                      }}
-                      disabled={regenerandoId === item.id}
-                      title="Regenerar modelo 3D con IA"
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        cursor: regenerandoId === item.id ? 'wait' : 'pointer',
-                        color: regenerandoId === item.id ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
-                        padding: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '4px',
-                      }}
-                    >
-                      {regenerandoId === item.id ? (
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin">
-                          <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="12" />
-                        </svg>
-                      ) : (
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                        </svg>
-                      )}
-                    </button>
-
+                  {/* Botón Superior: Editar Insumo */}
+                  <div style={{ position: 'absolute', top: '6px', right: '6px' }}>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -595,28 +701,28 @@ export default function CarruselInsumos3D({
                         borderRadius: '4px',
                       }}
                     >
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 20h9" />
                         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
                       </svg>
                     </button>
                   </div>
 
-                  {/* Render 3D de Estudio Fotográfico de Alta Definición */}
-                  <div style={{ margin: '14px 0 6px 0', pointerEvents: 'none' }}>
+                  {/* Figura 3D Garantizada */}
+                  <div style={{ margin: '14px 0 8px 0', pointerEvents: 'none' }}>
                     <InsumoFigura3D
                       nombre={item.nombre}
-                      tamaño={72}
+                      tamaño={74}
                       imagenFalUrl={item.imagenFalUrl}
                       rubro={rubro}
-                      animando={siendoArrastrado || regenerandoId === item.id}
+                      animando={siendoArrastrado}
                     />
                   </div>
 
                   <h4
                     style={{
                       fontSize: '13px',
-                      fontWeight: 700,
+                      fontWeight: 600,
                       color: 'var(--color-foreground)',
                       margin: '0 0 3px 0',
                       textAlign: 'center',
@@ -652,13 +758,15 @@ export default function CarruselInsumos3D({
                         e.stopPropagation();
                         onAsignarCostoDirecto(item);
                       }}
+                      className="btn-eng-secondary"
                       title="Agregar a la receta"
                       style={{
                         flex: 1,
-                        padding: '6px 8px',
+                        height: '30px',
+                        padding: '0 8px',
                         borderRadius: '6px',
                         border: '1px solid var(--color-border)',
-                        backgroundColor: '#ffffff',
+                        backgroundColor: '#FFFFFF',
                         color: 'var(--color-primary)',
                         fontSize: '11px',
                         fontWeight: 600,
@@ -669,7 +777,7 @@ export default function CarruselInsumos3D({
                         gap: '4px',
                       }}
                     >
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
                       </svg>
@@ -682,12 +790,14 @@ export default function CarruselInsumos3D({
                         onEliminarInsumo(item.id);
                         setItemsDescartadosCount((prev) => prev + 1);
                       }}
+                      className="btn-eng-secondary"
                       title="Eliminar insumo"
                       style={{
-                        padding: '6px 8px',
+                        width: '30px',
+                        height: '30px',
                         borderRadius: '6px',
                         border: '1px solid var(--color-border)',
-                        backgroundColor: '#ffffff',
+                        backgroundColor: '#FFFFFF',
                         color: 'var(--color-danger)',
                         cursor: 'pointer',
                         display: 'flex',
@@ -695,7 +805,7 @@ export default function CarruselInsumos3D({
                         justifyContent: 'center',
                       }}
                     >
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="3 6 5 6 21 6" />
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                       </svg>
@@ -714,7 +824,7 @@ export default function CarruselInsumos3D({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(15, 23, 42, 0.45)',
+            backgroundColor: 'rgba(9, 9, 11, 0.45)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -724,17 +834,17 @@ export default function CarruselInsumos3D({
         >
           <div
             style={{
-              backgroundColor: '#ffffff',
-              borderRadius: '12px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '10px',
               border: '1px solid var(--color-border)',
-              padding: '24px',
+              padding: '22px',
               maxWidth: '380px',
               width: '100%',
               boxShadow: 'var(--shadow-popover)',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-foreground)', margin: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+              <h3 className="heading-tight" style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0 }}>
                 Editar Insumo
               </h3>
               <button
@@ -742,66 +852,32 @@ export default function CarruselInsumos3D({
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-muted-foreground)', padding: '4px' }}
                 title="Cerrar modal"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 12px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid var(--color-border)', marginBottom: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 12px', backgroundColor: '#FAFAFA', borderRadius: '8px', border: '1px solid var(--color-border)', marginBottom: '14px' }}>
               <InsumoFigura3D
                 nombre={editNombre}
-                tamaño={60}
-                imagenFalUrl={insumoEditando?.imagenFalUrl}
+                tamaño={56}
                 rubro={rubro}
-                animando={regenerandoId === insumoEditando?.id}
               />
               <div style={{ flex: 1 }}>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
-                  Modelo 3D Fotorrealista
+                <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Vista Previa 3D en Tiempo Real
                 </span>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    if (!insumoEditando) return;
-                    setRegenerandoId(insumoEditando.id);
-                    try {
-                      const res = await generarActivo3D(editNombre + ' ' + (Date.now() % 1000), rubro);
-                      if (res?.url) {
-                        setInsumoEditando((prev) => ({ ...prev, imagenFalUrl: res.url }));
-                      }
-                    } finally {
-                      setRegenerandoId(null);
-                    }
-                  }}
-                  disabled={regenerandoId === insumoEditando?.id}
-                  style={{
-                    marginTop: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '5px',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    backgroundColor: 'var(--color-brand-50)',
-                    color: 'var(--color-primary)',
-                    border: '1px solid var(--color-brand-200)',
-                    cursor: regenerandoId === insumoEditando?.id ? 'wait' : 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                  }}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
-                  {regenerandoId === insumoEditando?.id ? 'Renderizando 3D…' : 'Regenerar 3D con IA'}
-                </button>
+                <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
+                  La figura 3D se adapta automáticamente al nombre del insumo.
+                </span>
               </div>
             </div>
 
             <form onSubmit={guardarEdicion} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
+                <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
                   NOMBRE DEL INSUMO
                 </label>
                 <input
@@ -811,10 +887,11 @@ export default function CarruselInsumos3D({
                   required
                   style={{
                     width: '100%',
-                    padding: '8px 12px',
+                    height: '36px',
+                    padding: '0 12px',
                     borderRadius: '6px',
                     border: '1px solid var(--color-border)',
-                    fontSize: '14px',
+                    fontSize: '13.5px',
                     boxSizing: 'border-box',
                     outline: 'none',
                   }}
@@ -822,21 +899,23 @@ export default function CarruselInsumos3D({
               </div>
 
               <div>
-                <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
+                <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
                   COSTO UNITARIO ($ CLP)
                 </label>
                 <input
                   type="number"
+                  className="tabular-nums"
                   value={editCosto}
                   onChange={(e) => setEditCosto(e.target.value)}
                   required
                   min="1"
                   style={{
                     width: '100%',
-                    padding: '8px 12px',
+                    height: '36px',
+                    padding: '0 12px',
                     borderRadius: '6px',
                     border: '1px solid var(--color-border)',
-                    fontSize: '14px',
+                    fontSize: '13.5px',
                     boxSizing: 'border-box',
                     outline: 'none',
                   }}
@@ -844,7 +923,7 @@ export default function CarruselInsumos3D({
               </div>
 
               <div>
-                <label style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
+                <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px' }}>
                   UNIDAD DE MEDIDA
                 </label>
                 <select
@@ -852,10 +931,11 @@ export default function CarruselInsumos3D({
                   onChange={(e) => setEditUnidad(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '8px 12px',
+                    height: '36px',
+                    padding: '0 12px',
                     borderRadius: '6px',
                     border: '1px solid var(--color-border)',
-                    fontSize: '14px',
+                    fontSize: '13.5px',
                     boxSizing: 'border-box',
                     outline: 'none',
                   }}
@@ -868,18 +948,19 @@ export default function CarruselInsumos3D({
                 </select>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '8px' }}>
                 <button
                   type="button"
                   onClick={() => setInsumoEditando(null)}
                   style={{
-                    padding: '8px 14px',
+                    height: '34px',
+                    padding: '0 14px',
                     borderRadius: '6px',
                     border: '1px solid var(--color-border)',
-                    backgroundColor: '#ffffff',
+                    backgroundColor: '#FFFFFF',
                     color: 'var(--color-foreground)',
                     fontSize: '12px',
-                    fontWeight: 600,
+                    fontWeight: 500,
                     cursor: 'pointer',
                   }}
                 >
@@ -888,11 +969,12 @@ export default function CarruselInsumos3D({
                 <button
                   type="submit"
                   style={{
-                    padding: '8px 16px',
+                    height: '34px',
+                    padding: '0 16px',
                     borderRadius: '6px',
                     border: 'none',
                     backgroundColor: 'var(--color-primary)',
-                    color: '#ffffff',
+                    color: '#FFFFFF',
                     fontSize: '12px',
                     fontWeight: 600,
                     cursor: 'pointer',
