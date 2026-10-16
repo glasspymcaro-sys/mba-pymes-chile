@@ -48,13 +48,13 @@ export default function ModuloFijacionPreciosYFugas() {
                 marginBottom: '4px',
               }}
             >
-              2. Fijación de Precios Inteligente • Detector de Fugas de Margen
+              2. Precios reales y comisiones
             </span>
             <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
-              Calculadora de Precio Real ({recetaEnOlla?.nombre || 'Producto Activo'})
+              Precio real de venta ({recetaEnOlla?.nombre || 'Producto activo'})
             </h2>
             <p style={{ fontSize: '12.5px', color: '#475569', margin: '2px 0 0 0' }}>
-              El 90% confunde Markup (recargo sobre el costo) con Margen Real sobre el precio y olvida descontar IVA, POS, Delivery y Merma.
+              Calcula el margen real descontando IVA, comisiones de tarjetas, aplicaciones de reparto y mermas.
             </p>
           </div>
         </div>
@@ -335,7 +335,7 @@ export default function ModuloFijacionPreciosYFugas() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Simulador Psicológico de Precios (Elige tu posicionamiento con 1 clic)
+            Estrategia de precios por posicionamiento
           </span>
           <span className="tabular-nums" style={{ fontSize: '11.5px', fontWeight: 600, color: '#475569' }}>
             Precio Actual: <strong style={{ color: '#0F766E' }}>{formatCLP(precioVentaConsolidado)}</strong> | Costo Directo + Fugas: <strong style={{ color: '#DC2626' }}>{formatCLP(analisisFugasActivas.costoDirectoEfectivoTotal)}</strong>

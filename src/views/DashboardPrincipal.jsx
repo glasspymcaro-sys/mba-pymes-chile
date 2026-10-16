@@ -109,7 +109,7 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
               letterSpacing: '0.06em',
             }}
           >
-            Flujo Estratégico Interconectado
+            Panel de control financiero
           </span>
           <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
             Producto evaluado: <strong style={{ color: '#0F172A' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
@@ -119,13 +119,13 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
         {/* Píldoras de Navegación por Secciones */}
         <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
           {[
-            { id: 'todas', label: 'Ver Todo el Centro' },
-            { id: 'productos', label: '1. Insumos & Márgenes', anchor: 'seccion-productos-insumos' },
-            { id: 'precios', label: '2. Precios & Fugas', anchor: 'seccion-precios' },
-            { id: 'descuentos', label: '3. Simulador Descuentos', anchor: 'seccion-descuentos' },
-            { id: 'sueldo', label: '4. Sueldo & Libertad', anchor: 'seccion-sueldo' },
-            { id: 'equilibrio', label: '5. Gráfico de Equilibrio', anchor: 'seccion-grafico-equilibrio' },
-            { id: 'matriz', label: '6. Matriz de Catálogo', anchor: 'seccion-matriz' },
+            { id: 'todas', label: 'Ver todo' },
+            { id: 'productos', label: '1. Insumos y márgenes', anchor: 'seccion-productos-insumos' },
+            { id: 'precios', label: '2. Precios y comisiones', anchor: 'seccion-precios' },
+            { id: 'descuentos', label: '3. Descuentos y combos', anchor: 'seccion-descuentos' },
+            { id: 'sueldo', label: '4. Sueldo objetivo', anchor: 'seccion-sueldo' },
+            { id: 'equilibrio', label: '5. Punto de equilibrio', anchor: 'seccion-grafico-equilibrio' },
+            { id: 'matriz', label: '6. Catálogo de productos', anchor: 'seccion-matriz' },
           ].map((sec) => (
             <button
               key={sec.id}

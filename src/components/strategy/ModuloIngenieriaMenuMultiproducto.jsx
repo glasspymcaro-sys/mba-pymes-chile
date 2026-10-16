@@ -91,13 +91,13 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
                 marginBottom: '4px',
               }}
             >
-              4. Punto de Equilibrio Multi-Producto • Ingeniería de Menú & Catálogo
+              4. Punto de equilibrio multiproducto
             </span>
             <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
-              Mix de Ventas Ponderado & Matriz de Rentabilidad (Estrellas vs. Clavos)
+              Rentabilidad por producto y volumen de venta
             </h2>
             <p style={{ fontSize: '12.5px', color: '#475569', margin: '2px 0 0 0' }}>
-              Mueve las barras para ajustar qué porcentaje de tus ventas representa cada producto y descubre tus Minas de Oro y Vampiros.
+              Ajusta la participación de cada producto para identificar los que sostienen tu negocio y los que reducen tu margen.
             </p>
           </div>
         </div>

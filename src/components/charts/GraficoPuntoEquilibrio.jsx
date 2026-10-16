@@ -178,13 +178,13 @@ export default function GraficoPuntoEquilibrio({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            Análisis de Viabilidad & Umbral de Retorno
+            Viabilidad y equilibrio
           </span>
           <h3 className="heading-tight" style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
-            Curva de Umbral de Rentabilidad (Break-Even)
+            Punto de equilibrio y rentabilidad
           </h3>
           <p style={{ fontSize: '12.5px', color: 'var(--color-muted-foreground)', margin: '2px 0 0 0' }}>
-            Zonificación dinámica: Área de absorción de costos fijos vs. vector de generación de utilidades
+            Muestra el volumen mínimo de ventas para cubrir costos y generar ganancias.
           </p>
         </div>
 
@@ -567,7 +567,7 @@ export default function GraficoPuntoEquilibrio({
             <line x1="12" y1="8" x2="12.01" y2="8" />
           </svg>
           <span>
-            A partir de <strong style={{ color: 'var(--color-foreground)' }}>{puntoEquilibrioUnidades.toLocaleString('es-CL')} unidades</strong> comercializadas, los ingresos cubren íntegramente la estructura de costos fijos y el negocio entra en zona de beneficio operacional neta.
+            Desde <strong style={{ color: 'var(--color-foreground)' }}>{puntoEquilibrioUnidades.toLocaleString('es-CL')} unidades</strong> vendidas al mes, cubres los costos fijos y comienzas a generar utilidades.
           </span>
         </div>
 
@@ -642,17 +642,17 @@ export default function GraficoPuntoEquilibrio({
                       letterSpacing: '0.06em',
                     }}
                   >
-                    Simulador Visual en Tiempo Real
+                    Simulador de volumen
                   </span>
                   <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
-                    Resolución Ampliada 960x460
+                    Vista detallada
                   </span>
                 </div>
                 <h2 className="heading-tight" style={{ fontSize: '20px', fontWeight: 700, color: '#0F172A', margin: '6px 0 2px 0' }}>
-                  Explorador de Punto de Equilibrio & Proyección de Resultados
+                  Simulador de punto de equilibrio y volumen
                 </h2>
                 <p style={{ fontSize: '13px', color: '#475569', margin: 0 }}>
-                  Desliza la barra interactiva para recorrer la curva y comprobar ingresos, costos y ganancias en cada nivel de venta.
+                  Mueve la barra para revisar ingresos, costos y ganancias en cada nivel de venta.
                 </p>
               </div>
 

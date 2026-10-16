@@ -76,7 +76,7 @@ export default function FooterEjecutivo({
             </div>
 
             <p style={{ fontSize: '12.5px', color: 'var(--color-muted-foreground)', lineHeight: 1.55, margin: 0 }}>
-              Plataforma de ingeniería de costos, catálogo interactivo y cálculo determinista de umbral de rentabilidad para PyMEs.
+              Calculadora de costos, precios y punto de equilibrio para pymes.
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginTop: '2px' }}>
@@ -124,7 +124,7 @@ export default function FooterEjecutivo({
                 <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
               </svg>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-foreground)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                Síntesis de Equilibrio en Vivo
+                Resumen mensual de equilibrio
               </span>
             </div>
 
@@ -182,16 +182,16 @@ export default function FooterEjecutivo({
                 <polyline points="2 12 12 17 22 12" />
               </svg>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-foreground)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                Navegación Directa & Ecuación Rectora
+                Accesos directos
               </span>
             </div>
 
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {[
-                { id: 'punto_equilibrio', label: '1. Punto de Equilibrio' },
-                { id: 'insumos', label: '2. Costeo & Insumos' },
-                { id: 'costos_fijos', label: '3. Estructura Fija' },
-                { id: 'historial', label: '4. Historial & Catálogo' },
+                { id: 'punto_equilibrio', label: '1. Punto de equilibrio' },
+                { id: 'insumos', label: '2. Costeo e insumos' },
+                { id: 'costos_fijos', label: '3. Costos fijos' },
+                { id: 'historial', label: '4. Catálogo' },
               ].map((nav) => (
                 <button
                   key={nav.id}

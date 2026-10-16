@@ -84,7 +84,7 @@ export default function ModuloSueldoObjetivoYLibertad() {
                   marginBottom: '4px',
                 }}
               >
-                1. Ingeniería Inversa • Target Profit
+                1. Meta de ingreso del propietario
               </span>
               <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
                 ¿Cuánto dinero líquido te quieres llevar al bolsillo este mes?
@@ -260,8 +260,8 @@ export default function ModuloSueldoObjetivoYLibertad() {
                   }}
                 >
                   {metaSueldo.excedeCapacidadFisica
-                    ? 'Alerta de Capacidad Física Real Excedida'
-                    : ' Ritmo Físico Operativo Sostenible'}
+                    ? 'Capacidad física excedida'
+                    : 'Capacidad operativa adecuada'}
                 </span>
                 <span
                   className="tabular-nums"
@@ -358,7 +358,7 @@ export default function ModuloSueldoObjetivoYLibertad() {
                   marginBottom: '4px',
                 }}
               >
-                Calendario Financiero • El Día de la Libertad
+                Calendario de cobertura mensual
               </span>
               <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
                 ¿En qué día del mes dejas de trabajar para pagar gastos?

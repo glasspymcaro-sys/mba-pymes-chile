@@ -88,7 +88,7 @@ export default function GeneradorRecetaOlla({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            Control de Gestión • Costeo de Ingredientes & Precio
+            Costeo de producto y precio
           </span>
           <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
             {tituloSeccion}
@@ -121,7 +121,7 @@ export default function GeneradorRecetaOlla({
               }}
             >
               <option value="" disabled>
-                Cargar producto guardado…
+                Cargar producto guardado
               </option>
               {recetas.map((r) => (
                 <option key={r.id} value={r.id}>

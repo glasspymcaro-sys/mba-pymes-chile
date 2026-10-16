@@ -91,17 +91,17 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                   letterSpacing: '0.06em',
                 }}
               >
-                1. Portafolio Activo & Márgenes de Insumos
+                1. Catálogo y márgenes
               </span>
               <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
                 {totalProductos} productos configurados
               </span>
             </div>
             <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#09090B', margin: '4px 0 2px 0' }}>
-              Catálogo de Productos & Costeo Directo de Ingredientes
+              Costeo de productos e insumos
             </h2>
             <p style={{ fontSize: '12.5px', color: '#475569', margin: 0 }}>
-              Selecciona cualquier producto para inspeccionar sus insumos y conectar sus números directamente a los simuladores de precios y descuentos.
+              Haz clic en un producto para revisar sus costos y evaluar su margen.
             </p>
           </div>
         </div>
@@ -164,7 +164,7 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                 <polyline points="2 17 12 22 22 17" />
                 <polyline points="2 12 12 17 22 12" />
               </svg>
-              <span>Generar o Editar Insumos</span>
+              <span>Editar insumos</span>
             </button>
           )}
         </div>
@@ -174,7 +174,7 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Haz clic en un producto para fijar sus precios y simular descuentos:
+            Selecciona un producto para simular precios y descuentos:
           </span>
           <span style={{ fontSize: '11px', color: '#0F766E', fontWeight: 600 }}>
             Producto Activo: <strong>{productoActivo?.nombre || 'Ninguno'}</strong>

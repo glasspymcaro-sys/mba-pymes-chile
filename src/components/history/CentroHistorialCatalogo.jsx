@@ -130,13 +130,13 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Gestión Comercial • Registro & Auditoría
+              Registro y catálogo
             </span>
             <h2 className="heading-tight" style={{ fontSize: '20px', fontWeight: 700, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
-              Historial y Catálogo Central
+              Historial y catálogo de productos
             </h2>
             <p style={{ fontSize: '13px', color: 'var(--color-muted-foreground)', margin: '2px 0 0 0' }}>
-              Supervisa todos tus productos finales, recetas guardadas y materias primas con fotos y costos actualizados.
+              Consulta y administra los productos, insumos y recetas de tu negocio.
             </p>
           </div>
 
