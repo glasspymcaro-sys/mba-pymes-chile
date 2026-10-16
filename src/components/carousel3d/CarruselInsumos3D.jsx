@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
 import TarritoBasura3D from '../svg3d/TarritoBasura3D.jsx';
 import GeneradorRecetaOlla from '../recipes/GeneradorRecetaOlla.jsx';
+import TechnicalEmptyStateSVG from '../svg3d/TechnicalEmptyStateSVG.jsx';
 import { formatCLP } from '../../utils/formatters.js';
 import { generarActivo3D, construirUrlActivo3D } from '../../lib/fal3d.js';
 
@@ -459,9 +460,11 @@ export default function CarruselInsumos3D({
         </div>
 
         {insumosFiltrados.length === 0 ? (
-          <div style={{ padding: '36px 12px', textAlign: 'center', color: 'var(--color-muted-foreground)', fontSize: '13px' }}>
-            No se encontraron insumos que coincidan con la búsqueda.
-          </div>
+          <TechnicalEmptyStateSVG
+            tipo="busqueda"
+            titulo="Sin coincidencias en el inventario de insumos"
+            descripcion="Verifique el término de búsqueda o registre una nueva materia prima en el generador superior."
+          />
         ) : (
           <div
             ref={carruselRef}

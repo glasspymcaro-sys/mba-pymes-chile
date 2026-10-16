@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useAppState } from '../../store/appState.jsx';
 import { generarDiagnosticoFinanciero } from '../../lib/gemini.js';
 import { registrarDiagnosticoIA } from '../../services/dbService.js';
+import SkeletonAnatomico from '../common/SkeletonAnatomico.jsx';
+import TechnicalEmptyStateSVG from '../svg3d/TechnicalEmptyStateSVG.jsx';
 import { formatCLP } from '../../utils/formatters.js';
 
 export default function AsesorFinancieroIA() {
@@ -27,6 +29,7 @@ export default function AsesorFinancieroIA() {
   const margenSeguridadUnidades = ventasEstimadasMensuales - puntoEquilibrioUnidades;
 
   const handleConsultarIA = async () => {
+    if (cargando) return;
     setCargando(true);
     setDiagnostico('');
     setHistorialGuardado(false);
@@ -71,9 +74,10 @@ export default function AsesorFinancieroIA() {
   };
 
   const metricBoxStyle = {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     border: '1px solid var(--color-border)',
-    padding: '14px',
+    boxShadow: 'var(--shadow-card)',
+    padding: '14px 16px',
     borderRadius: '8px',
     display: 'flex',
     flexDirection: 'column',
@@ -84,21 +88,21 @@ export default function AsesorFinancieroIA() {
     <div
       style={{
         backgroundColor: 'var(--color-surface)',
-        borderRadius: '12px',
+        borderRadius: '10px',
         border: '1px solid var(--color-border)',
-        padding: '24px',
+        padding: '22px 24px',
         boxShadow: 'var(--shadow-card)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '20px',
+        gap: '18px',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Auditoría y Estrategia • Gemini
+          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            Auditoría y Estrategia • Motor Gemini AI
           </span>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
+          <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
             Asesor Financiero con Inteligencia Artificial
           </h2>
         </div>
@@ -106,18 +110,26 @@ export default function AsesorFinancieroIA() {
         <button
           onClick={handleConsultarIA}
           disabled={cargando}
+          className="btn-eng-primary"
           style={{
-            padding: '10px 18px',
-            borderRadius: '8px',
+            height: '36px',
+            padding: '0 16px',
+            borderRadius: '6px',
             backgroundColor: 'var(--color-primary)',
-            color: '#ffffff',
+            color: '#FFFFFF',
             border: 'none',
-            fontSize: '13px',
+            fontSize: '12.5px',
             fontWeight: 600,
             cursor: cargando ? 'not-allowed' : 'pointer',
-            transition: 'background-color 0.15s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            opacity: cargando ? 0.85 : 1,
           }}
         >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
           {cargando ? 'Generando Dictamen…' : 'Generar Dictamen con IA'}
         </button>
       </div>
@@ -125,27 +137,27 @@ export default function AsesorFinancieroIA() {
       {/* Grid de Métricas Analizadas */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>PUNTO DE EQUILIBRIO</span>
+          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', letterSpacing: '0.04em' }}>PUNTO DE EQUILIBRIO</span>
           <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)' }}>
             {puntoEquilibrioUnidades.toLocaleString('es-CL')} un.
           </span>
-          <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
+          <span className="tabular-nums" style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
             {formatCLP(ventasPuntoEquilibrioPesos)}
           </span>
         </div>
 
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>MARGEN CONTRIBUCIÓN</span>
+          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', letterSpacing: '0.04em' }}>MARGEN CONTRIBUCIÓN</span>
           <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-primary)' }}>
             {formatCLP(margenContribucionUnitario)}
           </span>
-          <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
+          <span className="tabular-nums" style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
             {precioVentaConsolidado > 0 ? Math.round((margenContribucionUnitario / precioVentaConsolidado) * 100) : 0}% s/ venta
           </span>
         </div>
 
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>MARGEN DE SEGURIDAD</span>
+          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', letterSpacing: '0.04em' }}>MARGEN DE SEGURIDAD</span>
           <span
             className="tabular-nums"
             style={{
@@ -154,15 +166,15 @@ export default function AsesorFinancieroIA() {
               color: margenSeguridadUnidades >= 0 ? 'var(--color-success)' : 'var(--color-danger)',
             }}
           >
-            {Math.round(margenSeguridadUnidades)} un.
+            {Math.round(margenSeguridadUnidades).toLocaleString('es-CL')} un.
           </span>
-          <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
+          <span className="tabular-nums" style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
             {ventasEstimadasMensuales > 0 ? Math.round((margenSeguridadUnidades / ventasEstimadasMensuales) * 100) : 0}% holgura
           </span>
         </div>
 
         <div style={metricBoxStyle}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)' }}>COSTO FIJO TOTAL</span>
+          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', letterSpacing: '0.04em' }}>COSTO FIJO TOTAL</span>
           <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)' }}>
             {formatCLP(costoFijoTotal)}
           </span>
@@ -172,11 +184,13 @@ export default function AsesorFinancieroIA() {
         </div>
       </div>
 
-      {/* Resultados de Dictamen */}
-      {diagnostico && (
+      {/* Estado de Carga Anatómico, Estado Inicial Vectorial o Resultado de Dictamen */}
+      {cargando ? (
+        <SkeletonAnatomico variant="ai-report" />
+      ) : diagnostico ? (
         <div
           style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FFFFFF',
             borderRadius: '8px',
             border: '1px solid var(--color-border)',
             padding: '18px',
@@ -187,7 +201,7 @@ export default function AsesorFinancieroIA() {
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Dictamen Estratégico Generado por Gemini AI
             </span>
             {historialGuardado && (
@@ -198,6 +212,12 @@ export default function AsesorFinancieroIA() {
           </div>
           {diagnostico}
         </div>
+      ) : (
+        <TechnicalEmptyStateSVG
+          tipo="ia"
+          titulo="Motor de Auditoría Financiera IA listo para ejecución"
+          descripcion="Presione 'Generar Dictamen con IA' para evaluar la sensibilidad de precios, absorción de costos fijos y recomendaciones tácticas para su rubro."
+        />
       )}
     </div>
   );

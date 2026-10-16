@@ -4,6 +4,7 @@ import OllitaCocina3D from '../svg3d/OllitaCocina3D.jsx';
 import EstanteRetail3D from '../svg3d/EstanteRetail3D.jsx';
 import MesaServicios3D from '../svg3d/MesaServicios3D.jsx';
 import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
+import TechnicalEmptyStateSVG from '../svg3d/TechnicalEmptyStateSVG.jsx';
 import { formatCLP } from '../../utils/formatters.js';
 
 export default function GeneradorRecetaOlla({
@@ -11,7 +12,6 @@ export default function GeneradorRecetaOlla({
   onDragOverStand,
   onDragLeaveStand,
   zonaHover,
-  itemArrastrado,
 }) {
   const {
     perfil,
@@ -59,22 +59,22 @@ export default function GeneradorRecetaOlla({
     <div
       style={{
         backgroundColor: 'var(--color-surface)',
-        borderRadius: '12px',
+        borderRadius: '10px',
         border: '1px solid var(--color-border)',
         boxShadow: 'var(--shadow-card)',
-        padding: '24px',
+        padding: '22px 24px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '20px',
+        gap: '18px',
       }}
     >
       {/* 1. Encabezado del Generador de Producto */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             Control de Gestión • Escandallo & Costos Directos
           </span>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
+          <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-foreground)', margin: '2px 0 0 0' }}>
             {tituloSeccion}
           </h2>
           <p style={{ fontSize: '12.5px', color: 'var(--color-muted-foreground)', margin: '2px 0 0 0' }}>
@@ -92,12 +92,13 @@ export default function GeneradorRecetaOlla({
                 if (encontrada) cargarRecetaEnOlla(encontrada);
               }}
               style={{
-                padding: '8px 12px',
+                height: '34px',
+                padding: '0 10px',
                 borderRadius: '6px',
                 border: '1px solid var(--color-border)',
-                backgroundColor: '#ffffff',
+                backgroundColor: '#FFFFFF',
                 fontSize: '12.5px',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: 'var(--color-foreground)',
                 cursor: 'pointer',
                 outline: 'none',
@@ -116,22 +117,24 @@ export default function GeneradorRecetaOlla({
 
           <button
             onClick={vaciarOlla}
+            className="btn-eng-secondary"
             title="Iniciar un nuevo plato o producto desde cero"
             style={{
-              padding: '8px 14px',
+              height: '34px',
+              padding: '0 12px',
               borderRadius: '6px',
               border: '1px solid var(--color-border)',
-              backgroundColor: '#ffffff',
+              backgroundColor: '#FFFFFF',
               color: 'var(--color-foreground)',
               fontSize: '12.5px',
-              fontWeight: 600,
+              fontWeight: 500,
               cursor: 'pointer',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              gap: '5px',
+              gap: '6px',
             }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
@@ -146,14 +149,14 @@ export default function GeneradorRecetaOlla({
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
           gap: '14px',
-          padding: '16px',
+          padding: '14px 16px',
           borderRadius: '8px',
-          backgroundColor: '#f8fafc',
+          backgroundColor: '#FAFAFA',
           border: '1px solid var(--color-border)',
         }}
       >
         <div>
-          <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', textTransform: 'uppercase' }}>
+          <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Nombre del Producto / Plato
           </label>
           <input
@@ -163,11 +166,12 @@ export default function GeneradorRecetaOlla({
             placeholder="Ej: Hamburguesa Artesanal Clásica"
             style={{
               width: '100%',
-              padding: '8px 12px',
+              height: '36px',
+              padding: '0 12px',
               borderRadius: '6px',
               border: '1px solid var(--color-border)',
-              backgroundColor: '#ffffff',
-              fontSize: '14px',
+              backgroundColor: '#FFFFFF',
+              fontSize: '13.5px',
               fontWeight: 600,
               color: 'var(--color-foreground)',
               boxSizing: 'border-box',
@@ -177,22 +181,24 @@ export default function GeneradorRecetaOlla({
         </div>
 
         <div>
-          <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', textTransform: 'uppercase' }}>
+          <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Precio de Venta al Público ($ CLP)
           </label>
           <input
             type="number"
+            className="tabular-nums"
             value={precioVenta || ''}
             onChange={(e) => setPrecioRecetaEnOlla(e.target.value)}
             placeholder="Ej: 8900"
             min="100"
             style={{
               width: '100%',
-              padding: '8px 12px',
+              height: '36px',
+              padding: '0 12px',
               borderRadius: '6px',
               border: '1px solid var(--color-border)',
-              backgroundColor: '#ffffff',
-              fontSize: '14px',
+              backgroundColor: '#FFFFFF',
+              fontSize: '13.5px',
               fontWeight: 600,
               color: 'var(--color-foreground)',
               boxSizing: 'border-box',
@@ -202,24 +208,18 @@ export default function GeneradorRecetaOlla({
         </div>
       </div>
 
-      {/* 3. Escenario de Armado: Stand 3D + Lista de Ingredientes en la Receta */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '20px',
-          alignItems: 'start',
-        }}
-      >
-        {/* Lado A: Zona de Cocción / Ollita 3D con Drop Zone */}
+      {/* 3. Escenario de Armado Bento 5 / 7: Stand 3D + Lista de Ingredientes en la Receta */}
+      <div className="bento-grid-12" style={{ alignItems: 'start' }}>
+        {/* Lado A (5 col): Zona de Cocción / Ollita 3D con Drop Zone */}
         <div
+          className="bento-col-5"
           onDragOver={onDragOverStand}
           onDragLeave={onDragLeaveStand}
           onDrop={onDropEnStand}
           style={{
-            border: `2px dashed ${zonaHover === 'stand' ? 'var(--color-primary)' : 'var(--color-border)'}`,
-            backgroundColor: zonaHover === 'stand' ? 'var(--color-brand-50)' : '#f8fafc',
-            borderRadius: '12px',
+            border: `1.5px dashed ${zonaHover === 'stand' ? 'var(--color-primary)' : 'var(--color-border-subtle)'}`,
+            backgroundColor: zonaHover === 'stand' ? 'var(--color-brand-50)' : '#FAFAFA',
+            borderRadius: '10px',
             padding: '24px 16px',
             display: 'flex',
             flexDirection: 'column',
@@ -228,13 +228,13 @@ export default function GeneradorRecetaOlla({
             gap: '12px',
             textAlign: 'center',
             transition: 'all 0.2s ease',
-            minHeight: '260px',
-            boxShadow: zonaHover === 'stand' ? '0 0 0 4px rgba(15,118,110,0.15)' : 'none',
+            minHeight: '250px',
+            boxShadow: zonaHover === 'stand' ? '0 0 0 3px rgba(15,118,110,0.12)' : 'none',
           }}
         >
           {perfil === 'restaurant' && (
             <OllitaCocina3D
-              tamaño={120}
+              tamaño={118}
               insumosEnOlla={ingredientes}
               animando={zonaHover === 'stand'}
             />
@@ -242,7 +242,7 @@ export default function GeneradorRecetaOlla({
 
           {perfil === 'minimarket' && (
             <EstanteRetail3D
-              tamaño={120}
+              tamaño={118}
               itemsEnEstante={ingredientes}
               animando={zonaHover === 'stand'}
             />
@@ -250,14 +250,14 @@ export default function GeneradorRecetaOlla({
 
           {perfil === 'services' && (
             <MesaServicios3D
-              tamaño={120}
+              tamaño={118}
               itemsEnMesa={ingredientes}
               animando={zonaHover === 'stand'}
             />
           )}
 
           <div style={{ marginTop: '4px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-foreground)', display: 'block' }}>
+            <span className="tabular-nums" style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--color-foreground)', display: 'block' }}>
               {ingredientes.length} {ingredientes.length === 1 ? 'insumo integrado' : 'insumos integrados'}
             </span>
             <span style={{ fontSize: '11.5px', color: 'var(--color-muted-foreground)' }}>
@@ -266,37 +266,30 @@ export default function GeneradorRecetaOlla({
           </div>
         </div>
 
-        {/* Lado B: Escandallo Detallado de Ingredientes de la Receta */}
+        {/* Lado B (7 col): Escandallo Detallado de Ingredientes de la Receta */}
         <div
+          className="bento-col-7"
           style={{
             display: 'flex',
             flexDirection: 'column',
             gap: '10px',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-muted-foreground)', textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Ingredientes en la receta
             </span>
-            <span style={{ fontSize: '12px', color: 'var(--color-primary)', fontWeight: 700 }}>
+            <span className="tabular-nums" style={{ fontSize: '12px', color: 'var(--color-primary)', fontWeight: 600 }}>
               Costo Unitario: {formatCLP(costoTotal)}
             </span>
           </div>
 
           {ingredientes.length === 0 ? (
-            <div
-              style={{
-                border: '1px solid var(--color-border)',
-                borderRadius: '8px',
-                padding: '36px 16px',
-                textAlign: 'center',
-                color: 'var(--color-muted-foreground)',
-                fontSize: '13px',
-                backgroundColor: '#ffffff',
-              }}
-            >
-              La ollita está vacía. Selecciona o arrastra insumos desde el carrusel de abajo (ej: pan, carne, tomate) para armar tu producto.
-            </div>
+            <TechnicalEmptyStateSVG
+              tipo="receta"
+              titulo="Ollita de formulación sin insumos activos"
+              descripcion="Arrastre materias primas desde el carrusel inferior hacia el stand 3D (ej: pan, carne, tomate) para calcular el escandallo en tiempo real."
+            />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '280px', overflowY: 'auto' }}>
               {ingredientes.map((item) => {
@@ -310,10 +303,11 @@ export default function GeneradorRecetaOlla({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      padding: '10px 14px',
-                      backgroundColor: '#ffffff',
+                      padding: '8px 12px',
+                      backgroundColor: '#FFFFFF',
                       borderRadius: '8px',
                       border: '1px solid var(--color-border)',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.02)',
                       gap: '10px',
                     }}
                   >
@@ -326,7 +320,7 @@ export default function GeneradorRecetaOlla({
                         <h4 style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-foreground)', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {item.nombre}
                         </h4>
-                        <span style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
+                        <span className="tabular-nums" style={{ fontSize: '11px', color: 'var(--color-muted-foreground)' }}>
                           {formatCLP(item.costoUnitario)} / {item.unidadMedida || 'un'}
                         </span>
                       </div>
@@ -340,22 +334,22 @@ export default function GeneradorRecetaOlla({
                         style={{
                           width: '24px',
                           height: '24px',
-                          borderRadius: '4px',
+                          borderRadius: '5px',
                           border: '1px solid var(--color-border)',
-                          backgroundColor: '#ffffff',
+                          backgroundColor: '#FFFFFF',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontSize: '13px',
-                          fontWeight: 700,
+                          fontWeight: 600,
                           color: 'var(--color-foreground)',
                         }}
                       >
                         -
                       </button>
 
-                      <span className="tabular-nums" style={{ fontSize: '12px', fontWeight: 700, minWidth: '32px', textAlign: 'center' }}>
+                      <span className="tabular-nums" style={{ fontSize: '12px', fontWeight: 600, minWidth: '32px', textAlign: 'center' }}>
                         {cant}
                       </span>
 
@@ -365,15 +359,15 @@ export default function GeneradorRecetaOlla({
                         style={{
                           width: '24px',
                           height: '24px',
-                          borderRadius: '4px',
+                          borderRadius: '5px',
                           border: '1px solid var(--color-border)',
-                          backgroundColor: '#ffffff',
+                          backgroundColor: '#FFFFFF',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontSize: '13px',
-                          fontWeight: 700,
+                          fontWeight: 600,
                           color: 'var(--color-foreground)',
                         }}
                       >
@@ -382,7 +376,7 @@ export default function GeneradorRecetaOlla({
                     </div>
 
                     {/* Subtotal del Insumo en la Receta */}
-                    <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-foreground)', minWidth: '60px', textAlign: 'right' }}>
+                    <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-foreground)', minWidth: '64px', textAlign: 'right' }}>
                       {formatCLP(subtotal)}
                     </div>
 
@@ -401,7 +395,7 @@ export default function GeneradorRecetaOlla({
                         justifyContent: 'center',
                       }}
                     >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18" />
                         <line x1="6" y1="6" x2="18" y2="18" />
                       </svg>
@@ -418,7 +412,7 @@ export default function GeneradorRecetaOlla({
       <div
         style={{
           borderTop: '1px solid var(--color-border)',
-          paddingTop: '16px',
+          paddingTop: '14px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -428,10 +422,10 @@ export default function GeneradorRecetaOlla({
       >
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', letterSpacing: '0.04em' }}>
               COSTO DIRECTO TOTAL (CV)
             </span>
-            <span className="tabular-nums" style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-foreground)' }}>
+            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-foreground)' }}>
               {formatCLP(costoTotal)}
             </span>
           </div>
@@ -439,10 +433,10 @@ export default function GeneradorRecetaOlla({
           <div style={{ height: '24px', width: '1px', backgroundColor: 'var(--color-border)' }} />
 
           <div>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', letterSpacing: '0.04em' }}>
               PRECIO DE VENTA (P)
             </span>
-            <span className="tabular-nums" style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-foreground)' }}>
+            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-foreground)' }}>
               {formatCLP(precioVenta)}
             </span>
           </div>
@@ -450,10 +444,10 @@ export default function GeneradorRecetaOlla({
           <div style={{ height: '24px', width: '1px', backgroundColor: 'var(--color-border)' }} />
 
           <div>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', letterSpacing: '0.04em' }}>
               MARGEN CONTRIBUCIÓN (P - CV)
             </span>
-            <span className="tabular-nums" style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-success)' }}>
+            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-success)' }}>
               {formatCLP(margenContribucion)} <span style={{ fontSize: '12px', fontWeight: 600 }}>({margenPorcentaje}%)</span>
             </span>
           </div>
@@ -468,22 +462,24 @@ export default function GeneradorRecetaOlla({
 
           <button
             onClick={handleGuardar}
+            className="btn-eng-primary"
             style={{
-              padding: '10px 18px',
-              borderRadius: '8px',
+              height: '36px',
+              padding: '0 16px',
+              borderRadius: '6px',
               backgroundColor: 'var(--color-primary)',
-              color: '#ffffff',
+              color: '#FFFFFF',
               border: 'none',
-              fontSize: '13px',
+              fontSize: '12.5px',
               fontWeight: 600,
               cursor: 'pointer',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
               boxShadow: 'var(--shadow-card)',
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
               <polyline points="17 21 17 13 7 13 7 21" />
               <polyline points="7 3 7 8 15 8" />
