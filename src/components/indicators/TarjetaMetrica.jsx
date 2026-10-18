@@ -93,15 +93,17 @@ export default function TarjetaMetrica({
 
           <div
             style={{
-              width: '26px',
-              height: '26px',
-              borderRadius: '6px',
-              backgroundColor: esExito ? 'var(--color-success-bg)' : esPeligro ? 'var(--color-danger-bg)' : '#F4F4F5',
-              color: esExito ? 'var(--color-success)' : esPeligro ? 'var(--color-danger)' : 'var(--color-primary)',
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              backgroundColor: esExito ? '#ECFDF5' : esPeligro ? '#FEF2F2' : '#F0FDFA',
+              border: `1.5px solid ${esExito ? '#6EE7B7' : esPeligro ? '#FCA5A5' : '#99F6E4'}`,
+              color: esExito ? '#059669' : esPeligro ? '#DC2626' : '#0F766E',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
+              boxShadow: '0 2px 5px rgba(15, 23, 42, 0.05), inset 0 1px 0 #FFFFFF',
             }}
           >
             {renderIcono()}

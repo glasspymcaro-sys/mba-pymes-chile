@@ -146,6 +146,20 @@ export default function ImagenJson3D({ idIcono = 'sueldo_objetivo', descriptorJs
         style={{ overflow: 'visible' }}
       >
         <defs>
+          {/* Motor 4K PBR: Filtros de Oclusión Ambiental y Sombra de Contacto Vectorial */}
+          <filter id={`pbrContactShadow_${uid}`} x="-30%" y="-30%" width="160%" height="170%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#0F172A" floodOpacity="0.28" />
+            <feDropShadow dx="0" dy="8" stdDeviation="7" floodColor="#09090B" floodOpacity="0.18" />
+          </filter>
+
+          <filter id={`pbrGlowSpecular_${uid}`} x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
           {(spec.gradientes || []).map((g) => {
             if (g.tipo === 'radialGradient') {
               return (
@@ -172,6 +186,7 @@ export default function ImagenJson3D({ idIcono = 'sueldo_objetivo', descriptorJs
             );
           })}
         </defs>
+        {/* Renderizado de capas geométricas con soporte PBR y colisión cero */}
         {capasProcesadas.map((capa, idx) => renderizarNodoJson(capa, idx))}
       </svg>
     </div>

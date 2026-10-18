@@ -41,20 +41,20 @@ export default function ProductoRecetaFigura3D({
         style={{
           width: `${tamaño}px`,
           height: `${tamaño}px`,
-          borderRadius: '20px',
+          borderRadius: '22px',
           background: animando
-            ? 'radial-gradient(circle at 35% 25%, #FFFFFF 0%, #CCFBF1 100%)'
-            : 'radial-gradient(circle at 35% 25%, #FFFFFF 0%, #F1F5F9 100%)',
+            ? 'radial-gradient(circle at 35% 20%, #FFFFFF 0%, #F0FDFA 50%, #CCFBF1 100%)'
+            : 'radial-gradient(circle at 35% 20%, #FFFFFF 0%, #F8FAFC 55%, #E2E8F0 100%)',
           border: animando ? '2.5px solid #0D9488' : '2px solid #CBD5E1',
           boxShadow: animando
-            ? '0 16px 32px -4px rgba(13, 148, 136, 0.35), 0 4px 12px rgba(15, 23, 42, 0.08)'
-            : '0 12px 24px -4px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1px 0 #FFFFFF',
+            ? '0 18px 36px -6px rgba(13, 148, 136, 0.35), 0 6px 14px rgba(15, 23, 42, 0.1), inset 0 2px 0 #FFFFFF'
+            : '0 14px 28px -6px rgba(15, 23, 42, 0.14), 0 4px 10px rgba(15, 23, 42, 0.06), inset 0 2px 0 #FFFFFF, inset 0 -2px 0 rgba(148, 163, 184, 0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          transition: 'all 0.25s ease',
+          transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
         {imagenPersonalizada ? (
