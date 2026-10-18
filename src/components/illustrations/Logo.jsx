@@ -40,10 +40,10 @@ export default function Logo({ style = {} }) {
         <circle cx="32.5" cy="28.5" r="1.5" fill="#FFFFFF" fillOpacity="0.85" />
       </svg>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <span style={{ fontSize: '18px', fontWeight: 900, color: '#1a202c', letterSpacing: '-0.5px', lineHeight: '1.1' }}>
-          Integra <span style={{ color: 'var(--primary-color, #3182ce)' }}>Pyme</span>
+        <span style={{ fontSize: '18px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.5px', lineHeight: '1.1' }}>
+          Integra <span style={{ color: '#0F766E' }}>Pyme</span>
         </span>
-        <span style={{ fontSize: '9.5px', fontWeight: 800, color: 'var(--text-muted, #718096)', textTransform: 'uppercase', letterSpacing: '0.8px', marginTop: '2px' }}>
+        <span style={{ fontSize: '9.5px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.8px', marginTop: '2px' }}>
           Decisión Operativa
         </span>
       </div>

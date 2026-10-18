@@ -80,52 +80,48 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-      {/* BARRA DE NAVEGACIÓN RÁPIDA & FLUJO DE DECISIÓN DEL CENTRO ESTRATÉGICO */}
+      {/* BARRA DE FILTROS POR MÓDULOS DE DECISIÓN */}
       <div
         style={{
-          backgroundColor: '#FFFFFF',
-          borderRadius: '12px',
-          border: '1.5px solid #CBD5E1',
-          padding: '12px 18px',
-          boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '12px',
+          padding: '4px 2px',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span
             style={{
-              fontSize: '11px',
+              fontSize: '12px',
               fontWeight: 800,
               color: '#0F766E',
               backgroundColor: '#CCFBF1',
               border: '1px solid #99F6E4',
-              padding: '2px 8px',
-              borderRadius: '5px',
+              padding: '4px 10px',
+              borderRadius: '6px',
               textTransform: 'uppercase',
-              letterSpacing: '0.06em',
+              letterSpacing: '0.05em',
             }}
           >
-            Panel de control financiero
+            Módulos Estratégicos
           </span>
-          <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
-            Producto evaluado: <strong style={{ color: '#0F172A' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
+          <span style={{ fontSize: '13px', color: '#64748B' }}>
+            Simulando para: <strong style={{ color: '#0F172A' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
           </span>
         </div>
 
         {/* Píldoras de Navegación por Secciones */}
-        <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {[
-            { id: 'todas', label: 'Ver todo' },
-            { id: 'productos', label: '1. Insumos y márgenes', anchor: 'seccion-productos-insumos' },
-            { id: 'precios', label: '2. Precios y comisiones', anchor: 'seccion-precios' },
-            { id: 'descuentos', label: '3. Descuentos y combos', anchor: 'seccion-descuentos' },
-            { id: 'sueldo', label: '4. Sueldo objetivo', anchor: 'seccion-sueldo' },
-            { id: 'equilibrio', label: '5. Punto de equilibrio', anchor: 'seccion-grafico-equilibrio' },
-            { id: 'matriz', label: '6. Catálogo de productos', anchor: 'seccion-matriz' },
+            { id: 'todas', label: 'Ver Todo el Tablero' },
+            { id: 'productos', label: '1. Insumos y Márgenes', anchor: 'seccion-productos-insumos' },
+            { id: 'precios', label: '2. Precios Reales', anchor: 'seccion-precios' },
+            { id: 'descuentos', label: '3. Descuentos y Combos', anchor: 'seccion-descuentos' },
+            { id: 'sueldo', label: '4. Sueldo Objetivo', anchor: 'seccion-sueldo' },
+            { id: 'equilibrio', label: '5. Punto de Equilibrio', anchor: 'seccion-grafico-equilibrio' },
+            { id: 'matriz', label: '6. Catálogo', anchor: 'seccion-matriz' },
           ].map((sec) => (
             <button
               key={sec.id}
@@ -135,13 +131,14 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
                 if (sec.anchor) desplazarASeccion(sec.anchor);
               }}
               style={{
-                padding: '5px 11px',
-                borderRadius: '6px',
-                fontSize: '11.5px',
-                fontWeight: filtroSeccion === sec.id ? 700 : 500,
-                backgroundColor: filtroSeccion === sec.id ? '#0F766E' : '#F8FAFC',
+                padding: '6px 13px',
+                borderRadius: '8px',
+                fontSize: '12px',
+                fontWeight: filtroSeccion === sec.id ? 700 : 600,
+                backgroundColor: filtroSeccion === sec.id ? '#0F766E' : '#FFFFFF',
                 color: filtroSeccion === sec.id ? '#FFFFFF' : '#475569',
-                border: `1px solid ${filtroSeccion === sec.id ? '#0F766E' : '#CBD5E1'}`,
+                border: `1.5px solid ${filtroSeccion === sec.id ? '#0F766E' : '#CBD5E1'}`,
+                boxShadow: filtroSeccion === sec.id ? '0 2px 6px rgba(15, 118, 110, 0.25)' : '0 1px 2px rgba(0,0,0,0.03)',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}

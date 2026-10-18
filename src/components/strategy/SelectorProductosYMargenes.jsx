@@ -204,16 +204,32 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                 onClick={() => cargarRecetaEnOlla(prod)}
                 style={{
                   backgroundColor: esActivo ? '#F0FDFA' : '#FFFFFF',
-                  borderRadius: '10px',
+                  borderRadius: '12px',
                   border: `2px solid ${esActivo ? '#0F766E' : '#E2E8F0'}`,
-                  boxShadow: esActivo ? '0 4px 12px rgba(15, 118, 110, 0.12)' : '0 1px 3px rgba(0,0,0,0.04)',
-                  padding: '12px 14px',
+                  boxShadow: esActivo
+                    ? '0 8px 20px -2px rgba(15, 118, 110, 0.18), inset 0 1px 0 #FFFFFF'
+                    : '0 2px 6px -1px rgba(15, 23, 42, 0.05), inset 0 1px 0 #FFFFFF',
+                  padding: '14px 16px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
-                  transition: 'all 0.18s ease',
+                  gap: '14px',
+                  transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   position: 'relative',
+                }}
+                onMouseEnter={(e) => {
+                  if (!esActivo) {
+                    e.currentTarget.style.borderColor = '#94A3B8';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 14px -2px rgba(15, 23, 42, 0.09)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!esActivo) {
+                    e.currentTarget.style.borderColor = '#E2E8F0';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 6px -1px rgba(15, 23, 42, 0.05)';
+                  }
                 }}
               >
                 {/* Miniatura del producto */}
@@ -223,8 +239,8 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                     rubro={perfil}
                     figuraId={prod.figuraId}
                     imagenPersonalizada={prod.imagenPersonalizada}
-                    insumosEnReceta={prod.ingredientes}
-                    tamaño={48}
+                    insumosEnReceta={[]}
+                    tamaño={56}
                   />
                 </div>
 
@@ -371,21 +387,23 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                     key={ing.idAsignado || ing.id || idx}
                     style={{
                       backgroundColor: '#FFFFFF',
-                      borderRadius: '8px',
+                      borderRadius: '10px',
                       border: '1px solid #E2E8F0',
-                      padding: '8px 10px',
+                      boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+                      padding: '10px 12px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      gap: '8px',
+                      gap: '10px',
+                      transition: 'border-color 0.15s ease',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
                       <InsumoFigura3D
                         nombre={ing.nombre}
                         tipologia={ing.tipologia}
                         imagenPersonalizada={ing.imagenPersonalizada}
-                        tamaño={28}
+                        tamaño={36}
                         rubro={perfil}
                       />
                       <div style={{ minWidth: 0 }}>

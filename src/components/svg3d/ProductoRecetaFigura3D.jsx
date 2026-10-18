@@ -72,29 +72,10 @@ export default function ProductoRecetaFigura3D({
         ) : (
           <ImagenJson3D descriptorJson={specJson} tamaño={Math.round(tamaño * 0.95)} />
         )}
-
-        {/* Badge Indicador de Formato (JSON 3D o Foto Real) */}
-        <span
-          style={{
-            position: 'absolute',
-            bottom: '6px',
-            right: '8px',
-            fontSize: '9px',
-            fontWeight: 800,
-            color: imagenPersonalizada ? '#059669' : '#0F766E',
-            backgroundColor: 'rgba(255, 255, 255, 0.92)',
-            backdropFilter: 'blur(4px)',
-            padding: '1px 6px',
-            borderRadius: '4px',
-            border: '1px solid rgba(0,0,0,0.08)',
-          }}
-        >
-          {imagenPersonalizada ? 'FOTO' : 'ILUSTRACIÓN'}
-        </span>
       </div>
 
-      {/* Miniaturas de los Insumos integrados a la receta */}
-      {insumosEnReceta.length > 0 && (
+      {/* Miniaturas de los Insumos integrados a la receta (solo cuando el marco es amplio) */}
+      {tamaño >= 80 && insumosEnReceta.length > 0 && (
         <div
           style={{
             display: 'flex',
