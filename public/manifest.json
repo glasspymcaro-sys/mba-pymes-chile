@@ -4,14 +4,9 @@
   "description": "Suite ejecutiva de ingeniería de costos, simulación de precios y punto de equilibrio para empresas.",
   "icons": [
     {
-      "src": "/src/assets/logo.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/src/assets/logo.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
     }
   ],
   "start_url": "/",
