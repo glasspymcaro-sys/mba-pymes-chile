@@ -94,25 +94,26 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span
             style={{
-              fontSize: '12px',
-              fontWeight: 800,
-              color: '#0F766E',
-              backgroundColor: '#CCFBF1',
-              border: '1px solid #99F6E4',
+              fontSize: '11px',
+              fontWeight: 900,
+              color: '#070A0F',
+              backgroundColor: '#E2F800',
+              border: '1px solid #E2F800',
               padding: '4px 10px',
               borderRadius: '6px',
               textTransform: 'uppercase',
-              letterSpacing: '0.05em',
+              letterSpacing: '0.08em',
+              boxShadow: '0 0 10px rgba(226, 248, 0, 0.35)',
             }}
           >
             Módulos Estratégicos
           </span>
-          <span style={{ fontSize: '13px', color: '#64748B' }}>
-            Simulando para: <strong style={{ color: '#0F172A' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
+          <span style={{ fontSize: '13px', color: '#94A3B8' }}>
+            Simulando para: <strong style={{ color: '#FFFFFF' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
           </span>
         </div>
 
-        {/* Píldoras de Navegación por Secciones */}
+        {/* Píldoras de Navegación por Secciones ImpactM5 */}
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {[
             { id: 'todas', label: 'Ver Todo el Tablero' },
@@ -134,11 +135,11 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
                 padding: '6px 13px',
                 borderRadius: '8px',
                 fontSize: '12px',
-                fontWeight: filtroSeccion === sec.id ? 700 : 600,
-                backgroundColor: filtroSeccion === sec.id ? '#0F766E' : '#FFFFFF',
-                color: filtroSeccion === sec.id ? '#FFFFFF' : '#475569',
-                border: `1.5px solid ${filtroSeccion === sec.id ? '#0F766E' : '#CBD5E1'}`,
-                boxShadow: filtroSeccion === sec.id ? '0 2px 6px rgba(15, 118, 110, 0.25)' : '0 1px 2px rgba(0,0,0,0.03)',
+                fontWeight: filtroSeccion === sec.id ? 800 : 600,
+                backgroundColor: filtroSeccion === sec.id ? '#E2F800' : '#111827',
+                color: filtroSeccion === sec.id ? '#070A0F' : '#94A3B8',
+                border: `1px solid ${filtroSeccion === sec.id ? '#E2F800' : '#1E293B'}`,
+                boxShadow: filtroSeccion === sec.id ? '0 0 15px rgba(226, 248, 0, 0.35)' : 'none',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}

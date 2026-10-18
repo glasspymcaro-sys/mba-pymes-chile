@@ -89,20 +89,22 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         isGuest: true,
       };
 
-      // Registrar o sincronizar en profiles de Supabase
-      await supabase.from('profiles').upsert({
-        id: guestId,
-        email: guestUser.email,
-        nombre_negocio: 'Empresa Demo PyME',
-        perfil: 'restaurant',
-      });
+      // Intentar sincronizar en segundo plano sin bloquear la experiencia del usuario
+      try {
+        supabase.from('profiles').upsert({
+          id: guestId,
+          email: guestUser.email,
+          nombre_negocio: 'Empresa Demo PyME',
+          perfil: 'restaurant',
+        }).catch(() => {});
+      } catch (e) {}
 
+      localStorage.setItem('mba_auth_guest', 'true');
+      sessionStorage.setItem('mba_auth_dismissed', '1');
       setTipoMensaje('success');
-      setMensaje('Sesión demo iniciada correctamente.');
-      setTimeout(() => {
-        onAuthSuccess(guestUser);
-        onClose();
-      }, 500);
+      setMensaje('Sesión demo iniciada.');
+      onAuthSuccess(guestUser);
+      onClose();
     } catch (err) {
       setTipoMensaje('error');
       setMensaje('Error al crear sesión de invitado: ' + err.message);
@@ -113,55 +115,61 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
 
   const inputStyle = {
     width: '100%',
-    padding: '10px 14px',
-    borderRadius: '10px',
-    border: 'none',
+    padding: '12px 14px',
+    borderRadius: '8px',
+    border: '1.5px solid #1E293B',
     outline: 'none',
-    backgroundColor: 'var(--bg-neumorphic)',
-    boxShadow: 'var(--neu-pressed)',
+    backgroundColor: '#070A0F',
     fontSize: '13px',
-    color: 'var(--text-main)',
+    color: '#F8FAFC',
     boxSizing: 'border-box',
     marginBottom: '14px',
+    transition: 'border-color 0.15s ease',
   };
 
   const botonStyle = {
     width: '100%',
-    padding: '11px',
-    borderRadius: '10px',
+    padding: '12px',
+    borderRadius: '8px',
     border: 'none',
-    backgroundColor: 'var(--primary-color)',
-    color: '#ffffff',
+    backgroundColor: '#E2F800',
+    color: '#0B0F17',
     fontSize: '13px',
-    fontWeight: '700',
+    fontWeight: '900',
+    letterSpacing: '0.04em',
+    textTransform: 'uppercase',
     cursor: cargando ? 'not-allowed' : 'pointer',
-    boxShadow: 'var(--neu-flat-sm)',
+    boxShadow: '0 4px 14px rgba(226, 248, 0, 0.25)',
     transition: 'all 0.15s ease',
   };
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.65)',
-        backdropFilter: 'blur(4px)',
+        backgroundColor: 'rgba(5, 8, 15, 0.85)',
+        backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 9999,
         padding: '16px',
+        animation: 'fadeIn 0.2s ease',
       }}
     >
       <div
         style={{
           width: '100%',
           maxWidth: '440px',
-          backgroundColor: 'var(--bg-neumorphic)',
-          borderRadius: '20px',
-          padding: '28px',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
-          border: '1px solid rgba(255, 255, 255, 0.5)',
+          backgroundColor: '#0B0F17',
+          color: '#F8FAFC',
+          borderRadius: '16px',
+          padding: '30px',
+          boxShadow: '0 25px 60px -10px rgba(0, 0, 0, 0.7), 0 0 35px rgba(226, 248, 0, 0.08)',
+          border: '1.5px solid #1E293B',
           position: 'relative',
         }}
       >
@@ -175,30 +183,50 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             border: 'none',
             fontSize: '18px',
             cursor: 'pointer',
-            color: 'var(--text-muted)',
+            color: '#64748B',
             fontWeight: 'bold',
+            transition: 'color 0.15s ease',
           }}
           aria-label="Cerrar modal"
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '#64748B')}
         >
           ✕
         </button>
 
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '22px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+            <span
+              style={{
+                fontSize: '10px',
+                fontWeight: 900,
+                color: '#0B0F17',
+                backgroundColor: '#E2F800',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+              }}
+            >
+              ACCESO SEGURO
+            </span>
+          </div>
           <h2
             style={{
-              fontSize: '18px',
-              fontWeight: '800',
-              color: 'var(--text-main)',
+              fontSize: '20px',
+              fontWeight: 900,
+              color: '#FFFFFF',
               margin: '0 0 6px 0',
-              letterSpacing: '-0.3px',
+              letterSpacing: '-0.02em',
+              textTransform: 'uppercase',
             }}
           >
-            {modo === 'login' ? 'Iniciar Sesión en MBA PyMEs' : 'Registro de Empresa / Usuario'}
+            {modo === 'login' ? 'Iniciar Sesión' : 'Registro de Empresa'}
           </h2>
-          <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+          <p style={{ fontSize: '12.5px', color: '#94A3B8', margin: 0, lineHeight: 1.45 }}>
             {modo === 'login'
-              ? 'Conéctate a tu base de datos centralizada en Supabase'
-              : 'Crea tu cuenta institucional para persistir tu estructura de costos'}
+              ? 'Ingresa tus credenciales para sincronizar tu estructura de costos'
+              : 'Crea tu cuenta empresarial para guardar tus recetas y catálogo'}
           </p>
         </div>
 
@@ -206,12 +234,13 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
           <div
             style={{
               padding: '10px 14px',
-              borderRadius: '10px',
+              borderRadius: '8px',
               fontSize: '12px',
+              fontWeight: 600,
               marginBottom: '16px',
-              backgroundColor: tipoMensaje === 'error' ? '#fee2e2' : '#ecfdf5',
-              color: tipoMensaje === 'error' ? '#b91c1c' : '#047857',
-              border: `1px solid ${tipoMensaje === 'error' ? '#fca5a5' : '#a7f3d0'}`,
+              backgroundColor: tipoMensaje === 'error' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+              color: tipoMensaje === 'error' ? '#FCA5A5' : '#6EE7B7',
+              border: `1px solid ${tipoMensaje === 'error' ? '#EF4444' : '#10B981'}`,
             }}
           >
             {mensaje}
@@ -221,23 +250,25 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         <form onSubmit={handleSubmit}>
           {modo === 'register' && (
             <div>
-              <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-                NOMBRE DE LA EMPRESA O NEGOCIO
+              <label style={{ fontSize: '10.5px', fontWeight: 800, color: '#94A3B8', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Nombre del Negocio o PyME
               </label>
               <input
                 type="text"
                 value={nombreEmpresa}
                 onChange={(e) => setNombreEmpresa(e.target.value)}
-                placeholder="Ej: Cafetería y Tostaduría Valdivia"
+                placeholder="Ej: Cafetería Valdivia"
                 required={modo === 'register'}
                 style={inputStyle}
+                onFocus={(e) => (e.currentTarget.style.borderColor = '#E2F800')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#1E293B')}
               />
             </div>
           )}
 
           <div>
-            <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-              CORREO ELECTRÓNICO
+            <label style={{ fontSize: '10.5px', fontWeight: 800, color: '#94A3B8', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Correo Electrónico
             </label>
             <input
               type="email"
@@ -246,12 +277,14 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               placeholder="admin@empresa.cl"
               required
               style={inputStyle}
+              onFocus={(e) => (e.currentTarget.style.borderColor = '#E2F800')}
+              onBlur={(e) => (e.currentTarget.style.borderColor = '#1E293B')}
             />
           </div>
 
           <div>
-            <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-              CONTRASEÑA
+            <label style={{ fontSize: '10.5px', fontWeight: 800, color: '#94A3B8', display: 'block', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Contraseña
             </label>
             <input
               type="password"
@@ -261,15 +294,23 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               required
               minLength={6}
               style={inputStyle}
+              onFocus={(e) => (e.currentTarget.style.borderColor = '#E2F800')}
+              onBlur={(e) => (e.currentTarget.style.borderColor = '#1E293B')}
             />
           </div>
 
-          <button type="submit" disabled={cargando} style={botonStyle}>
-            {cargando ? 'Procesando...' : modo === 'login' ? 'Acceder al Sistema' : 'Crear Cuenta y Conectar'}
+          <button
+            type="submit"
+            disabled={cargando}
+            style={botonStyle}
+            onMouseEnter={(e) => !cargando && (e.currentTarget.style.transform = 'translateY(-1.5px)')}
+            onMouseLeave={(e) => !cargando && (e.currentTarget.style.transform = 'translateY(0)')}
+          >
+            {cargando ? 'Procesando...' : modo === 'login' ? 'Acceder al Tablero' : 'Crear Cuenta'}
           </button>
         </form>
 
-        <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ marginTop: '18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button
             type="button"
             onClick={() => {
@@ -279,9 +320,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--primary-color)',
+              color: '#E2F800',
               fontSize: '11.5px',
-              fontWeight: '700',
+              fontWeight: 800,
               cursor: 'pointer',
               padding: 0,
             }}
@@ -295,17 +336,19 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#94A3B8',
               fontSize: '11.5px',
+              fontWeight: 600,
               textDecoration: 'underline',
               cursor: 'pointer',
               padding: 0,
             }}
           >
-            Acceso Rápido Demo
+            Entrar como Invitado Demo
           </button>
         </div>
       </div>
     </div>
   );
 }
+

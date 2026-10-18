@@ -7,6 +7,7 @@ import GestionCostosFijosSimple from './components/costs/GestionCostosFijosSimpl
 import FooterEjecutivo from './components/layout/FooterEjecutivo.jsx';
 import CentroHistorialCatalogo from './components/history/CentroHistorialCatalogo.jsx';
 import AuthModal from './components/auth/AuthModal.jsx';
+import GuiaEmprendedorModal from './components/help/GuiaEmprendedorModal.jsx';
 import Logo from './components/illustrations/Logo.jsx';
 import { formatCLP } from './utils/formatters.js';
 
@@ -36,7 +37,11 @@ function ContenidoPrincipal() {
   } = useAppState();
 
   const [vista, setVista] = useState('punto_equilibrio'); // 'punto_equilibrio' | 'insumos' | 'costos_fijos'
-  const [modalAuthAbierto, setModalAuthAbierto] = useState(false);
+  // Al abrir la aplicación, salta de inmediato el login a menos que ya se haya descartado en esta sesión
+  const [modalAuthAbierto, setModalAuthAbierto] = useState(() => {
+    return !sessionStorage.getItem('mba_auth_dismissed') && !localStorage.getItem('mba_pymes_user');
+  });
+  const [modalGuiaAbierto, setModalGuiaAbierto] = useState(false);
 
   // Cálculos de Punto de Equilibrio con Fugas Reales y Sueldo Objetivo
   const margenContribucion = Math.max(0, Number(analisisFugasActivas?.margenContribucionReal || (precioVentaConsolidado - costoVariableConsolidado)));
@@ -47,13 +52,13 @@ function ContenidoPrincipal() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
-      {/* 1. Barra de Navegación Superior con Bordes Biselados y Botones Táctiles */}
+      {/* 1. Barra de Navegación Superior con Bordes Biselados y Botones Táctiles ImpactM5 */}
       <header
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.96)',
-          backdropFilter: 'blur(10px)',
-          borderBottom: '1.5px solid #CBD5E1',
-          boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+          backgroundColor: 'rgba(7, 10, 18, 0.95)',
+          backdropFilter: 'blur(12px)',
+          borderBottom: '1px solid #1E293B',
+          boxShadow: '0 4px 24px rgba(0, 0, 0, 0.6)',
           padding: '10px 20px',
           display: 'flex',
           alignItems: 'center',
@@ -75,10 +80,10 @@ function ContenidoPrincipal() {
               alignItems: 'center',
               gap: '4px',
               padding: '4px',
-              borderRadius: '10px',
-              border: '1.5px solid #CBD5E1',
-              backgroundColor: '#F1F5F9',
-              boxShadow: 'inset 0 1px 2px rgba(15, 23, 42, 0.06)',
+              borderRadius: '9px',
+              border: '1px solid #1E293B',
+              backgroundColor: '#0B0F17',
+              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.5)',
             }}
           >
             <button
@@ -88,7 +93,7 @@ function ContenidoPrincipal() {
                 height: '30px',
                 padding: '0 11px',
                 fontSize: '11.5px',
-                borderRadius: '7px',
+                borderRadius: '6px',
               }}
               title="Gastronomía / Restaurantes"
             >
@@ -109,7 +114,7 @@ function ContenidoPrincipal() {
                 height: '30px',
                 padding: '0 11px',
                 fontSize: '11.5px',
-                borderRadius: '7px',
+                borderRadius: '6px',
               }}
               title="Comercio / Retail / Minimarket (Góndola)"
             >
@@ -128,7 +133,7 @@ function ContenidoPrincipal() {
                 height: '30px',
                 padding: '0 11px',
                 fontSize: '11.5px',
-                borderRadius: '7px',
+                borderRadius: '6px',
               }}
               title="Agencia / Servicios / Consultoría (Mesa de Proyectos)"
             >
@@ -140,7 +145,7 @@ function ContenidoPrincipal() {
             </button>
           </div>
 
-          {/* Badge del Punto de Equilibrio + Meta Sueldo */}
+          {/* Badge del Punto de Equilibrio + Meta Sueldo ImpactM5 */}
           <div
             className="tabular-nums"
             style={{
@@ -150,11 +155,12 @@ function ContenidoPrincipal() {
               height: '32px',
               padding: '0 12px',
               borderRadius: '8px',
-              backgroundColor: esSolvente ? '#ECFDF5' : '#FEF2F2',
-              border: `1.5px solid ${esSolvente ? '#6EE7B7' : '#FCA5A5'}`,
+              backgroundColor: esSolvente ? 'rgba(226, 248, 0, 0.08)' : 'rgba(239, 68, 68, 0.12)',
+              border: `1px solid ${esSolvente ? '#E2F800' : '#EF4444'}`,
               fontSize: '11.5px',
-              fontWeight: 700,
-              color: esSolvente ? '#065F46' : '#991B1B',
+              fontWeight: 800,
+              color: esSolvente ? '#E2F800' : '#F87171',
+              boxShadow: esSolvente ? '0 0 12px rgba(226, 248, 0, 0.2)' : 'none',
             }}
           >
             <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
@@ -162,7 +168,7 @@ function ContenidoPrincipal() {
             </svg>
             <span>PE Base: {peUnidades.toLocaleString('es-CL')} un.</span>
             <span>•</span>
-            <span style={{ color: '#0F766E' }}>Meta c/Sueldo: {peConSueldoUnidades.toLocaleString('es-CL')} un.</span>
+            <span style={{ color: esSolvente ? '#FFFFFF' : '#FCA5A5' }}>Meta c/Sueldo: {peConSueldoUnidades.toLocaleString('es-CL')} un.</span>
           </div>
 
           {user && (
@@ -179,9 +185,9 @@ function ContenidoPrincipal() {
                 padding: '0 10px',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                backgroundColor: syncStatus === 'synced' ? '#ECFDF5' : '#F8FAFC',
-                border: `1.5px solid ${syncStatus === 'synced' ? '#6EE7B7' : '#CBD5E1'}`,
-                color: syncStatus === 'synced' ? '#059669' : '#475569',
+                backgroundColor: '#0B0F17',
+                border: `1px solid ${syncStatus === 'synced' ? 'rgba(226, 248, 0, 0.5)' : '#1E293B'}`,
+                color: syncStatus === 'synced' ? '#E2F800' : '#94A3B8',
               }}
             >
               <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
@@ -286,6 +292,38 @@ function ContenidoPrincipal() {
             </span>
           </button>
 
+          {/* Botón de Impacto: "¿Necesitas Ayuda? - Guía del Emprendedor" */}
+          <button
+            onClick={() => setModalGuiaAbierto(true)}
+            className="btn-impact-help"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              height: '36px',
+              padding: '0 13px',
+              fontSize: '12px',
+              fontWeight: 800,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              color: '#0B0F17',
+              backgroundColor: '#E2F800',
+              border: '1.5px solid #D4E800',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(226, 248, 0, 0.35)',
+              transition: 'all 0.15s ease',
+            }}
+            title="Aprende los conceptos clave de la aplicación sin rodeos ni jerga"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            ¿Necesitas Ayuda?
+          </button>
+
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span
@@ -338,14 +376,14 @@ function ContenidoPrincipal() {
         </nav>
       </header>
 
-      {/* Sub-barra de Telemetría Rápida de Unidad de Costeo y Sueldo Objetivo */}
+      {/* Sub-barra de Telemetría Rápida ImpactM5 */}
       <div
         style={{
-          backgroundColor: '#FFFFFF',
-          borderBottom: '1.5px solid #CBD5E1',
+          backgroundColor: '#0B0F19',
+          borderBottom: '1px solid #1E293B',
           padding: '8px 20px',
           fontSize: '11.5px',
-          color: '#475569',
+          color: '#94A3B8',
         }}
       >
         <div
@@ -360,28 +398,28 @@ function ContenidoPrincipal() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E2F800" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
             </svg>
             <span>
-              Producto Activo: <strong style={{ color: '#09090B' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
+              Producto Activo: <strong style={{ color: '#FFFFFF' }}>{recetaEnOlla?.nombre || 'Producto Principal'}</strong>
             </span>
             <span>•</span>
             <span className="tabular-nums">
-              Precio (P): <strong style={{ color: '#09090B' }}>{formatCLP(precioVentaConsolidado)}</strong>
+              Precio (P): <strong style={{ color: '#FFFFFF' }}>{formatCLP(precioVentaConsolidado)}</strong>
             </span>
             <span>•</span>
             <span className="tabular-nums">
-              Costo + Fugas: <strong style={{ color: '#DC2626' }}>{formatCLP(analisisFugasActivas.costoDirectoEfectivoTotal)}</strong>
+              Costo + Fugas: <strong style={{ color: '#EF4444' }}>{formatCLP(analisisFugasActivas.costoDirectoEfectivoTotal)}</strong>
             </span>
             <span>•</span>
             <span className="tabular-nums">
-              Ganancia Limpia/u: <strong style={{ color: '#059669' }}>{formatCLP(margenContribucion)} ({analisisFugasActivas.margenBrutoRealPorcentaje}%)</strong>
+              Ganancia Limpia/u: <strong style={{ color: '#E2F800' }}>{formatCLP(margenContribucion)} ({analisisFugasActivas.margenBrutoRealPorcentaje}%)</strong>
             </span>
             <span>•</span>
             <span className="tabular-nums">
-              Sueldo Objetivo: <strong style={{ color: '#0F766E' }}>{formatCLP(sueldoObjetivo)}</strong>
+              Sueldo Objetivo: <strong style={{ color: '#38BDF8' }}>{formatCLP(sueldoObjetivo)}</strong>
             </span>
           </div>
 
@@ -501,12 +539,38 @@ function ContenidoPrincipal() {
           </svg>
           <span>Historial</span>
         </button>
+
+        <button
+          type="button"
+          onClick={() => setModalGuiaAbierto(true)}
+          className="app-mobile-nav-item"
+        >
+          <div style={{ backgroundColor: '#E2F800', padding: '2px 8px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0B0F17" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </div>
+          <span style={{ color: '#0B0F17', fontWeight: 800 }}>Ayuda</span>
+        </button>
       </nav>
 
       <AuthModal
         isOpen={modalAuthAbierto}
-        onClose={() => setModalAuthAbierto(false)}
-        onAuthSuccess={() => setModalAuthAbierto(false)}
+        onClose={() => {
+          sessionStorage.setItem('mba_auth_dismissed', '1');
+          setModalAuthAbierto(false);
+        }}
+        onAuthSuccess={() => {
+          sessionStorage.setItem('mba_auth_dismissed', '1');
+          setModalAuthAbierto(false);
+        }}
+      />
+
+      <GuiaEmprendedorModal
+        isOpen={modalGuiaAbierto}
+        onClose={() => setModalGuiaAbierto(false)}
       />
     </div>
   );
