@@ -117,7 +117,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
       {/* 1. Encabezado Principal del Centro de Historial */}
       <div
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '12px',
           border: '1px solid var(--color-border)',
           padding: '22px 24px',
@@ -184,7 +184,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                 borderRadius: '6px',
                 fontSize: '12px',
                 fontWeight: tabActiva === 'productos' ? 600 : 500,
-                backgroundColor: tabActiva === 'productos' ? '#FFFFFF' : 'transparent',
+                backgroundColor: tabActiva === 'productos' ? '#1E293B' : 'transparent',
                 color: tabActiva === 'productos' ? 'var(--color-foreground)' : 'var(--color-muted-foreground)',
                 border: 'none',
                 cursor: 'pointer',
@@ -203,7 +203,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                 borderRadius: '6px',
                 fontSize: '12px',
                 fontWeight: tabActiva === 'insumos' ? 600 : 500,
-                backgroundColor: tabActiva === 'insumos' ? '#FFFFFF' : 'transparent',
+                backgroundColor: tabActiva === 'insumos' ? '#1E293B' : 'transparent',
                 color: tabActiva === 'insumos' ? 'var(--color-foreground)' : 'var(--color-muted-foreground)',
                 border: 'none',
                 cursor: 'pointer',
@@ -222,7 +222,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                 borderRadius: '6px',
                 fontSize: '12px',
                 fontWeight: tabActiva === 'rentabilidad' ? 600 : 500,
-                backgroundColor: tabActiva === 'rentabilidad' ? '#FFFFFF' : 'transparent',
+                backgroundColor: tabActiva === 'rentabilidad' ? '#1E293B' : 'transparent',
                 color: tabActiva === 'rentabilidad' ? 'var(--color-foreground)' : 'var(--color-muted-foreground)',
                 border: 'none',
                 cursor: 'pointer',
@@ -261,7 +261,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                 padding: '0 10px 0 32px',
                 borderRadius: '6px',
                 border: '1px solid var(--color-border)',
-                backgroundColor: '#FFFFFF',
+                backgroundColor: 'var(--color-surface)',
                 fontSize: '12.5px',
                 outline: 'none',
                 color: 'var(--color-foreground)',
@@ -318,7 +318,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                   <div
                     key={prod.id}
                     style={{
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: 'var(--color-surface)',
                       borderRadius: '10px',
                       border: `1.5px solid ${esActivo ? 'var(--color-primary)' : 'var(--color-border)'}`,
                       padding: '16px',
@@ -420,7 +420,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                         gap: '8px',
                         padding: '8px 10px',
                         borderRadius: '6px',
-                        backgroundColor: '#F8FAFC',
+                        backgroundColor: 'var(--color-surface-elevated)',
                         border: '1px solid var(--color-border-subtle)',
                       }}
                     >
@@ -456,7 +456,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                           height: '32px',
                           borderRadius: '6px',
                           border: '1px solid var(--color-primary)',
-                          backgroundColor: esActivo ? 'var(--color-brand-50)' : '#FFFFFF',
+                          backgroundColor: esActivo ? 'var(--color-surface-elevated)' : 'var(--color-surface)',
                           color: 'var(--color-primary)',
                           fontSize: '11.5px',
                           fontWeight: 600,
@@ -485,7 +485,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                           padding: '0 10px',
                           borderRadius: '6px',
                           border: '1px solid var(--color-border)',
-                          backgroundColor: '#FFFFFF',
+                          backgroundColor: 'var(--color-surface)',
                           color: 'var(--color-foreground)',
                           fontSize: '11.5px',
                           fontWeight: 600,
@@ -513,7 +513,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                             padding: '0 8px',
                             borderRadius: '6px',
                             border: '1px solid var(--color-border)',
-                            backgroundColor: '#FFFFFF',
+                            backgroundColor: 'var(--color-surface)',
                             color: 'var(--color-danger)',
                             cursor: 'pointer',
                             display: 'flex',
@@ -560,7 +560,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                   <div
                     key={ins.id}
                     style={{
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: 'var(--color-surface)',
                       borderRadius: '10px',
                       border: '1px solid var(--color-border)',
                       padding: '14px',
@@ -619,7 +619,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                           padding: '0 8px',
                           borderRadius: '5px',
                           border: '1px solid var(--color-border)',
-                          backgroundColor: '#FFFFFF',
+                          backgroundColor: 'var(--color-surface)',
                           fontSize: '11px',
                           fontWeight: 600,
                           color: 'var(--color-foreground)',
@@ -646,7 +646,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                           padding: '0 8px',
                           borderRadius: '5px',
                           border: '1px solid var(--color-border)',
-                          backgroundColor: '#FFFFFF',
+                          backgroundColor: 'var(--color-surface)',
                           color: 'var(--color-danger)',
                           fontSize: '11px',
                           cursor: 'pointer',
@@ -673,7 +673,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
               gap: '14px',
             }}
           >
-            <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+            <div style={{ backgroundColor: 'var(--color-surface)', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>
                 TOTAL DE PRODUCTOS
               </span>
@@ -682,7 +682,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
               </span>
             </div>
 
-            <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+            <div style={{ backgroundColor: 'var(--color-surface)', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>
                 MATERIAS PRIMAS REGISTRADAS
               </span>
@@ -691,7 +691,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
               </span>
             </div>
 
-            <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+            <div style={{ backgroundColor: 'var(--color-surface)', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>
                 PRECIO PROMEDIO
               </span>
@@ -700,7 +700,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
               </span>
             </div>
 
-            <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+            <div style={{ backgroundColor: 'var(--color-surface)', padding: '16px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block' }}>
                 MARGEN PROMEDIO DEL CATÁLOGO
               </span>
@@ -713,7 +713,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
           {metricasCatalogo.productoEstrella && (
             <div
               style={{
-                backgroundColor: '#FFFFFF',
+                backgroundColor: 'var(--color-surface)',
                 borderRadius: '10px',
                 border: '1.5px solid var(--color-brand-200)',
                 padding: '18px 20px',

@@ -1,6 +1,10 @@
 import React from 'react';
 import { useAppState } from '../../store/appState.jsx';
-import ImagenJson3D from '../svg3d/ImagenJson3D.jsx';
+import {
+  Icono3DLibertad,
+  Icono3DCapacidad,
+  Icono3DEbit,
+} from '../icons3d/SistemaIconografia3D.jsx';
 import {
   calcularSueldoObjetivoYCapacidad,
   calcularCalendarioDiaLibertad,
@@ -56,37 +60,41 @@ export default function ModuloSueldoObjetivoYLibertad() {
     <div id="seccion-sueldo" className="bento-grid-12" style={{ alignItems: 'stretch' }}>
       {/* LADO IZQUIERDO (6 COL): INGENIERÍA INVERSA "EL SUELDO OBJETIVO" + ALERTA DE CAPACIDAD FÍSICA */}
       <div
-        className="bento-col-6 card-ejecutiva-destacada"
+        className="bento-col-6 card-ejecutiva"
         style={{
-          padding: '22px',
+          padding: '24px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          gap: '16px',
+          gap: '18px',
+          backgroundColor: '#0D131F',
+          border: '1px solid #1E293B',
+          borderRadius: '16px',
+          boxShadow: '0 12px 30px -10px rgba(0, 0, 0, 0.7)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <ImagenJson3D idIcono="sueldo_objetivo" tamaño={54} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <Icono3DLibertad size={48} />
             <div>
               <span
                 style={{
                   fontSize: '10.5px',
                   fontWeight: 800,
-                  color: '#0F766E',
+                  color: '#E2F800',
                   textTransform: 'uppercase',
                   letterSpacing: '0.06em',
-                  backgroundColor: '#CCFBF1',
+                  backgroundColor: 'rgba(226, 248, 0, 0.1)',
                   padding: '3px 8px',
                   borderRadius: '6px',
-                  border: '1px solid #5EEAD4',
+                  border: '1px solid rgba(226, 248, 0, 0.35)',
                   display: 'inline-block',
                   marginBottom: '4px',
                 }}
               >
-                1. Meta de ingreso del propietario
+                Ingeniería Inversa del Sueldo
               </span>
-              <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
+              <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#F8FAFC', margin: 0 }}>
                 ¿Cuánto dinero líquido te quieres llevar al bolsillo este mes?
               </h2>
             </div>
@@ -96,22 +104,21 @@ export default function ModuloSueldoObjetivoYLibertad() {
         {/* Selector e Input del Sueldo Objetivo */}
         <div
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#0B0F17',
             borderRadius: '12px',
-            border: '1.5px solid #99F6E4',
-            padding: '14px 16px',
+            border: '1px solid #1E293B',
+            padding: '16px 18px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
-            boxShadow: '0 2px 8px rgba(15, 118, 110, 0.06)',
+            gap: '14px',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
             <div>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                 Tu Sueldo Líquido Mensual Deseado
               </span>
-              <div className="tabular-nums" style={{ fontSize: '26px', fontWeight: 900, color: '#0F766E', letterSpacing: '-0.03em' }}>
+              <div className="tabular-nums" style={{ fontSize: '26px', fontWeight: 900, color: '#E2F800', letterSpacing: '-0.03em' }}>
                 {formatCLP(sueldoObjetivo)}
               </div>
             </div>
@@ -127,6 +134,7 @@ export default function ModuloSueldoObjetivoYLibertad() {
                     height: '32px',
                     padding: '0 10px',
                     fontSize: '11.5px',
+                    fontWeight: 700,
                   }}
                 >
                   {formatCLP(monto)}
@@ -145,9 +153,9 @@ export default function ModuloSueldoObjetivoYLibertad() {
             onChange={(e) => setSueldoObjetivo(Number(e.target.value))}
           />
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
-            <span>Costos Fijos Empresa: {formatCLP(costoFijoTotal)}</span>
-            <span>Meta Total a Cubrir (CF + Sueldo): {formatCLP(costoFijoTotal + sueldoObjetivo)}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
+            <span>Costos Fijos Empresa: <strong style={{ color: '#F8FAFC' }}>{formatCLP(costoFijoTotal)}</strong></span>
+            <span>Meta Total a Cubrir: <strong style={{ color: '#E2F800' }}>{formatCLP(costoFijoTotal + sueldoObjetivo)}</strong></span>
           </div>
         </div>
 
@@ -155,58 +163,59 @@ export default function ModuloSueldoObjetivoYLibertad() {
         {metaSueldo.esViable ? (
           <div
             style={{
-              backgroundColor: '#09090B',
-              color: '#FFFFFF',
+              backgroundColor: '#111827',
+              color: '#F8FAFC',
               borderRadius: '12px',
               padding: '16px 18px',
-              border: '1.5px solid #27272A',
-              boxShadow: '0 8px 20px rgba(9, 9, 11, 0.16)',
+              border: '1px solid #1E293B',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
             }}
           >
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#5EEAD4', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#E2F800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
               Meta Traducida a Ritmo Diario ({diasOperativosMes} días hábiles/mes)
             </div>
             <p style={{ fontSize: '14.5px', lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
-              Para pagarte <strong style={{ color: '#5EEAD4', fontWeight: 800 }}>{formatCLP(sueldoObjetivo)} libres</strong> este mes vendiendo{' '}
+              Para pagarte <strong style={{ color: '#E2F800', fontWeight: 800 }}>{formatCLP(sueldoObjetivo)} libres</strong> este mes vendiendo{' '}
               <strong style={{ color: '#FFFFFF' }}>{recetaEnOlla?.nombre || 'tu producto'}</strong>, necesitas vender{' '}
               <span
                 className="tabular-nums"
                 style={{
-                  backgroundColor: '#0F766E',
-                  color: '#FFFFFF',
+                  backgroundColor: '#1E293B',
+                  color: '#E2F800',
                   padding: '2px 8px',
                   borderRadius: '6px',
                   fontWeight: 800,
-                  border: '1px solid #2DD4BF',
+                  border: '1px solid rgba(226, 248, 0, 0.4)',
                 }}
               >
                 {metaSueldo.unidadesDiariasMeta} {unidadEtiqueta} al día
               </span>{' '}
-              (o facturar <strong className="tabular-nums" style={{ color: '#FEF08A' }}>{formatCLP(metaSueldo.facturacionDiariaMeta)} diarios</strong>).
+              (o facturar <strong className="tabular-nums" style={{ color: '#10B981' }}>{formatCLP(metaSueldo.facturacionDiariaMeta)} diarios</strong>).
             </p>
             <div
               className="tabular-nums"
               style={{
-                marginTop: '10px',
+                marginTop: '12px',
                 paddingTop: '10px',
-                borderTop: '1px solid #27272A',
+                borderTop: '1px solid #1E293B',
                 display: 'flex',
                 justifyContent: 'space-between',
+                alignItems: 'center',
                 flexWrap: 'wrap',
                 gap: '8px',
                 fontSize: '11.5px',
-                color: '#A1A1AA',
+                color: '#94A3B8',
               }}
             >
-              <span>PE Básico (Ganar $0): <strong style={{ color: '#FFFFFF' }}>{metaSueldo.peBaseUnidades} un./mes</strong></span>
-              <span>PE + Tu Sueldo: <strong style={{ color: '#5EEAD4' }}>{metaSueldo.peConSueldoUnidades} un./mes</strong></span>
+              <span>PE Básico (Ganar $0): <strong style={{ color: '#F8FAFC' }}>{metaSueldo.peBaseUnidades} un./mes</strong></span>
+              <span>PE + Tu Sueldo: <strong style={{ color: '#E2F800' }}>{metaSueldo.peConSueldoUnidades} un./mes</strong></span>
               <button
                 type="button"
                 onClick={() => setVentasEstimadasMensuales(metaSueldo.peConSueldoUnidades)}
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#5EEAD4',
+                  color: '#E2F800',
                   fontWeight: 700,
                   cursor: 'pointer',
                   textDecoration: 'underline',
@@ -220,11 +229,11 @@ export default function ModuloSueldoObjetivoYLibertad() {
         ) : (
           <div
             style={{
-              backgroundColor: '#FEF2F2',
-              border: '1.5px solid #EF4444',
+              backgroundColor: 'rgba(239, 68, 68, 0.12)',
+              border: '1.5px solid rgba(239, 68, 68, 0.4)',
               borderRadius: '12px',
               padding: '14px',
-              color: '#991B1B',
+              color: '#F87171',
               fontSize: '13px',
               fontWeight: 700,
             }}
@@ -236,10 +245,10 @@ export default function ModuloSueldoObjetivoYLibertad() {
         {/* Alerta de Capacidad Física Real */}
         <div
           style={{
-            backgroundColor: metaSueldo.excedeCapacidadFisica ? '#FEF2F2' : '#F8FAFC',
-            border: `1.5px solid ${metaSueldo.excedeCapacidadFisica ? '#EF4444' : '#CBD5E1'}`,
+            backgroundColor: metaSueldo.excedeCapacidadFisica ? 'rgba(239, 68, 68, 0.12)' : '#0B0F17',
+            border: `1px solid ${metaSueldo.excedeCapacidadFisica ? 'rgba(239, 68, 68, 0.5)' : '#1E293B'}`,
             borderRadius: '12px',
-            padding: '12px 14px',
+            padding: '14px 16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -247,8 +256,8 @@ export default function ModuloSueldoObjetivoYLibertad() {
             flexWrap: 'wrap',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: '220px' }}>
-            <ImagenJson3D idIcono="alerta_capacidad" tamaño={42} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '220px' }}>
+            <Icono3DCapacidad size={42} />
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span
@@ -256,7 +265,7 @@ export default function ModuloSueldoObjetivoYLibertad() {
                     fontSize: '11px',
                     fontWeight: 800,
                     textTransform: 'uppercase',
-                    color: metaSueldo.excedeCapacidadFisica ? '#DC2626' : '#0F172A',
+                    color: metaSueldo.excedeCapacidadFisica ? '#EF4444' : '#F8FAFC',
                   }}
                 >
                   {metaSueldo.excedeCapacidadFisica
@@ -267,17 +276,18 @@ export default function ModuloSueldoObjetivoYLibertad() {
                   className="tabular-nums"
                   style={{
                     fontSize: '10.5px',
-                    fontWeight: 700,
-                    padding: '1px 6px',
+                    fontWeight: 800,
+                    padding: '2px 7px',
                     borderRadius: '4px',
-                    backgroundColor: metaSueldo.excedeCapacidadFisica ? '#FEE2E2' : '#ECFDF5',
-                    color: metaSueldo.excedeCapacidadFisica ? '#991B1B' : '#065F46',
+                    backgroundColor: metaSueldo.excedeCapacidadFisica ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                    color: metaSueldo.excedeCapacidadFisica ? '#EF4444' : '#10B981',
+                    border: `1px solid ${metaSueldo.excedeCapacidadFisica ? 'rgba(239, 68, 68, 0.4)' : 'rgba(16, 185, 129, 0.4)'}`,
                   }}
                 >
                   {metaSueldo.unidadesPorHoraMeta || 0} un./hora ({metaSueldo.porcentajeUsoCapacidad}% cap.)
                 </span>
               </div>
-              <p style={{ fontSize: '12px', color: metaSueldo.excedeCapacidadFisica ? '#7F1D1D' : '#475569', margin: '2px 0 0 0' }}>
+              <p style={{ fontSize: '12px', color: metaSueldo.excedeCapacidadFisica ? '#FCA5A5' : '#94A3B8', margin: '3px 0 0 0' }}>
                 {metaSueldo.excedeCapacidadFisica
                   ? `Exige despachar ${metaSueldo.unidadesPorHoraMeta} un./hora sin parar (máx. local: ${capacidadMaximaHora}/hr). Tu precio es demasiado bajo para tu capacidad física.`
                   : `Abriendo ${diasOperativosMes} días (${horasOperativasDia} hrs/día), requieres ${metaSueldo.unidadesPorHoraMeta} ventas por hora (capacidad máx: ${capacidadMaximaHora}/hr).`}
@@ -285,8 +295,8 @@ export default function ModuloSueldoObjetivoYLibertad() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <label style={{ fontSize: '10.5px', fontWeight: 700, color: '#475569' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <label style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8' }}>
               Días/Mes:
               <input
                 type="number"
@@ -295,17 +305,19 @@ export default function ModuloSueldoObjetivoYLibertad() {
                 value={diasOperativosMes}
                 onChange={(e) => setDiasOperativosMes(Math.max(1, Math.min(31, Number(e.target.value) || 25)))}
                 style={{
-                  width: '46px',
+                  width: '50px',
                   marginLeft: '4px',
-                  padding: '3px 5px',
+                  padding: '4px 6px',
                   borderRadius: '6px',
-                  border: '1px solid #CBD5E1',
+                  border: '1px solid #1E293B',
                   fontWeight: 700,
-                  fontSize: '11.5px',
+                  fontSize: '12px',
+                  backgroundColor: '#111827',
+                  color: '#F8FAFC',
                 }}
               />
             </label>
-            <label style={{ fontSize: '10.5px', fontWeight: 700, color: '#475569' }}>
+            <label style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8' }}>
               Máx/Hr:
               <input
                 type="number"
@@ -314,13 +326,15 @@ export default function ModuloSueldoObjetivoYLibertad() {
                 value={capacidadMaximaHora}
                 onChange={(e) => setCapacidadMaximaHora(Math.max(1, Number(e.target.value) || 12))}
                 style={{
-                  width: '48px',
+                  width: '50px',
                   marginLeft: '4px',
-                  padding: '3px 5px',
+                  padding: '4px 6px',
                   borderRadius: '6px',
-                  border: '1px solid #CBD5E1',
+                  border: '1px solid #1E293B',
                   fontWeight: 700,
-                  fontSize: '11.5px',
+                  fontSize: '12px',
+                  backgroundColor: '#111827',
+                  color: '#F8FAFC',
                 }}
               />
             </label>
@@ -332,43 +346,47 @@ export default function ModuloSueldoObjetivoYLibertad() {
       <div
         className="bento-col-6 card-ejecutiva"
         style={{
-          padding: '22px',
+          padding: '24px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          gap: '14px',
+          gap: '18px',
+          backgroundColor: '#0D131F',
+          border: '1px solid #1E293B',
+          borderRadius: '16px',
+          boxShadow: '0 12px 30px -10px rgba(0, 0, 0, 0.7)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <ImagenJson3D idIcono="dia_libertad" tamaño={52} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <Icono3DEbit size={48} />
             <div>
               <span
                 style={{
                   fontSize: '10.5px',
                   fontWeight: 800,
-                  color: '#059669',
+                  color: '#10B981',
                   textTransform: 'uppercase',
                   letterSpacing: '0.06em',
-                  backgroundColor: '#ECFDF5',
+                  backgroundColor: 'rgba(16, 185, 129, 0.12)',
                   padding: '3px 8px',
                   borderRadius: '6px',
-                  border: '1px solid #6EE7B7',
+                  border: '1px solid rgba(16, 185, 129, 0.35)',
                   display: 'inline-block',
                   marginBottom: '4px',
                 }}
               >
                 Calendario de cobertura mensual
               </span>
-              <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
+              <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#F8FAFC', margin: 0 }}>
                 ¿En qué día del mes dejas de trabajar para pagar gastos?
               </h2>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>Ritmo:</span>
-            <span className="tabular-nums" style={{ fontSize: '12px', fontWeight: 800, color: '#0F766E', backgroundColor: '#F0FDFA', padding: '4px 8px', borderRadius: '6px', border: '1px solid #99F6E4' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8' }}>Ritmo:</span>
+            <span className="tabular-nums" style={{ fontSize: '12px', fontWeight: 800, color: '#E2F800', backgroundColor: '#111827', padding: '4px 8px', borderRadius: '6px', border: '1px solid #1E293B' }}>
               {ventasEstimadasMensuales} un./mes
             </span>
           </div>
@@ -377,67 +395,67 @@ export default function ModuloSueldoObjetivoYLibertad() {
         {/* Dictamen Horario Exacto del Día de la Libertad */}
         <div
           style={{
-            padding: '13px 16px',
+            padding: '14px 18px',
             borderRadius: '12px',
-            backgroundColor: calendario.lograEquilibrioEnMes ? '#F0FDFA' : '#FEF2F2',
-            border: `1.5px solid ${calendario.lograEquilibrioEnMes ? '#5EEAD4' : '#FCA5A5'}`,
+            backgroundColor: calendario.lograEquilibrioEnMes ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+            border: `1.5px solid ${calendario.lograEquilibrioEnMes ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'}`,
             fontSize: '13px',
-            lineHeight: 1.5,
-            color: '#0F172A',
+            lineHeight: 1.55,
+            color: '#F8FAFC',
           }}
         >
           {calendario.lograEquilibrioEnMes ? (
             <>
               Del <strong>día 1 al {Math.max(1, calendario.diaEquilibrioNumero - 1)}</strong> trabajas para pagar arriendo, sueldos fijos y proveedores.{' '}
               Recién el{' '}
-              <strong style={{ color: '#0F766E', textDecoration: 'underline' }}>
+              <strong style={{ color: '#E2F800', textDecoration: 'underline' }}>
                 día {calendario.diaEquilibrioNumero} a las {calendario.horaLibertadCostos}
               </strong>{' '}
               empiezas a ganar plata para ti.{' '}
               {calendario.lograSueldoEnMes ? (
                 <span>
-                  Y el <strong style={{ color: '#059669' }}>día {calendario.diaSueldoNumero} ({calendario.horaLibertadSueldo})</strong> completas tu sueldo líquido de {formatCLP(sueldoObjetivo)}.
+                  Y el <strong style={{ color: '#10B981' }}>día {calendario.diaSueldoNumero} ({calendario.horaLibertadSueldo})</strong> completas tu sueldo líquido de {formatCLP(sueldoObjetivo)}.
                 </span>
               ) : (
-                <span style={{ color: '#B45309', fontWeight: 600 }}>
+                <span style={{ color: '#F59E0B', fontWeight: 600 }}>
                   (Con el volumen actual de {ventasEstimadasMensuales} un. cubres gastos fijos, pero faltan ventas para completar el 100% de tu sueldo objetivo).
                 </span>
               )}
             </>
           ) : (
-            <strong style={{ color: '#991B1B' }}>
+            <strong style={{ color: '#EF4444' }}>
               Alerta: Con {ventasEstimadasMensuales} unidades/mes trabajas los 30 días del mes sin alcanzar a cubrir los costos fijos ({formatCLP(costoFijoTotal)}). Incrementa el volumen o ajusta tu precio.
             </strong>
           )}
         </div>
 
-        {/* Grilla Visual de 30 Días del Mes */}
+        {/* Grilla Visual de 30 Días del Mes (Dark Tech Obsidian Tokens) */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
-            gap: '6px',
+            gap: '8px',
           }}
         >
           {calendario.diasCalendario.map((d) => {
             const esCostos = d.fase === 'costos_fijos';
             const esSueldo = d.fase === 'sueldo_objetivo';
-            const bg = esCostos ? '#FEF2F2' : esSueldo ? '#EFF6FF' : '#ECFDF5';
+            const bg = esCostos ? 'rgba(239, 68, 68, 0.12)' : esSueldo ? 'rgba(59, 130, 246, 0.12)' : 'rgba(16, 185, 129, 0.14)';
             const border = d.esDiaLibertadCostos || d.esDiaLibertadSueldo
-              ? '2px solid #09090B'
+              ? '2px solid #E2F800'
               : esCostos
-              ? '1px solid #FECACA'
+              ? '1px solid rgba(239, 68, 68, 0.3)'
               : esSueldo
-              ? '1px solid #93C5FD'
-              : '1px solid #6EE7B7';
-            const textColor = esCostos ? '#991B1B' : esSueldo ? '#1E40AF' : '#065F46';
+              ? '1px solid rgba(59, 130, 246, 0.3)'
+              : '1px solid rgba(16, 185, 129, 0.3)';
+            const textColor = esCostos ? '#FCA5A5' : esSueldo ? '#93C5FD' : '#10B981';
 
             return (
               <div
                 key={d.dia}
                 title={`Día ${d.dia}: ${d.etiqueta} (Acumulado neto: ${formatCLP(d.saldoNetoAcumulado)})`}
                 style={{
-                  padding: '6px 4px',
+                  padding: '8px 4px',
                   borderRadius: '8px',
                   backgroundColor: bg,
                   border,
@@ -446,34 +464,40 @@ export default function ModuloSueldoObjetivoYLibertad() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   position: 'relative',
-                  boxShadow: d.esDiaLibertadCostos || d.esDiaLibertadSueldo ? '0 3px 8px rgba(0,0,0,0.14)' : 'none',
+                  boxShadow: d.esDiaLibertadCostos || d.esDiaLibertadSueldo ? '0 0 15px rgba(226, 248, 0, 0.4)' : 'none',
+                  transition: 'transform 0.15s ease',
                 }}
               >
-                <span className="tabular-nums" style={{ fontSize: '12px', fontWeight: 800, color: textColor }}>
-                  Día {d.dia}
+                <span className="tabular-nums" style={{ fontSize: '13px', fontWeight: 800, color: textColor }}>
+                  {d.dia}
                 </span>
-                <span style={{ fontSize: '9px', fontWeight: 700, color: textColor, opacity: 0.9, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
-                  {d.esDiaLibertadCostos ? 'LIBERTAD PE' : d.esDiaLibertadSueldo ? 'META SUELDO' : esCostos ? 'Gastos' : esSueldo ? 'Tu Sueldo' : 'Ganancia'}
+                <span style={{ fontSize: '9px', fontWeight: 700, color: textColor, textTransform: 'uppercase', marginTop: '2px' }}>
+                  {d.esDiaLibertadCostos ? 'LIBERTAD' : d.esDiaLibertadSueldo ? 'SUELDO' : esCostos ? 'Gastos' : esSueldo ? 'Sueldo' : 'Utilidad'}
                 </span>
               </div>
             );
           })}
         </div>
 
-        {/* Leyenda de Fases del Mes */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', fontSize: '11px', fontWeight: 600, color: '#475569' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#FECACA', border: '1px solid #EF4444', display: 'inline-block' }} />
-            <span>Días para Pagar Gastos ({calendario.diasParaPagarCostos}d)</span>
+        {/* Leyenda del Calendario */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#94A3B8', borderTop: '1px solid #1E293B', paddingTop: '10px' }}>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '2px', backgroundColor: '#EF4444' }} />
+              Gastos Fijos
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '2px', backgroundColor: '#3B82F6' }} />
+              Tu Sueldo
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '2px', backgroundColor: '#10B981' }} />
+              Utilidad Libre
+            </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#BFDBFE', border: '1px solid #2563EB', display: 'inline-block' }} />
-            <span>Construyendo Tu Sueldo</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#6EE7B7', border: '1px solid #059669', display: 'inline-block' }} />
-            <span>Utilidad Líquida Extra</span>
-          </div>
+          <span style={{ color: '#E2F800', fontWeight: 700 }}>
+            {calendario.diasCalendario.filter((d) => d.fase === 'ganancia_neta').length} días de ganancia limpia
+          </span>
         </div>
       </div>
     </div>

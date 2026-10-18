@@ -2,7 +2,11 @@ import React from 'react';
 import { useAppState } from '../../store/appState.jsx';
 import ProductoRecetaFigura3D from '../svg3d/ProductoRecetaFigura3D.jsx';
 import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
-import ImagenJson3D from '../svg3d/ImagenJson3D.jsx';
+import {
+  Icono3DCosteoInsumos,
+  Icono3DMargen,
+  Icono3DDescuento,
+} from '../icons3d/SistemaIconografia3D.jsx';
 import { formatCLP } from '../../utils/formatters.js';
 
 /**
@@ -10,7 +14,7 @@ import { formatCLP } from '../../utils/formatters.js';
  * Primer bloque del Centro Estratégico: Permite visualizar de un vistazo los insumos,
  * el costo directo, el precio de venta y el margen de contribución de cada producto,
  * y seleccionar el producto activo para simulaciones de precios y descuentos.
- * Cumple estrictamente con la regla de cero emojis.
+ * Cumple con la estética Dark Tech ImpactM5 ($5,000+ USD) y cero emojis.
  */
 export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuentos }) {
   const {
@@ -64,27 +68,29 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
       id="seccion-productos-insumos"
       className="card-ejecutiva"
       style={{
-        padding: '22px',
+        padding: '24px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '18px',
-        border: '1.5px solid #CBD5E1',
-        boxShadow: '0 4px 16px rgba(15, 23, 42, 0.05)',
+        gap: '20px',
+        backgroundColor: '#0D131F',
+        border: '1px solid #1E293B',
+        boxShadow: '0 12px 30px -10px rgba(0, 0, 0, 0.7)',
+        borderRadius: '16px',
       }}
     >
       {/* 1. Cabecera Ejecutiva del Módulo */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <ImagenJson3D idIcono="mina_oro" tamaño={50} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <Icono3DCosteoInsumos size={44} />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span
                 style={{
                   fontSize: '10.5px',
                   fontWeight: 800,
-                  color: '#0F766E',
-                  backgroundColor: '#CCFBF1',
-                  border: '1px solid #99F6E4',
+                  color: '#E2F800',
+                  backgroundColor: 'rgba(226, 248, 0, 0.1)',
+                  border: '1px solid rgba(226, 248, 0, 0.3)',
                   padding: '2px 8px',
                   borderRadius: '4px',
                   textTransform: 'uppercase',
@@ -93,34 +99,34 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
               >
                 1. Catálogo y márgenes
               </span>
-              <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
+              <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
                 {totalProductos} productos configurados
               </span>
             </div>
-            <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#09090B', margin: '4px 0 2px 0' }}>
+            <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#F8FAFC', margin: '4px 0 2px 0' }}>
               Costeo de productos e insumos
             </h2>
-            <p style={{ fontSize: '12.5px', color: '#475569', margin: 0 }}>
-              Haz clic en un producto para revisar sus costos y evaluar su margen.
+            <p style={{ fontSize: '12.5px', color: '#94A3B8', margin: 0 }}>
+              Haz clic en un producto para revisar sus costos y evaluar su margen de contribución.
             </p>
           </div>
         </div>
 
         {/* Resumen Rápido de Indicadores del Portafolio */}
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div
             style={{
-              padding: '6px 12px',
-              borderRadius: '8px',
-              backgroundColor: '#F8FAFC',
-              border: '1px solid #E2E8F0',
+              padding: '8px 14px',
+              borderRadius: '10px',
+              backgroundColor: '#111827',
+              border: '1px solid #1E293B',
               textAlign: 'center',
             }}
           >
-            <span style={{ fontSize: '10px', color: '#64748B', fontWeight: 700, display: 'block', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '10px', color: '#94A3B8', fontWeight: 700, display: 'block', textTransform: 'uppercase' }}>
               Margen Promedio
             </span>
-            <span className="tabular-nums" style={{ fontSize: '14px', fontWeight: 800, color: '#0F766E' }}>
+            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 800, color: '#E2F800' }}>
               {margenPromedio}%
             </span>
           </div>
@@ -128,17 +134,17 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
           {productoEstrella && (
             <div
               style={{
-                padding: '6px 12px',
-                borderRadius: '8px',
-                backgroundColor: '#F0FDFA',
-                border: '1px solid #99F6E4',
+                padding: '8px 14px',
+                borderRadius: '10px',
+                backgroundColor: '#111827',
+                border: '1px solid #1E293B',
                 textAlign: 'center',
               }}
             >
-              <span style={{ fontSize: '10px', color: '#0F766E', fontWeight: 700, display: 'block', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700, display: 'block', textTransform: 'uppercase' }}>
                 Mayor Aporte Unitario
               </span>
-              <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F172A' }}>
+              <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#F8FAFC' }}>
                 {productoEstrella.nombre}
               </span>
             </div>
@@ -151,19 +157,19 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
               className="btn-bacan-secondary"
               title="Ir al generador de recetas para agregar o cambiar ingredientes"
               style={{
-                height: '34px',
-                padding: '0 12px',
+                height: '36px',
+                padding: '0 14px',
                 fontSize: '11.5px',
-                fontWeight: 600,
-                color: '#0F766E',
-                borderColor: '#0F766E',
+                fontWeight: 700,
+                color: '#E2F800',
+                borderColor: '#1E293B',
+                backgroundColor: '#111827',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
+              <Icono3DCosteoInsumos size={16} />
               <span>Editar insumos</span>
             </button>
           )}
@@ -171,20 +177,20 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
       </div>
 
       {/* 2. Rejilla de Selección Rápida de Productos */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Selecciona un producto para simular precios y descuentos:
           </span>
-          <span style={{ fontSize: '11px', color: '#0F766E', fontWeight: 600 }}>
-            Producto Activo: <strong>{productoActivo?.nombre || 'Ninguno'}</strong>
+          <span style={{ fontSize: '11px', color: '#E2F800', fontWeight: 600 }}>
+            Producto Activo: <strong style={{ color: '#FFFFFF' }}>{productoActivo?.nombre || 'Ninguno'}</strong>
           </span>
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: '12px',
           }}
         >
@@ -203,32 +209,32 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                 key={prod.id}
                 onClick={() => cargarRecetaEnOlla(prod)}
                 style={{
-                  backgroundColor: esActivo ? '#F0FDFA' : '#FFFFFF',
+                  backgroundColor: esActivo ? '#131A29' : '#0B0F17',
                   borderRadius: '12px',
-                  border: `2px solid ${esActivo ? '#0F766E' : '#E2E8F0'}`,
+                  border: `2px solid ${esActivo ? '#E2F800' : '#1E293B'}`,
                   boxShadow: esActivo
-                    ? '0 8px 20px -2px rgba(15, 118, 110, 0.18), inset 0 1px 0 #FFFFFF'
-                    : '0 2px 6px -1px rgba(15, 23, 42, 0.05), inset 0 1px 0 #FFFFFF',
+                    ? '0 0 20px rgba(226, 248, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.6)'
+                    : '0 4px 12px rgba(0, 0, 0, 0.4)',
                   padding: '14px 16px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '14px',
-                  transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   position: 'relative',
                 }}
                 onMouseEnter={(e) => {
                   if (!esActivo) {
-                    e.currentTarget.style.borderColor = '#94A3B8';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 14px -2px rgba(15, 23, 42, 0.09)';
+                    e.currentTarget.style.borderColor = 'rgba(226, 248, 0, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(226, 248, 0, 0.1)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!esActivo) {
-                    e.currentTarget.style.borderColor = '#E2E8F0';
+                    e.currentTarget.style.borderColor = '#1E293B';
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 6px -1px rgba(15, 23, 42, 0.05)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.4)';
                   }
                 }}
               >
@@ -249,9 +255,9 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '4px' }}>
                     <h4
                       style={{
-                        fontSize: '13px',
+                        fontSize: '13.5px',
                         fontWeight: 700,
-                        color: esActivo ? '#0F766E' : '#0F172A',
+                        color: esActivo ? '#E2F800' : '#F8FAFC',
                         margin: 0,
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
@@ -265,13 +271,14 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                       <span
                         style={{
                           fontSize: '9.5px',
-                          fontWeight: 700,
-                          backgroundColor: '#0F766E',
-                          color: '#FFFFFF',
+                          fontWeight: 800,
+                          backgroundColor: '#E2F800',
+                          color: '#070A12',
                           padding: '1px 6px',
                           borderRadius: '4px',
                           textTransform: 'uppercase',
                           flexShrink: 0,
+                          letterSpacing: '0.04em',
                         }}
                       >
                         Activo
@@ -281,11 +288,11 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
                     <div>
-                      <span style={{ fontSize: '10px', color: '#64748B', display: 'block' }}>
-                        Precio: <strong className="tabular-nums" style={{ color: '#0F172A' }}>{formatCLP(precioProd)}</strong>
+                      <span style={{ fontSize: '10px', color: '#94A3B8', display: 'block' }}>
+                        Precio: <strong className="tabular-nums" style={{ color: '#F8FAFC' }}>{formatCLP(precioProd)}</strong>
                       </span>
-                      <span style={{ fontSize: '10px', color: '#64748B', display: 'block' }}>
-                        Costo: <strong className="tabular-nums" style={{ color: '#DC2626' }}>{formatCLP(costoProd)}</strong>
+                      <span style={{ fontSize: '10px', color: '#94A3B8', display: 'block' }}>
+                        Costo: <strong className="tabular-nums" style={{ color: '#F87171' }}>{formatCLP(costoProd)}</strong>
                       </span>
                     </div>
 
@@ -295,17 +302,17 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                         style={{
                           fontSize: '11.5px',
                           fontWeight: 800,
-                          color: margenPct >= 50 ? '#059669' : margenPct >= 30 ? '#0F766E' : '#D97706',
-                          backgroundColor: margenPct >= 50 ? '#ECFDF5' : margenPct >= 30 ? '#F0FDFA' : '#FFFBEB',
-                          border: `1px solid ${margenPct >= 50 ? '#A7F3D0' : margenPct >= 30 ? '#99F6E4' : '#FDE68A'}`,
-                          padding: '2px 6px',
+                          color: margenPct >= 50 ? '#10B981' : margenPct >= 30 ? '#E2F800' : '#F59E0B',
+                          backgroundColor: margenPct >= 50 ? 'rgba(16, 185, 129, 0.15)' : margenPct >= 30 ? 'rgba(226, 248, 0, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                          border: `1px solid ${margenPct >= 50 ? 'rgba(16, 185, 129, 0.35)' : margenPct >= 30 ? 'rgba(226, 248, 0, 0.35)' : 'rgba(245, 158, 11, 0.35)'}`,
+                          padding: '2px 7px',
                           borderRadius: '5px',
                           display: 'inline-block',
                         }}
                       >
                         +{margenPct}%
                       </span>
-                      <span className="tabular-nums" style={{ fontSize: '9.5px', color: '#64748B', display: 'block', marginTop: '2px' }}>
+                      <span className="tabular-nums" style={{ fontSize: '9.5px', color: '#94A3B8', display: 'block', marginTop: '2px' }}>
                         {formatCLP(margenPesos)}/u
                       </span>
                     </div>
@@ -321,22 +328,22 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
       {productoActivo && (
         <div
           style={{
-            backgroundColor: '#F8FAFC',
-            borderRadius: '10px',
-            border: '1.5px solid #CBD5E1',
-            padding: '16px 18px',
+            backgroundColor: '#0B0F17',
+            borderRadius: '12px',
+            border: '1px solid #1E293B',
+            padding: '18px 20px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '14px',
           }}
         >
           {/* Cabecera del Detalle */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: '#0F766E', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#E2F800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Estructura de Costeo Directo • {productoActivo.nombre}
               </span>
-              <span style={{ fontSize: '11px', color: '#64748B' }}>
+              <span style={{ fontSize: '11px', color: '#94A3B8' }}>
                 ({ingredientesActivos.length} insumos asignados)
               </span>
             </div>
@@ -348,33 +355,32 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                   onClick={onIrADescuentos}
                   className="btn-bacan-secondary"
                   style={{
-                    height: '28px',
-                    padding: '0 10px',
+                    height: '30px',
+                    padding: '0 12px',
                     fontSize: '11px',
-                    fontWeight: 600,
-                    color: '#DC2626',
-                    borderColor: '#FCA5A5',
-                    backgroundColor: '#FEF2F2',
+                    fontWeight: 700,
+                    color: '#EF4444',
+                    borderColor: 'rgba(239, 68, 68, 0.4)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
                   }}
                 >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="19" y1="5" x2="5" y2="19" />
-                    <circle cx="6.5" cy="6.5" r="2.5" />
-                    <circle cx="17.5" cy="17.5" r="2.5" />
-                  </svg>
+                  <Icono3DDescuento size={14} />
                   <span>Simular Descuento de este Producto &darr;</span>
                 </button>
               )}
             </div>
           </div>
 
-          {/* Desglose de Insumos en Chips / Tabla Técnica */}
+          {/* Desglose de Insumos en Chips Técnicos Obsidian */}
           {ingredientesActivos.length > 0 ? (
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
-                gap: '8px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '10px',
               }}
             >
               {ingredientesActivos.map((ing, idx) => {
@@ -386,11 +392,11 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                   <div
                     key={ing.idAsignado || ing.id || idx}
                     style={{
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: '#111827',
                       borderRadius: '10px',
-                      border: '1px solid #E2E8F0',
-                      boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
-                      padding: '10px 12px',
+                      border: '1px solid #1E293B',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)',
+                      padding: '10px 14px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -409,9 +415,9 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                       <div style={{ minWidth: 0 }}>
                         <span
                           style={{
-                            fontSize: '11.5px',
-                            fontWeight: 600,
-                            color: '#0F172A',
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            color: '#F8FAFC',
                             display: 'block',
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
@@ -420,13 +426,13 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                         >
                           {ing.nombre}
                         </span>
-                        <span style={{ fontSize: '10px', color: '#64748B' }}>
+                        <span style={{ fontSize: '10.5px', color: '#94A3B8' }}>
                           {cant > 1 ? `${cant} x ` : ''}{formatCLP(costoU)} / {ing.unidadMedida || 'un'}
                         </span>
                       </div>
                     </div>
 
-                    <span className="tabular-nums" style={{ fontSize: '11.5px', fontWeight: 700, color: '#DC2626', flexShrink: 0 }}>
+                    <span className="tabular-nums" style={{ fontSize: '12px', fontWeight: 800, color: '#F87171', flexShrink: 0 }}>
                       {formatCLP(aporteTotal)}
                     </span>
                   </div>
@@ -436,14 +442,14 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
           ) : (
             <div
               style={{
-                padding: '16px',
+                padding: '18px',
                 textAlign: 'center',
-                backgroundColor: '#FFFFFF',
-                borderRadius: '8px',
-                border: '1px dashed #CBD5E1',
+                backgroundColor: '#111827',
+                borderRadius: '10px',
+                border: '1px dashed #1E293B',
               }}
             >
-              <p style={{ fontSize: '12px', color: '#64748B', margin: '0 0 8px 0' }}>
+              <p style={{ fontSize: '12px', color: '#94A3B8', margin: '0 0 10px 0' }}>
                 Este producto no tiene insumos individuales asignados todavía.
               </p>
               {onIrAInsumos && (
@@ -451,7 +457,7 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
                   type="button"
                   onClick={onIrAInsumos}
                   className="btn-bacan-secondary"
-                  style={{ height: '30px', padding: '0 12px', fontSize: '11.5px' }}
+                  style={{ height: '32px', padding: '0 14px', fontSize: '11.5px', color: '#E2F800', borderColor: '#1E293B' }}
                 >
                   Agregar Ingredientes en la sección de Costeo
                 </button>
@@ -467,28 +473,28 @@ export default function SelectorProductosYMargenes({ onIrAInsumos, onIrADescuent
               alignItems: 'center',
               flexWrap: 'wrap',
               gap: '12px',
-              backgroundColor: '#FFFFFF',
-              borderRadius: '8px',
-              border: '1px solid #E2E8F0',
-              padding: '10px 14px',
+              backgroundColor: '#111827',
+              borderRadius: '10px',
+              border: '1px solid #1E293B',
+              padding: '12px 16px',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '11px', color: '#64748B' }}>
-                Precio Venta (P): <strong className="tabular-nums" style={{ color: '#0F172A', fontSize: '13px' }}>{formatCLP(precioVentaConsolidado)}</strong>
+              <span style={{ fontSize: '11px', color: '#94A3B8' }}>
+                Precio Venta (P): <strong className="tabular-nums" style={{ color: '#F8FAFC', fontSize: '13.5px' }}>{formatCLP(precioVentaConsolidado)}</strong>
               </span>
-              <span>-</span>
-              <span style={{ fontSize: '11px', color: '#64748B' }}>
-                Costo Insumos (CV): <strong className="tabular-nums" style={{ color: '#DC2626', fontSize: '13px' }}>{formatCLP(costoVariableConsolidado)}</strong>
+              <span style={{ color: '#475569' }}>-</span>
+              <span style={{ fontSize: '11px', color: '#94A3B8' }}>
+                Costo Insumos (CV): <strong className="tabular-nums" style={{ color: '#F87171', fontSize: '13.5px' }}>{formatCLP(costoVariableConsolidado)}</strong>
               </span>
-              <span>=</span>
-              <span style={{ fontSize: '11px', color: '#64748B' }}>
-                Margen Bruto de Contribución: <strong className="tabular-nums" style={{ color: '#0F766E', fontSize: '14px', fontWeight: 800 }}>{formatCLP(Math.max(0, precioVentaConsolidado - costoVariableConsolidado))}</strong>
+              <span style={{ color: '#475569' }}>=</span>
+              <span style={{ fontSize: '11px', color: '#94A3B8' }}>
+                Margen Bruto de Contribución: <strong className="tabular-nums" style={{ color: '#E2F800', fontSize: '14.5px', fontWeight: 800 }}>{formatCLP(Math.max(0, precioVentaConsolidado - costoVariableConsolidado))}</strong>
               </span>
             </div>
 
-            <div style={{ fontSize: '11.5px', color: '#475569' }}>
-              Tras Fugas Reales (IVA/POS/Merma): <strong className="tabular-nums" style={{ color: '#059669', fontWeight: 700 }}>{formatCLP(analisisFugasActivas.margenContribucionReal)} ({analisisFugasActivas.margenBrutoRealPorcentaje}%)</strong>
+            <div style={{ fontSize: '11.5px', color: '#94A3B8' }}>
+              Tras Fugas Reales (IVA/POS/Merma): <strong className="tabular-nums" style={{ color: '#10B981', fontWeight: 800 }}>{formatCLP(analisisFugasActivas.margenContribucionReal)} ({analisisFugasActivas.margenBrutoRealPorcentaje}%)</strong>
             </div>
           </div>
         </div>

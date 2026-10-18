@@ -1,6 +1,10 @@
 import React from 'react';
 import { useAppState } from '../../store/appState.jsx';
-import ImagenJson3D from '../svg3d/ImagenJson3D.jsx';
+import {
+  Icono3DMatriz,
+  Icono3DMargen,
+  Icono3DEbit,
+} from '../icons3d/SistemaIconografia3D.jsx';
 import InsumoFigura3D from '../svg3d/InsumoFigura3D.jsx';
 import { calcularIngenieriaMenuMultiproducto } from '../../core/calculationEngine.js';
 import { formatCLP } from '../../utils/formatters.js';
@@ -33,9 +37,9 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
       subtitulo: 'Alto margen • Se vende mucho',
       iconoId: 'mina_oro',
       consejo: 'No los toques, asegúrate de no quedarte jamás sin stock.',
-      color: '#D97706',
-      bg: '#FFFBEB',
-      borde: '#FCD34D',
+      color: '#E2F800',
+      bg: 'rgba(226, 248, 0, 0.08)',
+      borde: 'rgba(226, 248, 0, 0.35)',
     },
     {
       id: 'gancho',
@@ -43,9 +47,9 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
       subtitulo: 'Bajo margen • Se vende mucho',
       iconoId: 'gancho_comercial',
       consejo: 'Súbeles el precio un 5% o úsalos para vender un complemento caro.',
-      color: '#2563EB',
-      bg: '#EFF6FF',
-      borde: '#93C5FD',
+      color: '#60A5FA',
+      bg: 'rgba(59, 130, 246, 0.08)',
+      borde: 'rgba(59, 130, 246, 0.35)',
     },
     {
       id: 'joya_oculta',
@@ -53,9 +57,9 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
       subtitulo: 'Alto margen • Se vende poco',
       iconoId: 'joya_oculta',
       consejo: 'Dales más visibilidad, te dejan mucha plata cada vez que salen.',
-      color: '#059669',
-      bg: '#ECFDF5',
-      borde: '#6EE7B7',
+      color: '#10B981',
+      bg: 'rgba(16, 185, 129, 0.08)',
+      borde: 'rgba(16, 185, 129, 0.35)',
     },
     {
       id: 'vampiro',
@@ -63,40 +67,53 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
       subtitulo: 'Bajo margen • Se vende poco',
       iconoId: 'vampiro_catalogo',
       consejo: 'Elimínalos del catálogo o sube su margen; solo te quitan tiempo e inventario.',
-      color: '#DC2626',
-      bg: '#FEF2F2',
-      borde: '#FCA5A5',
+      color: '#EF4444',
+      bg: 'rgba(239, 68, 68, 0.08)',
+      borde: 'rgba(239, 68, 68, 0.35)',
     },
   ];
 
   return (
-    <div id="seccion-matriz" className="card-ejecutiva" style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div
+      id="seccion-matriz"
+      className="card-ejecutiva"
+      style={{
+        padding: '24px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '22px',
+        backgroundColor: '#0D131F',
+        border: '1px solid #1E293B',
+        boxShadow: '0 12px 30px -10px rgba(0, 0, 0, 0.7)',
+        borderRadius: '16px',
+      }}
+    >
       {/* Cabecera de Punto de Equilibrio Multi-Producto */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <ImagenJson3D idIcono="mina_oro" tamaño={54} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <Icono3DMatriz size={48} />
           <div>
             <span
               style={{
                 fontSize: '10.5px',
                 fontWeight: 800,
-                color: '#B45309',
+                color: '#E2F800',
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
-                backgroundColor: '#FFFBEB',
+                backgroundColor: 'rgba(226, 248, 0, 0.1)',
                 padding: '3px 8px',
                 borderRadius: '6px',
-                border: '1px solid #FCD34D',
+                border: '1px solid rgba(226, 248, 0, 0.35)',
                 display: 'inline-block',
                 marginBottom: '4px',
               }}
             >
               4. Punto de equilibrio multiproducto
             </span>
-            <h2 className="heading-tight" style={{ fontSize: '17px', fontWeight: 800, color: '#09090B', margin: 0 }}>
+            <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#F8FAFC', margin: 0 }}>
               Rentabilidad por producto y volumen de venta
             </h2>
-            <p style={{ fontSize: '12.5px', color: '#475569', margin: '2px 0 0 0' }}>
+            <p style={{ fontSize: '12.5px', color: '#94A3B8', margin: '3px 0 0 0' }}>
               Ajusta la participación de cada producto para identificar los que sostienen tu negocio y los que reducen tu margen.
             </p>
           </div>
@@ -104,20 +121,20 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
 
         {/* Resumen Ponderado Multi-Producto */}
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <div style={{ padding: '8px 14px', borderRadius: '10px', backgroundColor: '#F8FAFC', border: '1.5px solid #CBD5E1' }}>
-            <span style={{ fontSize: '10px', fontWeight: 700, color: '#64748B', display: 'block', textTransform: 'uppercase' }}>
+          <div style={{ padding: '8px 14px', borderRadius: '10px', backgroundColor: '#111827', border: '1px solid #1E293B' }}>
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', display: 'block', textTransform: 'uppercase' }}>
               Margen Ponderado Mix
             </span>
-            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 800, color: '#0F766E' }}>
+            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 800, color: '#E2F800' }}>
               {formatCLP(ingenieria.margenPonderado)} / venta
             </span>
           </div>
 
-          <div style={{ padding: '8px 14px', borderRadius: '10px', backgroundColor: '#F0FDFA', border: '1.5px solid #5EEAD4' }}>
-            <span style={{ fontSize: '10px', fontWeight: 700, color: '#0F766E', display: 'block', textTransform: 'uppercase' }}>
+          <div style={{ padding: '8px 14px', borderRadius: '10px', backgroundColor: '#111827', border: '1px solid #1E293B' }}>
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#10B981', display: 'block', textTransform: 'uppercase' }}>
               Equilibrio + Tu Sueldo (Mix)
             </span>
-            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 900, color: '#09090B' }}>
+            <span className="tabular-nums" style={{ fontSize: '15px', fontWeight: 900, color: '#F8FAFC' }}>
               {ingenieria.peMultiproductoConSueldoUnidades.toLocaleString('es-CL')} un. ({formatCLP(ingenieria.facturacionEquilibrioConSueldo)})
             </span>
           </div>
@@ -127,20 +144,20 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
       {/* Mix de Ventas Visual con Deslizadores Interactivos */}
       <div
         style={{
-          backgroundColor: '#F8FAFC',
+          backgroundColor: '#0B0F17',
           borderRadius: '12px',
-          border: '1.5px solid #CBD5E1',
-          padding: '16px',
+          border: '1px solid #1E293B',
+          padding: '18px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '12px',
+          gap: '14px',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#E2F800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Mix de Ventas Visual y Cuota de Equilibrio por Producto
           </span>
-          <span style={{ fontSize: '11px', color: '#475569', fontWeight: 600 }}>
+          <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
             Haz clic en cualquier producto para abrirlo en el Costeo de Ingredientes
           </span>
         </div>
@@ -152,14 +169,14 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
               <div
                 key={prod.id}
                 style={{
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: esActivo ? '#131A29' : '#111827',
                   borderRadius: '10px',
-                  border: esActivo ? '2px solid #0F766E' : '1.5px solid #CBD5E1',
-                  padding: '12px 14px',
+                  border: esActivo ? '2px solid #E2F800' : '1px solid #1E293B',
+                  padding: '14px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px',
-                  boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
+                  gap: '10px',
+                  boxShadow: esActivo ? '0 0 15px rgba(226, 248, 0, 0.2)' : '0 2px 6px rgba(0, 0, 0, 0.3)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
@@ -168,20 +185,20 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
                       cargarRecetaEnOlla(prod);
                       if (onEditarProductoEnOllita) onEditarProductoEnOllita(prod);
                     }}
-                    style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', minWidth: 0 }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', minWidth: 0 }}
                   >
                     <InsumoFigura3D
                       nombre={prod.ingredientes?.[0]?.nombre || prod.nombre}
-                      tamaño={32}
+                      tamaño={34}
                       rubro={perfil}
                       tipologia={prod.ingredientes?.[0]?.tipologia}
                     />
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: '#09090B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 800, color: esActivo ? '#E2F800' : '#F8FAFC', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {prod.nombre}
                       </div>
-                      <div className="tabular-nums" style={{ fontSize: '11px', color: '#475569', fontWeight: 600 }}>
-                        Precio: {formatCLP(prod.precioVenta)} • Libre: <strong style={{ color: '#059669' }}>{formatCLP(prod.margenUnitario)}</strong>
+                      <div className="tabular-nums" style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
+                        Precio: {formatCLP(prod.precioVenta)} • Ganancia: <strong style={{ color: '#10B981' }}>{formatCLP(prod.margenUnitario)}</strong>
                       </div>
                     </div>
                   </div>
@@ -191,11 +208,11 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
                     style={{
                       fontSize: '12px',
                       fontWeight: 900,
-                      color: '#0F766E',
-                      backgroundColor: '#F0FDFA',
+                      color: '#E2F800',
+                      backgroundColor: 'rgba(226, 248, 0, 0.1)',
                       padding: '3px 8px',
                       borderRadius: '6px',
-                      border: '1px solid #99F6E4',
+                      border: '1px solid rgba(226, 248, 0, 0.3)',
                     }}
                   >
                     {prod.mixNormalizado}%
@@ -212,9 +229,9 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
                   onChange={(e) => actualizarMixReceta(prod.id, Number(e.target.value))}
                 />
 
-                <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#475569', fontWeight: 600 }}>
-                  <span>Para empatar (PE): <strong>{prod.unidadesEquilibrioBase} un.</strong></span>
-                  <span>Con tu Sueldo: <strong style={{ color: '#0F766E' }}>{prod.unidadesEquilibrioConSueldo} un./mes</strong></span>
+                <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
+                  <span>Para empatar (PE): <strong style={{ color: '#F8FAFC' }}>{prod.unidadesEquilibrioBase} un.</strong></span>
+                  <span>Con tu Sueldo: <strong style={{ color: '#E2F800' }}>{prod.unidadesEquilibrioConSueldo} un./mes</strong></span>
                 </div>
               </div>
             );
@@ -231,39 +248,39 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
               key={cuad.id}
               style={{
                 borderRadius: '14px',
-                border: `1.5px solid ${cuad.borde}`,
+                border: `1px solid ${cuad.borde}`,
                 backgroundColor: cuad.bg,
-                padding: '16px',
+                padding: '18px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                gap: '12px',
+                gap: '14px',
               }}
             >
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <ImagenJson3D idIcono={cuad.iconoId} tamaño={44} />
+                  <Icono3DMargen size={38} />
                   <div>
                     <span style={{ fontSize: '10px', fontWeight: 800, color: cuad.color, textTransform: 'uppercase', display: 'block' }}>
                       {cuad.subtitulo}
                     </span>
-                    <h3 style={{ fontSize: '15.5px', fontWeight: 900, color: '#09090B', margin: 0 }}>
+                    <h3 style={{ fontSize: '16px', fontWeight: 900, color: '#F8FAFC', margin: 0 }}>
                       {cuad.titulo}
                     </h3>
                   </div>
                 </div>
 
-                <p style={{ fontSize: '12px', color: '#334155', margin: '0 0 10px 0', fontWeight: 600, lineHeight: 1.4 }}>
+                <p style={{ fontSize: '12px', color: '#94A3B8', margin: '0 0 12px 0', fontWeight: 500, lineHeight: 1.45 }}>
                   "{cuad.consejo}"
                 </p>
 
                 {itemsCuadrante.length === 0 ? (
                   <div
                     style={{
-                      padding: '10px',
+                      padding: '12px',
                       borderRadius: '8px',
-                      backgroundColor: 'rgba(255,255,255,0.65)',
-                      border: '1px dashed rgba(0,0,0,0.12)',
+                      backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                      border: '1px dashed rgba(255, 255, 255, 0.1)',
                       fontSize: '11.5px',
                       color: '#64748B',
                       textAlign: 'center',
@@ -277,80 +294,63 @@ export default function ModuloIngenieriaMenuMultiproducto({ onEditarProductoEnOl
                       <div
                         key={item.id}
                         style={{
-                          backgroundColor: '#FFFFFF',
+                          backgroundColor: '#111827',
                           borderRadius: '10px',
-                          border: '1px solid rgba(0,0,0,0.1)',
-                          padding: '9px 11px',
+                          border: '1px solid #1E293B',
+                          padding: '10px 12px',
                           display: 'flex',
                           flexDirection: 'column',
                           gap: '6px',
-                          boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)',
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontSize: '12.5px', fontWeight: 800, color: '#09090B' }}>{item.nombre}</span>
+                          <span style={{ fontSize: '13px', fontWeight: 800, color: '#F8FAFC' }}>{item.nombre}</span>
                           <span className="tabular-nums" style={{ fontSize: '11px', fontWeight: 800, color: cuad.color }}>
                             Mix {item.mixNormalizado}%
                           </span>
                         </div>
 
-                        <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#475569' }}>
+                        <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94A3B8' }}>
                           <span>Venta: {formatCLP(item.precioVenta)}</span>
-                          <span>Ganancia/u: <strong>{formatCLP(item.margenUnitario)} ({item.margenPorcentaje}%)</strong></span>
+                          <span>Ganancia: <strong style={{ color: '#10B981' }}>{formatCLP(item.margenUnitario)} ({item.margenPorcentaje}%)</strong></span>
                         </div>
 
-                        {/* Botones Bacanes de Acción Directa según Cuadrante */}
-                        <div style={{ display: 'flex', gap: '6px', marginTop: '2px' }}>
-                          {cuad.id === 'gancho' && (
-                            <button
-                              type="button"
-                              onClick={() => ajustarPrecioRecetaPorId(item.id, 1.05)}
-                              className="btn-bacan-primary"
-                              style={{ height: '26px', padding: '0 8px', fontSize: '10.5px', flex: 1 }}
-                            >
-                              Subir Precio +5%
-                            </button>
-                          )}
-                          {cuad.id === 'joya_oculta' && (
-                            <button
-                              type="button"
-                              onClick={() => actualizarMixReceta(item.id, item.mixPeso + 15)}
-                              className="btn-bacan-primary"
-                              style={{ height: '26px', padding: '0 8px', fontSize: '10.5px', flex: 1 }}
-                            >
-                              Impulsar Ventas (+Mix)
-                            </button>
-                          )}
-                          {cuad.id === 'vampiro' && (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => ajustarPrecioRecetaPorId(item.id, 1.12)}
-                                className="btn-bacan-secondary"
-                                style={{ height: '26px', padding: '0 8px', fontSize: '10.5px', flex: 1 }}
-                              >
-                                Subir +12%
-                              </button>
-                              {recetas.length > 1 && (
-                                <button
-                                  type="button"
-                                  onClick={() => eliminarRecetaPorId(item.id)}
-                                  className="btn-bacan-secondary"
-                                  style={{ height: '26px', padding: '0 8px', fontSize: '10.5px', color: '#DC2626', borderColor: '#FCA5A5' }}
-                                >
-                                  Eliminar
-                                </button>
-                              )}
-                            </>
-                          )}
+                        <div style={{ display: 'flex', gap: '6px', marginTop: '4px' }}>
                           <button
                             type="button"
-                            onClick={() => cargarRecetaEnOlla(item)}
-                            className="btn-bacan-secondary"
-                            style={{ height: '26px', padding: '0 8px', fontSize: '10.5px' }}
+                            onClick={() => ajustarPrecioRecetaPorId(item.id, Math.round(item.precioVenta * 1.05))}
+                            style={{
+                              fontSize: '10px',
+                              padding: '3px 8px',
+                              borderRadius: '4px',
+                              backgroundColor: '#1E293B',
+                              color: '#E2F800',
+                              border: '1px solid rgba(226, 248, 0, 0.3)',
+                              cursor: 'pointer',
+                              fontWeight: 700,
+                            }}
                           >
-                            Ver Detalles
+                            +5% Precio
                           </button>
+                          {cuad.id === 'vampiro' && (
+                            <button
+                              type="button"
+                              onClick={() => eliminarRecetaPorId(item.id)}
+                              style={{
+                                fontSize: '10px',
+                                padding: '3px 8px',
+                                borderRadius: '4px',
+                                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                                color: '#EF4444',
+                                border: '1px solid rgba(239, 68, 68, 0.4)',
+                                cursor: 'pointer',
+                                fontWeight: 700,
+                              }}
+                            >
+                              Eliminar del Menú
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}

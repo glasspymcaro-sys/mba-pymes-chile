@@ -299,7 +299,7 @@ export default function DashboardPrincipal({ onIrAInsumos }) {
                         : '100%'}
                     </span>
                   </div>
-                  <div style={{ width: '100%', height: '8px', backgroundColor: '#E2E8F0', borderRadius: '999px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '8px', backgroundColor: '#1E293B', borderRadius: '999px', overflow: 'hidden' }}>
                     <div
                       style={{
                         width: `${puntoEquilibrioConSueldoUnidades > 0 ? Math.min(100, Math.round((ventasEfectivas / puntoEquilibrioConSueldoUnidades) * 100)) : 100}%`,

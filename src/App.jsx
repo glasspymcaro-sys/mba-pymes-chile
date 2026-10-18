@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppStateProvider, useAppState } from './store/appState.jsx';
 import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 import DashboardPrincipal from './views/DashboardPrincipal.jsx';
@@ -9,6 +9,16 @@ import CentroHistorialCatalogo from './components/history/CentroHistorialCatalog
 import AuthModal from './components/auth/AuthModal.jsx';
 import GuiaEmprendedorModal from './components/help/GuiaEmprendedorModal.jsx';
 import Logo from './components/illustrations/Logo.jsx';
+import {
+  Icono3DRestaurante,
+  Icono3DComercio,
+  Icono3DServicios,
+  Icono3DCentroEstrategico,
+  Icono3DCosteoInsumos,
+  Icono3DCostosFijos,
+  Icono3DHistorial,
+  Icono3DAyuda,
+} from './components/icons3d/SistemaIconografia3D.jsx';
 import { formatCLP } from './utils/formatters.js';
 
 function ContenidoPrincipal() {
@@ -42,6 +52,19 @@ function ContenidoPrincipal() {
     return !sessionStorage.getItem('mba_auth_dismissed') && !localStorage.getItem('mba_pymes_user');
   });
   const [modalGuiaAbierto, setModalGuiaAbierto] = useState(false);
+  const [scrollProgreso, setScrollProgreso] = useState(0);
+
+  // Escáner de desplazamiento único e indicador de lectura
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgreso(Math.min(100, Math.max(0, (window.scrollY / totalScroll) * 100)));
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Cálculos de Punto de Equilibrio con Fugas Reales y Sueldo Objetivo
   const margenContribucion = Math.max(0, Number(analisisFugasActivas?.margenContribucionReal || (precioVentaConsolidado - costoVariableConsolidado)));
@@ -52,6 +75,21 @@ function ContenidoPrincipal() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
+      {/* Barra de progreso de desplazamiento dinámico (Electric Lime Glow) */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          height: '3px',
+          width: `${scrollProgreso}%`,
+          backgroundColor: '#E2F800',
+          boxShadow: '0 0 10px #E2F800, 0 0 20px #E2F800',
+          zIndex: 100,
+          transition: 'width 0.1s cubic-bezier(0.25, 1, 0.5, 1)',
+        }}
+      />
+
       {/* 1. Barra de Navegación Superior con Bordes Biselados y Botones Táctiles ImpactM5 */}
       <header
         style={{
@@ -94,16 +132,11 @@ function ContenidoPrincipal() {
                 padding: '0 11px',
                 fontSize: '11.5px',
                 borderRadius: '6px',
+                gap: '6px',
               }}
               title="Gastronomía / Restaurantes"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
-                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-                <line x1="6" y1="1" x2="6" y2="4" />
-                <line x1="10" y1="1" x2="10" y2="4" />
-                <line x1="14" y1="1" x2="14" y2="4" />
-              </svg>
+              <Icono3DRestaurante size={16} />
               Restaurante
             </button>
 
@@ -115,14 +148,11 @@ function ContenidoPrincipal() {
                 padding: '0 11px',
                 fontSize: '11.5px',
                 borderRadius: '6px',
+                gap: '6px',
               }}
               title="Comercio / Retail / Minimarket (Góndola)"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
+              <Icono3DComercio size={16} />
               Comercio / Retail
             </button>
 
@@ -134,13 +164,11 @@ function ContenidoPrincipal() {
                 padding: '0 11px',
                 fontSize: '11.5px',
                 borderRadius: '6px',
+                gap: '6px',
               }}
               title="Agencia / Servicios / Consultoría (Mesa de Proyectos)"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-              </svg>
+              <Icono3DServicios size={16} />
               Servicios
             </button>
           </div>
@@ -198,41 +226,34 @@ function ContenidoPrincipal() {
           )}
         </div>
 
-        {/* Navegación Principal con Botones Bacanes */}
+        {/* Navegación Principal con Botones Bacanes y Sistema de Iconos 3D PBR */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setVista('punto_equilibrio')}
             className={vista === 'punto_equilibrio' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
-            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
+            style={{ height: '38px', padding: '0 14px', fontSize: '12.5px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="20" x2="18" y2="10" />
-              <line x1="12" y1="20" x2="12" y2="4" />
-              <line x1="6" y1="20" x2="6" y2="14" />
-            </svg>
-            Centro Estratégico & Precios
+            <Icono3DCentroEstrategico size={18} />
+            <span>Centro Estratégico & Precios</span>
           </button>
 
           <button
             onClick={() => setVista('insumos')}
             className={vista === 'insumos' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
-            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
+            style={{ height: '38px', padding: '0 14px', fontSize: '12.5px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 2 7 12 12 22 7 12 2" />
-              <polyline points="2 17 12 22 22 17" />
-              <polyline points="2 12 12 17 22 12" />
-            </svg>
-            Costeo & Insumos
+            <Icono3DCosteoInsumos size={18} />
+            <span>Costeo & Insumos</span>
             <span
               className="tabular-nums"
               style={{
                 fontSize: '10.5px',
-                padding: '1px 6px',
+                padding: '2px 7px',
                 borderRadius: '5px',
-                backgroundColor: vista === 'insumos' ? 'rgba(255,255,255,0.22)' : '#E2E8F0',
-                color: vista === 'insumos' ? '#FFFFFF' : '#09090B',
+                backgroundColor: vista === 'insumos' ? '#070A12' : '#1E293B',
+                color: vista === 'insumos' ? '#E2F800' : '#F8FAFC',
                 fontWeight: 800,
+                border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
               {insumos.length}
@@ -242,24 +263,20 @@ function ContenidoPrincipal() {
           <button
             onClick={() => setVista('costos_fijos')}
             className={vista === 'costos_fijos' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
-            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
+            style={{ height: '38px', padding: '0 14px', fontSize: '12.5px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            Costos Fijos
+            <Icono3DCostosFijos size={18} />
+            <span>Costos Fijos</span>
             <span
               className="tabular-nums"
               style={{
                 fontSize: '10.5px',
-                padding: '1px 6px',
+                padding: '2px 7px',
                 borderRadius: '5px',
-                backgroundColor: vista === 'costos_fijos' ? 'rgba(255,255,255,0.22)' : '#E2E8F0',
-                color: vista === 'costos_fijos' ? '#FFFFFF' : '#09090B',
+                backgroundColor: vista === 'costos_fijos' ? '#070A12' : '#1E293B',
+                color: vista === 'costos_fijos' ? '#E2F800' : '#F8FAFC',
                 fontWeight: 800,
+                border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
               {costosFijos.length}
@@ -269,23 +286,21 @@ function ContenidoPrincipal() {
           <button
             onClick={() => setVista('historial')}
             className={vista === 'historial' ? 'btn-bacan-primary' : 'btn-bacan-secondary'}
-            style={{ height: '36px', padding: '0 14px', fontSize: '12.5px' }}
+            style={{ height: '38px', padding: '0 14px', fontSize: '12.5px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             title="Historial de recetas guardadas, catálogo y materias primas"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-            Historial & Catálogo
+            <Icono3DHistorial size={18} />
+            <span>Historial & Catálogo</span>
             <span
               className="tabular-nums"
               style={{
                 fontSize: '10.5px',
-                padding: '1px 6px',
+                padding: '2px 7px',
                 borderRadius: '5px',
-                backgroundColor: vista === 'historial' ? 'rgba(255,255,255,0.22)' : '#E2E8F0',
-                color: vista === 'historial' ? '#FFFFFF' : '#09090B',
+                backgroundColor: vista === 'historial' ? '#070A12' : '#1E293B',
+                color: vista === 'historial' ? '#E2F800' : '#F8FAFC',
                 fontWeight: 800,
+                border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
               {recetas?.length || 0}
@@ -299,9 +314,9 @@ function ContenidoPrincipal() {
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
-              height: '36px',
-              padding: '0 13px',
+              gap: '8px',
+              height: '38px',
+              padding: '0 14px',
               fontSize: '12px',
               fontWeight: 800,
               letterSpacing: '0.04em',
@@ -311,17 +326,13 @@ function ContenidoPrincipal() {
               border: '1.5px solid #D4E800',
               borderRadius: '8px',
               cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(226, 248, 0, 0.35)',
+              boxShadow: '0 2px 12px rgba(226, 248, 0, 0.4)',
               transition: 'all 0.15s ease',
             }}
             title="Aprende los conceptos clave de la aplicación sin rodeos ni jerga"
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-            ¿Necesitas Ayuda?
+            <Icono3DAyuda size={18} />
+            <span>¿Necesitas Ayuda?</span>
           </button>
 
           {user ? (
@@ -491,11 +502,7 @@ function ContenidoPrincipal() {
           onClick={() => setVista('punto_equilibrio')}
           className={`app-mobile-nav-item ${vista === 'punto_equilibrio' ? 'active' : ''}`}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10" />
-            <line x1="12" y1="20" x2="12" y2="4" />
-            <line x1="6" y1="20" x2="6" y2="14" />
-          </svg>
+          <Icono3DCentroEstrategico size={22} />
           <span>Equilibrio</span>
         </button>
 
@@ -504,11 +511,7 @@ function ContenidoPrincipal() {
           onClick={() => setVista('insumos')}
           className={`app-mobile-nav-item ${vista === 'insumos' ? 'active' : ''}`}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="12 2 2 7 12 12 22 7 12 2" />
-            <polyline points="2 17 12 22 22 17" />
-            <polyline points="2 12 12 17 22 12" />
-          </svg>
+          <Icono3DCosteoInsumos size={22} />
           <span>Costeo</span>
         </button>
 
@@ -517,14 +520,7 @@ function ContenidoPrincipal() {
           onClick={() => setVista('costos_fijos')}
           className={`app-mobile-nav-item ${vista === 'costos_fijos' ? 'active' : ''}`}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="8" y1="6" x2="21" y2="6" />
-            <line x1="8" y1="12" x2="21" y2="12" />
-            <line x1="8" y1="18" x2="21" y2="18" />
-            <line x1="3" y1="6" x2="3.01" y2="6" />
-            <line x1="3" y1="12" x2="3.01" y2="12" />
-            <line x1="3" y1="18" x2="3.01" y2="18" />
-          </svg>
+          <Icono3DCostosFijos size={22} />
           <span>Costos Fijos</span>
         </button>
 
@@ -533,10 +529,7 @@ function ContenidoPrincipal() {
           onClick={() => setVista('historial')}
           className={`app-mobile-nav-item ${vista === 'historial' ? 'active' : ''}`}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
+          <Icono3DHistorial size={22} />
           <span>Historial</span>
         </button>
 
@@ -545,14 +538,10 @@ function ContenidoPrincipal() {
           onClick={() => setModalGuiaAbierto(true)}
           className="app-mobile-nav-item"
         >
-          <div style={{ backgroundColor: '#E2F800', padding: '2px 8px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0B0F17" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
+          <div style={{ backgroundColor: '#E2F800', padding: '3px 8px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icono3DAyuda size={18} />
           </div>
-          <span style={{ color: '#0B0F17', fontWeight: 800 }}>Ayuda</span>
+          <span style={{ color: '#E2F800', fontWeight: 800 }}>Ayuda</span>
         </button>
       </nav>
 

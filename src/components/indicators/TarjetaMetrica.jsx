@@ -1,8 +1,14 @@
 import React from 'react';
+import {
+  Icono3DPuntoEquilibrio,
+  Icono3DEbit,
+  Icono3DMargen,
+  Icono3DCostosFijos,
+} from '../icons3d/SistemaIconografia3D.jsx';
 
 /**
- * Componente KpiCard de Ingeniería Financiera (Paper Technical Design System)
- * Incluye iconografía vectorial dedicada (strokeWidth="1.5"), cifras en tabular-nums y badge semántico.
+ * Componente KpiCard de Ingeniería Financiera (Estética ImpactM5 Dark Tech)
+ * Incluye iconografía 3D PBR dedicada, cifras en tabular-nums y badge semántico.
  */
 export default function TarjetaMetrica({
   titulo,
@@ -16,65 +22,56 @@ export default function TarjetaMetrica({
     color.includes('green') ||
     color.includes('success') ||
     color === '#059669' ||
+    color === '#10B981' ||
     tendencia === 'Solvente' ||
     tendencia === 'Cubierto' ||
-    tendencia === 'Ganancia';
+    tendencia === 'Ganancia' ||
+    tendencia === 'Meta Lograda' ||
+    tendencia === 'Positivo';
+
   const esPeligro =
     color.includes('red') ||
     color.includes('danger') ||
     color === '#DC2626' ||
+    color === '#EF4444' ||
     tendencia === 'Déficit' ||
     tendencia === 'Pérdida';
 
   const renderIcono = () => {
     if (icono === 'ebit' || titulo.toLowerCase().includes('resultado')) {
-      return (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-          <polyline points="17 6 23 6 23 12" />
-        </svg>
-      );
+      return <Icono3DEbit size={26} />;
     }
-    if (icono === 'margen' || titulo.toLowerCase().includes('contribución')) {
-      return (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-      );
+    if (icono === 'margen' || titulo.toLowerCase().includes('contribución') || titulo.toLowerCase().includes('ganancia')) {
+      return <Icono3DMargen size={26} />;
     }
     if (icono === 'fijos' || titulo.toLowerCase().includes('fija') || titulo.toLowerCase().includes('fijo')) {
-      return (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-          <line x1="16" y1="2" x2="16" y2="6" />
-          <line x1="8" y1="2" x2="8" y2="6" />
-          <line x1="3" y1="10" x2="21" y2="10" />
-        </svg>
-      );
+      return <Icono3DCostosFijos size={26} />;
     }
-    return (
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="8" x2="12" y2="12" />
-        <line x1="12" y1="16" x2="12.01" y2="16" />
-      </svg>
-    );
+    return <Icono3DPuntoEquilibrio size={26} />;
   };
 
   return (
     <div
       style={{
-        backgroundColor: 'var(--color-surface)',
-        borderRadius: '10px',
-        border: '1px solid var(--color-border)',
-        boxShadow: 'var(--shadow-card)',
+        backgroundColor: '#0D131F',
+        borderRadius: '12px',
+        border: '1px solid #1E293B',
+        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)',
         padding: '18px 20px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         minHeight: '132px',
         height: '100%',
-        transition: 'all 0.15s ease',
+        transition: 'all 0.2s ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(226, 248, 0, 0.4)';
+        e.currentTarget.style.transform = 'translateY(-2px)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = '#1E293B';
+        e.currentTarget.style.transform = 'translateY(0)';
       }}
     >
       <div>
@@ -82,10 +79,10 @@ export default function TarjetaMetrica({
           <span
             style={{
               fontSize: '11px',
-              fontWeight: 600,
-              color: 'var(--color-muted-foreground)',
+              fontWeight: 800,
+              color: '#94A3B8',
               textTransform: 'uppercase',
-              letterSpacing: '0.05em',
+              letterSpacing: '0.07em',
             }}
           >
             {titulo}
@@ -93,17 +90,26 @@ export default function TarjetaMetrica({
 
           <div
             style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '8px',
-              backgroundColor: esExito ? '#ECFDF5' : esPeligro ? '#FEF2F2' : '#F0FDFA',
-              border: `1.5px solid ${esExito ? '#6EE7B7' : esPeligro ? '#FCA5A5' : '#99F6E4'}`,
-              color: esExito ? '#059669' : esPeligro ? '#DC2626' : '#0F766E',
+              width: '36px',
+              height: '36px',
+              borderRadius: '9px',
+              backgroundColor: esExito
+                ? 'rgba(16, 185, 129, 0.15)'
+                : esPeligro
+                ? 'rgba(239, 68, 68, 0.15)'
+                : 'rgba(226, 248, 0, 0.12)',
+              border: `1px solid ${
+                esExito
+                  ? 'rgba(16, 185, 129, 0.4)'
+                  : esPeligro
+                  ? 'rgba(239, 68, 68, 0.4)'
+                  : 'rgba(226, 248, 0, 0.35)'
+              }`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: '0 2px 5px rgba(15, 23, 42, 0.05), inset 0 1px 0 #FFFFFF',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
             }}
           >
             {renderIcono()}

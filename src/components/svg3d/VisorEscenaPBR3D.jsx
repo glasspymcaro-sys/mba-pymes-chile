@@ -44,7 +44,7 @@ export default function VisorEscenaPBR3D({
     <div
       className="surface-card"
       style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '10px',
         border: '1px solid var(--color-border)',
         boxShadow: 'var(--shadow-card)',
@@ -282,11 +282,11 @@ export default function VisorEscenaPBR3D({
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: 'var(--color-surface-elevated)',
                     border: '1px solid var(--color-border)',
                     padding: '3px 8px 3px 4px',
                     borderRadius: '6px',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
                   }}
                 >
                   <InsumoFigura3D nombre={item.nombre} tamaño={22} imagenFalUrl={item.imagenFalUrl} rubro={perfil} tipologia={item.tipologia} />

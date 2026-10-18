@@ -197,8 +197,8 @@ export default function GraficoPuntoEquilibrio({
               gap: '6px',
               padding: '4px 10px',
               borderRadius: '6px',
-              border: '1px solid var(--color-border)',
-              backgroundColor: '#FFFFFF',
+              border: '1px solid #1E293B',
+              backgroundColor: '#111827',
               fontSize: '11.5px',
               fontWeight: 600,
               color: 'var(--color-foreground)',
@@ -215,8 +215,8 @@ export default function GraficoPuntoEquilibrio({
               gap: '6px',
               padding: '4px 10px',
               borderRadius: '6px',
-              border: '1px solid var(--color-border)',
-              backgroundColor: '#FFFFFF',
+              border: '1px solid #1E293B',
+              backgroundColor: '#111827',
               fontSize: '11.5px',
               fontWeight: 600,
               color: 'var(--color-foreground)',
@@ -233,11 +233,11 @@ export default function GraficoPuntoEquilibrio({
               gap: '6px',
               padding: '4px 12px',
               borderRadius: '6px',
-              border: '1px solid var(--color-brand-300)',
-              backgroundColor: 'var(--color-brand-50)',
+              border: '1px solid rgba(226, 248, 0, 0.3)',
+              backgroundColor: 'rgba(226, 248, 0, 0.1)',
               fontSize: '12px',
               fontWeight: 700,
-              color: 'var(--color-brand-900)',
+              color: '#E2F800',
             }}
           >
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-brand-700)', display: 'inline-block', boxShadow: '0 0 0 2px rgba(15,118,110,0.25)' }} />
@@ -255,9 +255,9 @@ export default function GraficoPuntoEquilibrio({
               padding: '0 12px',
               fontSize: '12px',
               fontWeight: 600,
-              color: '#0F172A',
-              backgroundColor: '#FFFFFF',
-              border: '1.5px solid #0F766E',
+              color: '#E2F800',
+              backgroundColor: '#111827',
+              border: '1.5px solid #E2F800',
               borderRadius: '6px',
               display: 'inline-flex',
               alignItems: 'center',
@@ -283,7 +283,7 @@ export default function GraficoPuntoEquilibrio({
           width: '100%',
           borderRadius: '10px',
           border: '1px solid var(--color-border)',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#111827',
           position: 'relative',
           padding: '14px 8px',
           boxSizing: 'border-box',
@@ -511,7 +511,7 @@ export default function GraficoPuntoEquilibrio({
               position: 'absolute',
               top: '16px',
               right: '16px',
-              backgroundColor: '#FFFFFF',
+              backgroundColor: '#111827',
               border: '1px solid var(--color-border)',
               borderRadius: '8px',
               padding: '10px 14px',
@@ -611,9 +611,9 @@ export default function GraficoPuntoEquilibrio({
         >
           <div
             style={{
-              backgroundColor: '#FFFFFF',
+              backgroundColor: '#0D131F',
               borderRadius: '14px',
-              border: '1px solid #CBD5E1',
+              border: '1px solid #1E293B',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
               width: '100%',
               maxWidth: '1020px',
@@ -626,16 +626,16 @@ export default function GraficoPuntoEquilibrio({
             }}
           >
             {/* Cabecera del Modal */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #E2E8F0', paddingBottom: '14px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #1E293B', paddingBottom: '14px' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span
                     style={{
                       fontSize: '10.5px',
                       fontWeight: 700,
-                      color: '#0F766E',
-                      backgroundColor: '#CCFBF1',
-                      border: '1px solid #99F6E4',
+                      color: '#E2F800',
+                      backgroundColor: 'rgba(226, 248, 0, 0.1)',
+                      border: '1px solid rgba(226, 248, 0, 0.3)',
                       padding: '2px 8px',
                       borderRadius: '4px',
                       textTransform: 'uppercase',
@@ -648,10 +648,10 @@ export default function GraficoPuntoEquilibrio({
                     Vista detallada
                   </span>
                 </div>
-                <h2 className="heading-tight" style={{ fontSize: '20px', fontWeight: 700, color: '#0F172A', margin: '6px 0 2px 0' }}>
+                <h2 className="heading-tight" style={{ fontSize: '20px', fontWeight: 700, color: '#F8FAFC', margin: '6px 0 2px 0' }}>
                   Simulador de punto de equilibrio y volumen
                 </h2>
-                <p style={{ fontSize: '13px', color: '#475569', margin: 0 }}>
+                <p style={{ fontSize: '13px', color: '#94A3B8', margin: 0 }}>
                   Mueve la barra para revisar ingresos, costos y ganancias en cada nivel de venta.
                 </p>
               </div>
@@ -665,9 +665,9 @@ export default function GraficoPuntoEquilibrio({
                   height: '36px',
                   width: '36px',
                   borderRadius: '8px',
-                  border: '1px solid #E2E8F0',
-                  backgroundColor: '#F8FAFC',
-                  color: '#475569',
+                  border: '1px solid #1E293B',
+                  backgroundColor: '#111827',
+                  color: '#94A3B8',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -690,15 +690,15 @@ export default function GraficoPuntoEquilibrio({
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 gap: '12px',
-                backgroundColor: '#F8FAFC',
-                border: '1px solid #E2E8F0',
+                backgroundColor: '#111827',
+                border: '1px solid #1E293B',
                 borderRadius: '10px',
                 padding: '10px 14px',
               }}
             >
               {/* Selector de Escala de Proyección */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                   Ampliación del Rango:
                 </span>
                 <div style={{ display: 'inline-flex', gap: '4px' }}>
@@ -717,8 +717,8 @@ export default function GraficoPuntoEquilibrio({
                         fontWeight: escalaZoom === z.id ? 700 : 500,
                         borderRadius: '6px',
                         border: `1px solid ${escalaZoom === z.id ? '#0F766E' : '#CBD5E1'}`,
-                        backgroundColor: escalaZoom === z.id ? '#0F766E' : '#FFFFFF',
-                        color: escalaZoom === z.id ? '#FFFFFF' : '#334155',
+                        backgroundColor: escalaZoom === z.id ? '#1E293B' : '#0B0F17',
+                        color: escalaZoom === z.id ? '#E2F800' : '#94A3B8',
                         cursor: 'pointer',
                       }}
                     >
@@ -730,7 +730,7 @@ export default function GraficoPuntoEquilibrio({
 
               {/* Saltos Rápidos de Simulación */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                   Saltar a:
                 </span>
                 <button
@@ -740,9 +740,9 @@ export default function GraficoPuntoEquilibrio({
                     padding: '3px 8px',
                     fontSize: '11px',
                     borderRadius: '5px',
-                    border: '1px solid #E2E8F0',
-                    backgroundColor: '#FFFFFF',
-                    color: '#334155',
+                    border: '1px solid #1E293B',
+                    backgroundColor: '#111827',
+                    color: '#94A3B8',
                     cursor: 'pointer',
                   }}
                 >
@@ -790,9 +790,9 @@ export default function GraficoPuntoEquilibrio({
                       padding: '3px 8px',
                       fontSize: '11px',
                       borderRadius: '5px',
-                      border: '1px solid #CBD5E1',
-                      backgroundColor: '#FFFFFF',
-                      color: '#0F172A',
+                      border: '1px solid #1E293B',
+                      backgroundColor: '#111827',
+                      color: '#F8FAFC',
                       cursor: 'pointer',
                     }}
                   >
@@ -805,7 +805,7 @@ export default function GraficoPuntoEquilibrio({
             {/* CONTROL DESLIZANTE DE VOLUMEN (EL SCRUBBER: 'MOVERTE POR EL GRÁFICO') */}
             <div
               style={{
-                backgroundColor: '#F0FDFA',
+                backgroundColor: '#0B0F17',
                 border: '1.5px solid #5EEAD4',
                 borderRadius: '10px',
                 padding: '14px 18px',
@@ -819,7 +819,7 @@ export default function GraficoPuntoEquilibrio({
                   MOVERTE POR EL GRÁFICO: Desliza las unidades para inspeccionar cada punto
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '12px', color: '#475569' }}>
+                  <span style={{ fontSize: '12px', color: '#94A3B8' }}>
                     Nivel simulado:
                   </span>
                   <span
@@ -828,7 +828,7 @@ export default function GraficoPuntoEquilibrio({
                       fontSize: '16px',
                       fontWeight: 800,
                       color: '#0F766E',
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: '#111827',
                       border: '1px solid #99F6E4',
                       padding: '2px 10px',
                       borderRadius: '6px',
@@ -866,8 +866,8 @@ export default function GraficoPuntoEquilibrio({
               style={{
                 width: '100%',
                 borderRadius: '10px',
-                border: '1px solid #E2E8F0',
-                backgroundColor: '#FFFFFF',
+                border: '1px solid #1E293B',
+                backgroundColor: '#111827',
                 position: 'relative',
                 padding: '16px 10px',
                 boxSizing: 'border-box',
@@ -1111,20 +1111,20 @@ export default function GraficoPuntoEquilibrio({
               }}
             >
               {/* Tarjeta 1: Unidades Simuladas & Cobertura */}
-              <div style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '12px' }}>
+              <div style={{ backgroundColor: '#111827', border: '1px solid #1E293B', borderRadius: '8px', padding: '12px' }}>
                 <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#64748B', display: 'block', textTransform: 'uppercase' }}>
                   Volumen Seleccionado
                 </span>
-                <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A' }}>
+                <span className="tabular-nums" style={{ fontSize: '18px', fontWeight: 800, color: '#F8FAFC' }}>
                   {unidadesScrubber.toLocaleString('es-CL')} un.
                 </span>
-                <div style={{ fontSize: '11.5px', color: '#475569', marginTop: '2px' }}>
+                <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '2px' }}>
                   Cobertura del Equilibrio: <strong>{porcentajeCoberturaPE}%</strong>
                 </div>
               </div>
 
               {/* Tarjeta 2: Ingresos Proyectados */}
-              <div style={{ backgroundColor: '#F0FDFA', border: '1px solid #CCFBF1', borderRadius: '8px', padding: '12px' }}>
+              <div style={{ backgroundColor: '#0B0F17', border: '1px solid #1E293B', borderRadius: '8px', padding: '12px' }}>
                 <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#0F766E', display: 'block', textTransform: 'uppercase' }}>
                   Ingresos Totales (Venta)
                 </span>

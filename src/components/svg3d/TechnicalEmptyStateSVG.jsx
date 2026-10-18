@@ -20,7 +20,7 @@ export default function TechnicalEmptyStateSVG({
         borderRadius: '10px',
         padding: '28px 20px',
         textAlign: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--color-surface)',
         boxShadow: 'var(--shadow-card)',
         display: 'flex',
         flexDirection: 'column',

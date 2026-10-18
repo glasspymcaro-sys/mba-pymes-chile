@@ -1,6 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { useAppState } from '../../store/appState.jsx';
-import ImagenJson3D from '../svg3d/ImagenJson3D.jsx';
+import {
+  Icono3DDescuento,
+  Icono3DMargen,
+  Icono3DInflacion,
+  Icono3DEbit,
+  Icono3DCentroEstrategico,
+} from '../icons3d/SistemaIconografia3D.jsx';
 import {
   calcularDestructorDescuentos,
   calcularEscudoAntiInflacion,
@@ -271,12 +277,14 @@ export default function ModuloSimuladorQuePasaSi() {
       id="seccion-descuentos"
       className="card-ejecutiva"
       style={{
-        padding: '22px',
+        padding: '24px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '20px',
-        border: '1.5px solid #CBD5E1',
-        boxShadow: '0 4px 16px rgba(15, 23, 42, 0.05)',
+        gap: '22px',
+        backgroundColor: '#0D131F',
+        border: '1px solid #1E293B',
+        boxShadow: '0 12px 30px -10px rgba(0, 0, 0, 0.7)',
+        borderRadius: '16px',
       }}
     >
       {/* 1. Cabecera Ejecutiva con Selector de Módulos (Tabs) */}
@@ -286,54 +294,54 @@ export default function ModuloSimuladorQuePasaSi() {
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '12px',
-          borderBottom: '1px solid #E2E8F0',
-          paddingBottom: '14px',
+          gap: '14px',
+          borderBottom: '1px solid #1E293B',
+          paddingBottom: '16px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <ImagenJson3D idIcono="destructor_descuentos" tamaño={48} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <Icono3DDescuento size={46} />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span
                 style={{
                   fontSize: '10.5px',
                   fontWeight: 800,
-                  color: '#DC2626',
+                  color: '#EF4444',
                   textTransform: 'uppercase',
                   letterSpacing: '0.06em',
-                  backgroundColor: '#FEF2F2',
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                  border: '1px solid #FCA5A5',
+                  backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                  padding: '3px 8px',
+                  borderRadius: '6px',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
                 }}
               >
                 3. Simulador de Decisiones & Políticas Comerciales
               </span>
-              <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
-                Evaluando: <strong style={{ color: '#0F172A' }}>{productoBaseActual?.nombre || 'Producto Principal'}</strong>
+              <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>
+                Evaluando: <strong style={{ color: '#E2F800' }}>{productoBaseActual?.nombre || 'Producto Principal'}</strong>
               </span>
             </div>
-            <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#09090B', margin: '4px 0 0 0' }}>
+            <h2 className="heading-tight" style={{ fontSize: '18px', fontWeight: 800, color: '#F8FAFC', margin: '4px 0 0 0' }}>
               Simulador & Editor de Descuentos, Combos y Alzas de Costos
             </h2>
           </div>
         </div>
 
-        {/* Pestañas de Navegación Ejecutiva */}
-        <div style={{ display: 'flex', gap: '6px', backgroundColor: '#F1F5F9', padding: '4px', borderRadius: '10px' }}>
+        {/* Pestañas de Navegación Ejecutiva ImpactM5 */}
+        <div style={{ display: 'flex', gap: '6px', backgroundColor: '#111827', padding: '4px', borderRadius: '10px', border: '1px solid #1E293B' }}>
           <button
             type="button"
             onClick={() => setPestañaActiva('descuentos')}
             style={{
-              padding: '6px 14px',
-              borderRadius: '7px',
-              fontSize: '11.5px',
-              fontWeight: pestañaActiva === 'descuentos' ? 700 : 500,
-              backgroundColor: pestañaActiva === 'descuentos' ? '#FFFFFF' : 'transparent',
-              color: pestañaActiva === 'descuentos' ? '#DC2626' : '#64748B',
-              border: pestañaActiva === 'descuentos' ? '1px solid #E2E8F0' : 'none',
-              boxShadow: pestañaActiva === 'descuentos' ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+              padding: '8px 14px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: pestañaActiva === 'descuentos' ? 800 : 600,
+              backgroundColor: pestañaActiva === 'descuentos' ? '#1E293B' : 'transparent',
+              color: pestañaActiva === 'descuentos' ? '#EF4444' : '#94A3B8',
+              border: pestañaActiva === 'descuentos' ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid transparent',
+              boxShadow: pestañaActiva === 'descuentos' ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
             }}
@@ -345,14 +353,14 @@ export default function ModuloSimuladorQuePasaSi() {
             type="button"
             onClick={() => setPestañaActiva('combos')}
             style={{
-              padding: '6px 14px',
-              borderRadius: '7px',
-              fontSize: '11.5px',
-              fontWeight: pestañaActiva === 'combos' ? 700 : 500,
-              backgroundColor: pestañaActiva === 'combos' ? '#FFFFFF' : 'transparent',
-              color: pestañaActiva === 'combos' ? '#0F766E' : '#64748B',
-              border: pestañaActiva === 'combos' ? '1px solid #E2E8F0' : 'none',
-              boxShadow: pestañaActiva === 'combos' ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+              padding: '8px 14px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: pestañaActiva === 'combos' ? 800 : 600,
+              backgroundColor: pestañaActiva === 'combos' ? '#1E293B' : 'transparent',
+              color: pestañaActiva === 'combos' ? '#10B981' : '#94A3B8',
+              border: pestañaActiva === 'combos' ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid transparent',
+              boxShadow: pestañaActiva === 'combos' ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
             }}
@@ -364,14 +372,14 @@ export default function ModuloSimuladorQuePasaSi() {
             type="button"
             onClick={() => setPestañaActiva('inflacion')}
             style={{
-              padding: '6px 14px',
-              borderRadius: '7px',
-              fontSize: '11.5px',
-              fontWeight: pestañaActiva === 'inflacion' ? 700 : 500,
-              backgroundColor: pestañaActiva === 'inflacion' ? '#FFFFFF' : 'transparent',
-              color: pestañaActiva === 'inflacion' ? '#D97706' : '#64748B',
-              border: pestañaActiva === 'inflacion' ? '1px solid #E2E8F0' : 'none',
-              boxShadow: pestañaActiva === 'inflacion' ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+              padding: '8px 14px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: pestañaActiva === 'inflacion' ? 800 : 600,
+              backgroundColor: pestañaActiva === 'inflacion' ? '#1E293B' : 'transparent',
+              color: pestañaActiva === 'inflacion' ? '#F59E0B' : '#94A3B8',
+              border: pestañaActiva === 'inflacion' ? '1px solid rgba(245, 158, 11, 0.4)' : '1px solid transparent',
+              boxShadow: pestañaActiva === 'inflacion' ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
             }}
@@ -387,28 +395,28 @@ export default function ModuloSimuladorQuePasaSi() {
           {/* Panel de Controles Editables del Descuento */}
           <div
             style={{
-              backgroundColor: '#F8FAFC',
+              backgroundColor: '#0B0F17',
               borderRadius: '12px',
-              border: '1.5px solid #CBD5E1',
-              padding: '16px 18px',
+              border: '1px solid #1E293B',
+              padding: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '14px',
+              gap: '16px',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
               <div>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#475569', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#E2F800', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Configuración de la Oferta Promocional
                 </span>
-                <div style={{ fontSize: '13px', color: '#0F172A', fontWeight: 600, marginTop: '2px' }}>
-                  Precio Actual: <strong>{formatCLP(precioBaseDescuento)}</strong> • Costo Directo Total: <strong>{formatCLP(costoDirectoEfectivo)}</strong>
+                <div style={{ fontSize: '13.5px', color: '#F8FAFC', fontWeight: 600, marginTop: '3px' }}>
+                  Precio Actual: <strong style={{ color: '#FFFFFF' }}>{formatCLP(precioBaseDescuento)}</strong> • Costo Directo Total: <strong style={{ color: '#F87171' }}>{formatCLP(costoDirectoEfectivo)}</strong>
                 </div>
               </div>
 
               {/* Selector de Modo: Porcentaje vs Monto Fijo */}
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>Tipo:</span>
+                <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>Tipo:</span>
                 <button
                   type="button"
                   onClick={() => setModoDescuento('porcentaje')}
@@ -432,7 +440,7 @@ export default function ModuloSimuladorQuePasaSi() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
               {modoDescuento === 'porcentaje' ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <label htmlFor="input-pct-dcto" style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F172A' }}>
+                  <label htmlFor="input-pct-dcto" style={{ fontSize: '12.5px', fontWeight: 700, color: '#F8FAFC' }}>
                     Descuento a aplicar:
                   </label>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -449,24 +457,24 @@ export default function ModuloSimuladorQuePasaSi() {
                         height: '34px',
                         padding: '0 8px',
                         borderRadius: '8px',
-                        border: '1.5px solid #CBD5E1',
+                        border: '1px solid #1E293B',
                         fontSize: '15px',
                         fontWeight: 700,
                         textAlign: 'center',
-                        color: '#DC2626',
-                        backgroundColor: '#FFFFFF',
+                        color: '#EF4444',
+                        backgroundColor: '#111827',
                       }}
                     />
-                    <span style={{ fontSize: '14px', fontWeight: 800, color: '#DC2626' }}>%</span>
+                    <span style={{ fontSize: '14px', fontWeight: 800, color: '#EF4444' }}>%</span>
                   </div>
                 </div>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <label htmlFor="input-monto-dcto" style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F172A' }}>
+                  <label htmlFor="input-monto-dcto" style={{ fontSize: '12.5px', fontWeight: 700, color: '#F8FAFC' }}>
                     Rebaja directa por unidad:
                   </label>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#64748B' }}>$</span>
+                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#94A3B8' }}>$</span>
                     <input
                       id="input-monto-dcto"
                       type="number"
@@ -480,15 +488,15 @@ export default function ModuloSimuladorQuePasaSi() {
                         height: '34px',
                         padding: '0 8px',
                         borderRadius: '8px',
-                        border: '1.5px solid #CBD5E1',
+                        border: '1px solid #1E293B',
                         fontSize: '15px',
                         fontWeight: 700,
                         textAlign: 'right',
-                        color: '#DC2626',
-                        backgroundColor: '#FFFFFF',
+                        color: '#EF4444',
+                        backgroundColor: '#111827',
                       }}
                     />
-                    <span style={{ fontSize: '11.5px', color: '#64748B', fontWeight: 600 }}>
+                    <span style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>
                       (Equivale al {porcentajeEfectivo}%)
                     </span>
                   </div>
@@ -497,7 +505,7 @@ export default function ModuloSimuladorQuePasaSi() {
 
               {/* Botones de Descuentos Rápidos y Clásicos */}
               <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', alignItems: 'center' }}>
-                <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>Atajos:</span>
+                <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 600 }}>Atajos:</span>
                 {[
                   { label: '5%', valPct: 5, valMonto: Math.round(precioBaseDescuento * 0.05) },
                   { label: '10%', valPct: 10, valMonto: Math.round(precioBaseDescuento * 0.1) },
@@ -547,15 +555,15 @@ export default function ModuloSimuladorQuePasaSi() {
             />
 
             {/* Fila de Resumen de Precios */}
-            <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#475569', fontWeight: 600, flexWrap: 'wrap', gap: '8px' }}>
-              <span>Precio Normal: <strong>{formatCLP(impactoDescuento.precioOriginal)}</strong></span>
-              <span>Rebaja por unidad: <strong style={{ color: '#DC2626' }}>-{formatCLP(impactoDescuento.precioOriginal - impactoDescuento.nuevoPrecioConDescuento)}</strong></span>
-              <span>Precio con Descuento: <strong style={{ color: '#DC2626', fontSize: '14px' }}>{formatCLP(impactoDescuento.nuevoPrecioConDescuento)}</strong></span>
+            <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#94A3B8', fontWeight: 600, flexWrap: 'wrap', gap: '8px' }}>
+              <span>Precio Normal: <strong style={{ color: '#F8FAFC' }}>{formatCLP(impactoDescuento.precioOriginal)}</strong></span>
+              <span>Rebaja por unidad: <strong style={{ color: '#EF4444' }}>-{formatCLP(impactoDescuento.precioOriginal - impactoDescuento.nuevoPrecioConDescuento)}</strong></span>
+              <span>Precio con Descuento: <strong style={{ color: '#E2F800', fontSize: '14.5px' }}>{formatCLP(impactoDescuento.nuevoPrecioConDescuento)}</strong></span>
             </div>
 
             {/* Motivo / Estrategia de la Promoción */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', borderTop: '1px solid #E2E8F0', paddingTop: '10px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', borderTop: '1px solid #1E293B', paddingTop: '12px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                 Objetivo de la Promo:
               </span>
               {['Gancho Comercial', 'Liquidación de Stock', 'Fidelización Clientes', 'Temporada Baja'].map((motivo) => (
@@ -564,13 +572,13 @@ export default function ModuloSimuladorQuePasaSi() {
                   type="button"
                   onClick={() => setMotivoPromocion(motivo)}
                   style={{
-                    padding: '3px 9px',
+                    padding: '4px 10px',
                     borderRadius: '6px',
                     fontSize: '11px',
-                    fontWeight: motivoPromocion === motivo ? 700 : 500,
-                    backgroundColor: motivoPromocion === motivo ? '#0F766E' : '#FFFFFF',
-                    color: motivoPromocion === motivo ? '#FFFFFF' : '#475569',
-                    border: `1px solid ${motivoPromocion === motivo ? '#0F766E' : '#CBD5E1'}`,
+                    fontWeight: motivoPromocion === motivo ? 800 : 600,
+                    backgroundColor: motivoPromocion === motivo ? '#1E293B' : '#0B0F17',
+                    color: motivoPromocion === motivo ? '#E2F800' : '#94A3B8',
+                    border: `1px solid ${motivoPromocion === motivo ? '#E2F800' : '#1E293B'}`,
                     cursor: 'pointer',
                   }}
                 >
@@ -584,27 +592,27 @@ export default function ModuloSimuladorQuePasaSi() {
           {impactoDescuento.entraEnPerdidaDirecta ? (
             <div
               style={{
-                backgroundColor: '#FEF2F2',
-                border: '2px solid #DC2626',
+                backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                border: '1.5px solid rgba(239, 68, 68, 0.5)',
                 borderRadius: '12px',
                 padding: '16px 18px',
-                color: '#7F1D1D',
+                color: '#FCA5A5',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '8px',
+                gap: '10px',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', color: '#DC2626' }}>
+                <span style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', color: '#EF4444' }}>
                   Alerta Crítica • Aniquilación Total del Margen Directo
                 </span>
-                <span style={{ fontSize: '11px', fontWeight: 800, backgroundColor: '#DC2626', color: '#FFFFFF', padding: '2px 8px', borderRadius: '4px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, backgroundColor: '#EF4444', color: '#FFFFFF', padding: '2px 8px', borderRadius: '4px' }}>
                   Pérdida por Unidad
                 </span>
               </div>
               <p style={{ fontSize: '13.5px', lineHeight: 1.5, margin: 0, fontWeight: 600 }}>
-                Si bajas tu precio a <strong>{formatCLP(impactoDescuento.nuevoPrecioConDescuento)}</strong>, quedas por debajo de tus costos directos efectivos ({formatCLP(costoDirectoEfectivo)}).{' '}
-                <strong>Pierdes {formatCLP(Math.abs(impactoDescuento.margenConDescuento))} de tu bolsillo en cada producto vendido.</strong> Entre más vendas, más dinero destruyes.
+                Si bajas tu precio a <strong style={{ color: '#FFFFFF' }}>{formatCLP(impactoDescuento.nuevoPrecioConDescuento)}</strong>, quedas por debajo de tus costos directos efectivos ({formatCLP(costoDirectoEfectivo)}).{' '}
+                <strong style={{ color: '#EF4444' }}>Pierdes {formatCLP(Math.abs(impactoDescuento.margenConDescuento))} de tu bolsillo en cada producto vendido.</strong> Entre más vendas, más dinero destruyes.
               </p>
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
                 <button
@@ -620,8 +628,8 @@ export default function ModuloSimuladorQuePasaSi() {
           ) : (
             <div
               style={{
-                backgroundColor: '#FFFBEB',
-                border: '1.5px solid #F59E0B',
+                backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                border: '1.5px solid rgba(245, 158, 11, 0.35)',
                 borderRadius: '12px',
                 padding: '16px 18px',
                 display: 'flex',
@@ -630,13 +638,13 @@ export default function ModuloSimuladorQuePasaSi() {
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 800, textTransform: 'uppercase', color: '#B45309' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 800, textTransform: 'uppercase', color: '#F59E0B' }}>
                   El Golpe de Realidad Financiera ({motivoPromocion})
                 </span>
                 <span
                   className="tabular-nums"
                   style={{
-                    backgroundColor: '#DC2626',
+                    backgroundColor: '#EF4444',
                     color: '#FFFFFF',
                     padding: '3px 8px',
                     borderRadius: '6px',
@@ -648,30 +656,30 @@ export default function ModuloSimuladorQuePasaSi() {
                 </span>
               </div>
 
-              <p style={{ fontSize: '13.5px', lineHeight: 1.55, margin: 0, color: '#09090B' }}>
-                Al bajar el precio un <strong className="tabular-nums">{porcentajeEfectivo}%</strong>, tu ganancia limpia por unidad cae de{' '}
-                <strong className="tabular-nums" style={{ color: '#059669' }}>{formatCLP(impactoDescuento.margenActualUnitario)}</strong> a{' '}
-                <strong className="tabular-nums" style={{ color: '#DC2626' }}>{formatCLP(impactoDescuento.margenConDescuento)}</strong>.{' '}
+              <p style={{ fontSize: '13.5px', lineHeight: 1.55, margin: 0, color: '#F8FAFC' }}>
+                Al bajar el precio un <strong className="tabular-nums" style={{ color: '#E2F800' }}>{porcentajeEfectivo}%</strong>, tu ganancia limpia por unidad cae de{' '}
+                <strong className="tabular-nums" style={{ color: '#10B981' }}>{formatCLP(impactoDescuento.margenActualUnitario)}</strong> a{' '}
+                <strong className="tabular-nums" style={{ color: '#EF4444' }}>{formatCLP(impactoDescuento.margenConDescuento)}</strong>.{' '}
                 Tendrás que vender{' '}
-                <strong>{impactoDescuento.unidadesNecesariasParaEmpatar} unidades</strong> (+{impactoDescuento.unidadesExtraRequeridas} unidades extras al mes){' '}
+                <strong style={{ color: '#FFFFFF' }}>{impactoDescuento.unidadesNecesariasParaEmpatar} unidades</strong> (+{impactoDescuento.unidadesExtraRequeridas} unidades extras al mes){' '}
                 <strong>solo para ganar exactamente lo mismo que ganas hoy</strong>.
               </p>
 
               {/* Simulador Interactivo: ¿Cuánto crees que van a subir tus ventas? */}
               <div
                 style={{
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: '#111827',
                   borderRadius: '10px',
-                  border: '1px solid #FCD34D',
-                  padding: '12px 14px',
+                  border: '1px solid #1E293B',
+                  padding: '14px 16px',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#78350F' }}>
-                    Si estimas que tus ventas subirán un <strong className="tabular-nums" style={{ color: '#0F766E' }}>+{aumentoVentasEsperado}%</strong> gracias a la promoción:
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#F8FAFC' }}>
+                    Si estimas que tus ventas subirán un <strong className="tabular-nums" style={{ color: '#E2F800' }}>+{aumentoVentasEsperado}%</strong> gracias a la promoción:
                   </span>
                   <div style={{ display: 'flex', gap: '4px' }}>
                     {[10, 20, 25, 40, 60].map((pct) => (
@@ -681,12 +689,12 @@ export default function ModuloSimuladorQuePasaSi() {
                         onClick={() => setAumentoVentasEsperado(pct)}
                         style={{
                           height: '24px',
-                          padding: '0 6px',
+                          padding: '0 8px',
                           fontSize: '10.5px',
-                          fontWeight: aumentoVentasEsperado === pct ? 700 : 500,
-                          backgroundColor: aumentoVentasEsperado === pct ? '#0F766E' : '#F8FAFC',
-                          color: aumentoVentasEsperado === pct ? '#FFFFFF' : '#475569',
-                          border: `1px solid ${aumentoVentasEsperado === pct ? '#0F766E' : '#CBD5E1'}`,
+                          fontWeight: aumentoVentasEsperado === pct ? 800 : 600,
+                          backgroundColor: aumentoVentasEsperado === pct ? '#1E293B' : '#0B0F17',
+                          color: aumentoVentasEsperado === pct ? '#E2F800' : '#94A3B8',
+                          border: `1px solid ${aumentoVentasEsperado === pct ? '#E2F800' : '#1E293B'}`,
                           borderRadius: '5px',
                           cursor: 'pointer',
                         }}
@@ -697,13 +705,13 @@ export default function ModuloSimuladorQuePasaSi() {
                   </div>
                 </div>
 
-                <div className="tabular-nums" style={{ fontSize: '12.5px', color: '#09090B' }}>
+                <div className="tabular-nums" style={{ fontSize: '12.5px', color: '#F8FAFC' }}>
                   {proyeccionVentasDescuento.esRentable ? (
-                    <span style={{ color: '#059669', fontWeight: 600 }}>
+                    <span style={{ color: '#10B981', fontWeight: 600 }}>
                       Resultado positivo: Ganarías {formatCLP(proyeccionVentasDescuento.diferenciaLiquida)} extra al mes al vender {proyeccionVentasDescuento.qEstimadaConPromo} un.
                     </span>
                   ) : (
-                    <span style={{ color: '#DC2626', fontWeight: 600 }}>
+                    <span style={{ color: '#F87171', fontWeight: 600 }}>
                       Trampa comercial: Aun vendiendo un +{aumentoVentasEsperado}% más ({proyeccionVentasDescuento.qEstimadaConPromo} un.), ganarás {formatCLP(Math.abs(proyeccionVentasDescuento.diferenciaLiquida))} MENOS a fin de mes que quedándote a precio normal.
                     </span>
                   )}
@@ -711,8 +719,8 @@ export default function ModuloSimuladorQuePasaSi() {
               </div>
 
               {/* Botón de Enlace al Creador de Combos */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', borderTop: '1px solid #FCD34D', paddingTop: '8px' }}>
-                <span style={{ fontSize: '11.5px', color: '#78350F', fontWeight: 600 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', borderTop: '1px solid rgba(245, 158, 11, 0.3)', paddingTop: '10px' }}>
+                <span style={{ fontSize: '11.5px', color: '#FDE68A', fontWeight: 600 }}>
                   Consejo financiero: El combo incrementa el ticket y protege tu margen líquido.
                 </span>
                 <button
@@ -735,11 +743,11 @@ export default function ModuloSimuladorQuePasaSi() {
           {mensajeComboGuardado && (
             <div
               style={{
-                backgroundColor: '#ECFDF5',
-                border: '1.5px solid #6EE7B7',
+                backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                border: '1.5px solid rgba(16, 185, 129, 0.4)',
                 borderRadius: '10px',
                 padding: '12px 16px',
-                color: '#065F46',
+                color: '#10B981',
                 fontWeight: 700,
                 fontSize: '13px',
               }}
@@ -751,27 +759,27 @@ export default function ModuloSimuladorQuePasaSi() {
           {/* Formulario de Configuración del Combo */}
           <div
             style={{
-              backgroundColor: '#F8FAFC',
+              backgroundColor: '#0B0F17',
               borderRadius: '12px',
-              border: '1.5px solid #CBD5E1',
-              padding: '16px 18px',
+              border: '1px solid #1E293B',
+              padding: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '14px',
+              gap: '16px',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#0F766E', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Diseño del Pack / Combo Rentable
               </span>
-              <span style={{ fontSize: '11.5px', color: '#64748B', fontWeight: 600 }}>
+              <span style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>
                 Eleva el ticket promedio sin destruir el margen de contribución
               </span>
             </div>
 
             {/* Nombre del Combo */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <label htmlFor="input-nombre-combo" style={{ fontSize: '11.5px', fontWeight: 700, color: '#334155', textTransform: 'uppercase' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label htmlFor="input-nombre-combo" style={{ fontSize: '11.5px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                 Nombre del Combo / Pack Comercial:
               </label>
               <input
@@ -781,23 +789,23 @@ export default function ModuloSimuladorQuePasaSi() {
                 onChange={(e) => setNombreCombo(e.target.value)}
                 placeholder="Ej: Pack Degustación Premium, Combo Dúo Almuerzo"
                 style={{
-                  height: '36px',
+                  height: '38px',
                   padding: '0 12px',
                   borderRadius: '8px',
-                  border: '1.5px solid #CBD5E1',
+                  border: '1px solid #1E293B',
                   fontSize: '13.5px',
                   fontWeight: 600,
-                  color: '#0F172A',
-                  backgroundColor: '#FFFFFF',
+                  color: '#F8FAFC',
+                  backgroundColor: '#111827',
                 }}
               />
             </div>
 
             {/* Selección de Producto Base y Acompañante */}
-            <div className="bento-grid-12" style={{ gap: '12px', alignItems: 'stretch' }}>
+            <div className="bento-grid-12" style={{ gap: '14px', alignItems: 'stretch' }}>
               {/* Producto Base */}
               <div className="bento-col-6" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="select-prod-base" style={{ fontSize: '11px', fontWeight: 700, color: '#334155', textTransform: 'uppercase' }}>
+                <label htmlFor="select-prod-base" style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                   1. Producto Principal (Base):
                 </label>
                 <select
@@ -805,31 +813,31 @@ export default function ModuloSimuladorQuePasaSi() {
                   value={productoBaseActual?.id || ''}
                   onChange={(e) => setProductoBaseId(e.target.value)}
                   style={{
-                    height: '36px',
+                    height: '38px',
                     padding: '0 10px',
                     borderRadius: '8px',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1px solid #1E293B',
                     fontSize: '12.5px',
                     fontWeight: 600,
-                    color: '#0F172A',
-                    backgroundColor: '#FFFFFF',
+                    color: '#F8FAFC',
+                    backgroundColor: '#111827',
                   }}
                 >
                   {recetas.map((r) => (
-                    <option key={r.id} value={r.id}>
+                    <option key={r.id} value={r.id} style={{ backgroundColor: '#111827', color: '#F8FAFC' }}>
                       {r.nombre} (Normal: {formatCLP(r.precioVenta)})
                     </option>
                   ))}
                 </select>
-                <div style={{ fontSize: '11.5px', color: '#64748B' }}>
-                  Costo directo base: <strong>{formatCLP(calculoCombo.costoBase)}</strong>
+                <div style={{ fontSize: '11.5px', color: '#94A3B8' }}>
+                  Costo directo base: <strong style={{ color: '#F8FAFC' }}>{formatCLP(calculoCombo.costoBase)}</strong>
                 </div>
               </div>
 
               {/* Acompañante o Complemento */}
               <div className="bento-col-6" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <label htmlFor="select-acomp" style={{ fontSize: '11px', fontWeight: 700, color: '#334155', textTransform: 'uppercase' }}>
+                  <label htmlFor="select-acomp" style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                     2. Acompañante o Complemento:
                   </label>
                   <div style={{ display: 'flex', gap: '4px' }}>
@@ -837,13 +845,13 @@ export default function ModuloSimuladorQuePasaSi() {
                       type="button"
                       onClick={() => setAcompananteTipo('receta')}
                       style={{
-                        padding: '1px 6px',
-                        fontSize: '10px',
-                        borderRadius: '4px',
-                        fontWeight: acompananteTipo === 'receta' ? 700 : 500,
-                        backgroundColor: acompananteTipo === 'receta' ? '#0F766E' : '#E2E8F0',
-                        color: acompananteTipo === 'receta' ? '#FFFFFF' : '#475569',
-                        border: 'none',
+                        padding: '2px 8px',
+                        fontSize: '10.5px',
+                        borderRadius: '5px',
+                        fontWeight: acompananteTipo === 'receta' ? 800 : 600,
+                        backgroundColor: acompananteTipo === 'receta' ? '#1E293B' : '#0B0F17',
+                        color: acompananteTipo === 'receta' ? '#E2F800' : '#94A3B8',
+                        border: `1px solid ${acompananteTipo === 'receta' ? '#E2F800' : '#1E293B'}`,
                         cursor: 'pointer',
                       }}
                     >
@@ -853,13 +861,13 @@ export default function ModuloSimuladorQuePasaSi() {
                       type="button"
                       onClick={() => setAcompananteTipo('insumo')}
                       style={{
-                        padding: '1px 6px',
-                        fontSize: '10px',
-                        borderRadius: '4px',
-                        fontWeight: acompananteTipo === 'insumo' ? 700 : 500,
-                        backgroundColor: acompananteTipo === 'insumo' ? '#0F766E' : '#E2E8F0',
-                        color: acompananteTipo === 'insumo' ? '#FFFFFF' : '#475569',
-                        border: 'none',
+                        padding: '2px 8px',
+                        fontSize: '10.5px',
+                        borderRadius: '5px',
+                        fontWeight: acompananteTipo === 'insumo' ? 800 : 600,
+                        backgroundColor: acompananteTipo === 'insumo' ? '#1E293B' : '#0B0F17',
+                        color: acompananteTipo === 'insumo' ? '#E2F800' : '#94A3B8',
+                        border: `1px solid ${acompananteTipo === 'insumo' ? '#E2F800' : '#1E293B'}`,
                         cursor: 'pointer',
                       }}
                     >
@@ -868,33 +876,33 @@ export default function ModuloSimuladorQuePasaSi() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '6px' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
                   <select
                     id="select-acomp"
                     value={acompananteActual?.id || ''}
                     onChange={(e) => setAcompananteId(e.target.value)}
                     style={{
                       flex: 1,
-                      height: '36px',
-                      padding: '0 8px',
+                      height: '38px',
+                      padding: '0 10px',
                       borderRadius: '8px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1px solid #1E293B',
                       fontSize: '12.5px',
                       fontWeight: 600,
-                      color: '#0F172A',
-                      backgroundColor: '#FFFFFF',
+                      color: '#F8FAFC',
+                      backgroundColor: '#111827',
                     }}
                   >
                     {acompananteTipo === 'receta'
                       ? recetas
                           .filter((r) => r.id !== (productoBaseActual?.id || ''))
                           .map((r) => (
-                            <option key={r.id} value={r.id}>
+                            <option key={r.id} value={r.id} style={{ backgroundColor: '#111827', color: '#F8FAFC' }}>
                               {r.nombre} (Normal: {formatCLP(r.precioVenta)})
                             </option>
                           ))
                       : insumos.map((i) => (
-                          <option key={i.id} value={i.id}>
+                          <option key={i.id} value={i.id} style={{ backgroundColor: '#111827', color: '#F8FAFC' }}>
                             {i.nombre} (Costo: {formatCLP(i.costoUnitario)})
                           </option>
                         ))}
@@ -908,22 +916,22 @@ export default function ModuloSimuladorQuePasaSi() {
                     value={cantidadAcompanante}
                     onChange={(e) => setCantidadAcompanante(Math.max(1, Number(e.target.value)))}
                     style={{
-                      width: '52px',
-                      height: '36px',
+                      width: '56px',
+                      height: '38px',
                       padding: '0 4px',
                       borderRadius: '8px',
-                      border: '1.5px solid #CBD5E1',
-                      fontSize: '13px',
-                      fontWeight: 700,
+                      border: '1px solid #1E293B',
+                      fontSize: '14px',
+                      fontWeight: 800,
                       textAlign: 'center',
-                      color: '#0F172A',
-                      backgroundColor: '#FFFFFF',
+                      color: '#E2F800',
+                      backgroundColor: '#111827',
                     }}
                   />
                 </div>
 
-                <div style={{ fontSize: '11.5px', color: '#64748B' }}>
-                  Costo acompañante: <strong>{formatCLP(calculoCombo.costoAcomp)}</strong>
+                <div style={{ fontSize: '11.5px', color: '#94A3B8' }}>
+                  Costo acompañante: <strong style={{ color: '#F8FAFC' }}>{formatCLP(calculoCombo.costoAcomp)}</strong>
                 </div>
               </div>
             </div>
@@ -936,17 +944,17 @@ export default function ModuloSimuladorQuePasaSi() {
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 gap: '12px',
-                borderTop: '1px solid #E2E8F0',
-                paddingTop: '12px',
+                borderTop: '1px solid #1E293B',
+                paddingTop: '14px',
               }}
             >
               {/* Empaque Extra */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <label htmlFor="input-empaque" style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
+                <label htmlFor="input-empaque" style={{ fontSize: '12px', fontWeight: 600, color: '#94A3B8' }}>
                   Packaging / Caja Combo:
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-                  <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>$</span>
+                  <span style={{ fontSize: '13px', color: '#94A3B8', fontWeight: 600 }}>$</span>
                   <input
                     id="input-empaque"
                     type="number"
@@ -955,15 +963,16 @@ export default function ModuloSimuladorQuePasaSi() {
                     value={costoEmpaqueExtra}
                     onChange={(e) => setCostoEmpaqueExtra(Number(e.target.value))}
                     style={{
-                      width: '75px',
-                      height: '32px',
-                      padding: '0 6px',
+                      width: '80px',
+                      height: '34px',
+                      padding: '0 8px',
                       borderRadius: '6px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1px solid #1E293B',
                       fontSize: '13px',
                       fontWeight: 600,
                       textAlign: 'right',
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: '#111827',
+                      color: '#F8FAFC',
                     }}
                   />
                 </div>
@@ -971,11 +980,11 @@ export default function ModuloSimuladorQuePasaSi() {
 
               {/* Fijación Libre del Precio Promocional del Combo */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#F8FAFC' }}>
                   Precio Final del Combo:
                 </span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#0F766E' }}>$</span>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#E2F800' }}>$</span>
                   <input
                     type="number"
                     min="1000"
@@ -984,16 +993,16 @@ export default function ModuloSimuladorQuePasaSi() {
                     value={precioPromocionalCombo}
                     onChange={(e) => setPrecioPromocionalCombo(e.target.value)}
                     style={{
-                      width: '110px',
-                      height: '36px',
-                      padding: '0 8px',
+                      width: '120px',
+                      height: '38px',
+                      padding: '0 10px',
                       borderRadius: '8px',
-                      border: '2px solid #0F766E',
+                      border: '1.5px solid #E2F800',
                       fontSize: '16px',
                       fontWeight: 800,
                       textAlign: 'right',
-                      color: '#0F766E',
-                      backgroundColor: '#FFFFFF',
+                      color: '#E2F800',
+                      backgroundColor: '#111827',
                     }}
                   />
                 </div>
@@ -1004,7 +1013,7 @@ export default function ModuloSimuladorQuePasaSi() {
                   onClick={() => setPrecioPromocionalCombo('')}
                   className="btn-bacan-secondary"
                   title="Calcular precio sugerido con 12% de descuento para el cliente"
-                  style={{ height: '28px', padding: '0 8px', fontSize: '11px' }}
+                  style={{ height: '32px', padding: '0 10px', fontSize: '11px', color: '#E2F800' }}
                 >
                   Sugerido ({formatCLP(calculoCombo.precioSugeridoCombo)})
                 </button>
@@ -1015,25 +1024,27 @@ export default function ModuloSimuladorQuePasaSi() {
           {/* Tarjeta de Comparación Financiera: Combo vs Descuento Plano */}
           <div
             style={{
-              backgroundColor: '#F0FDFA',
-              border: '2px solid #0D9488',
+              backgroundColor: '#0B0F17',
+              border: '1.5px solid #10B981',
               borderRadius: '12px',
-              padding: '16px 18px',
+              padding: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
+              gap: '14px',
+              boxShadow: '0 0 20px rgba(16, 185, 129, 0.1)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', color: '#0F766E' }}>
+              <span style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', color: '#10B981' }}>
                 Evaluación de Rentabilidad del Combo vs Descuento Plano
               </span>
               <span
                 className="tabular-nums"
                 style={{
-                  backgroundColor: '#0F766E',
-                  color: '#FFFFFF',
-                  padding: '3px 10px',
+                  backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                  border: '1px solid #10B981',
+                  color: '#10B981',
+                  padding: '4px 10px',
                   borderRadius: '6px',
                   fontSize: '12px',
                   fontWeight: 800,
@@ -1047,25 +1058,25 @@ export default function ModuloSimuladorQuePasaSi() {
               <div
                 className="bento-col-6"
                 style={{
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: '#111827',
                   borderRadius: '10px',
-                  padding: '12px 14px',
-                  border: '1px solid #CCFBF1',
+                  padding: '14px 16px',
+                  border: '1px solid #1E293B',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '6px',
                 }}
               >
-                <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                   Lo que ve tu cliente:
                 </span>
-                <div style={{ fontSize: '13.5px', color: '#09090B' }}>
+                <div style={{ fontSize: '13.5px', color: '#F8FAFC' }}>
                   Suma por separado: <span style={{ textDecoration: 'line-through', color: '#94A3B8' }}>{formatCLP(calculoCombo.precioSumaSeparada)}</span>
                 </div>
-                <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#0F766E' }}>
+                <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#E2F800' }}>
                   Paga solo {formatCLP(calculoCombo.precioFinalCombo)} (Ahorra {formatCLP(calculoCombo.ahorroCliente)} / -{calculoCombo.ahorroClientePct}%)
                 </div>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>
+                <div style={{ fontSize: '11px', color: '#94A3B8' }}>
                   Sensación de oferta atractiva sin que tengas que abaratar tu producto estrella.
                 </div>
               </div>
@@ -1073,25 +1084,25 @@ export default function ModuloSimuladorQuePasaSi() {
               <div
                 className="bento-col-6"
                 style={{
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: '#111827',
                   borderRadius: '10px',
-                  padding: '12px 14px',
-                  border: '1px solid #CCFBF1',
+                  padding: '14px 16px',
+                  border: '1px solid #1E293B',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '6px',
                 }}
               >
-                <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' }}>
                   Lo que entra a tu bolsillo:
                 </span>
-                <div style={{ fontSize: '13.5px', color: '#09090B' }}>
-                  Costo insumos total combo: <strong>{formatCLP(calculoCombo.costoTotalCombo)}</strong>
+                <div style={{ fontSize: '13.5px', color: '#F8FAFC' }}>
+                  Costo insumos total combo: <strong style={{ color: '#F87171' }}>{formatCLP(calculoCombo.costoTotalCombo)}</strong>
                 </div>
-                <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#059669' }}>
+                <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#10B981' }}>
                   Ganancia neta/combo: {formatCLP(calculoCombo.margenLimpioCombo)} ({calculoCombo.margenComboPct}% margen)
                 </div>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>
+                <div style={{ fontSize: '11px', color: '#94A3B8' }}>
                   Frente a ganar solo {formatCLP(calculoCombo.margenBaseConDcto20)} con un descuento directo del 20%.
                 </div>
               </div>
@@ -1118,11 +1129,11 @@ export default function ModuloSimuladorQuePasaSi() {
           {mensajePrecioBlindado && (
             <div
               style={{
-                backgroundColor: '#ECFDF5',
-                border: '1.5px solid #6EE7B7',
+                backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                border: '1.5px solid rgba(16, 185, 129, 0.4)',
                 borderRadius: '10px',
                 padding: '12px 16px',
-                color: '#065F46',
+                color: '#10B981',
                 fontWeight: 700,
                 fontSize: '13px',
               }}
@@ -1134,18 +1145,18 @@ export default function ModuloSimuladorQuePasaSi() {
           {/* Control Deslizante de Alza de Proveedor */}
           <div
             style={{
-              backgroundColor: '#F8FAFC',
+              backgroundColor: '#0B0F17',
               borderRadius: '12px',
-              border: '1.5px solid #CBD5E1',
-              padding: '16px 18px',
+              border: '1px solid #1E293B',
+              padding: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
+              gap: '14px',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#F8FAFC' }}>
                   Subida de costos del proveedor:
                 </span>
                 <input
@@ -1157,18 +1168,18 @@ export default function ModuloSimuladorQuePasaSi() {
                   onChange={(e) => setPorcentajeInflacionProveedor(Number(e.target.value))}
                   style={{
                     width: '65px',
-                    height: '32px',
+                    height: '34px',
                     padding: '0 6px',
                     borderRadius: '6px',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1px solid #1E293B',
                     fontSize: '14px',
                     fontWeight: 700,
                     textAlign: 'center',
-                    color: '#D97706',
-                    backgroundColor: '#FFFFFF',
+                    color: '#F59E0B',
+                    backgroundColor: '#111827',
                   }}
                 />
-                <span style={{ fontSize: '14px', fontWeight: 800, color: '#D97706' }}>%</span>
+                <span style={{ fontSize: '14px', fontWeight: 800, color: '#F59E0B' }}>%</span>
               </div>
 
               {/* Botones de Alza Rápida */}
@@ -1197,10 +1208,10 @@ export default function ModuloSimuladorQuePasaSi() {
               onChange={(e) => setPorcentajeInflacionProveedor(Number(e.target.value))}
             />
 
-            <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', color: '#475569', fontWeight: 600, flexWrap: 'wrap', gap: '6px' }}>
-              <span>Costo Insumos Actual: <strong>{formatCLP(costoVariableConsolidado)}</strong></span>
+            <div className="tabular-nums" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', color: '#94A3B8', fontWeight: 600, flexWrap: 'wrap', gap: '6px' }}>
+              <span>Costo Insumos Actual: <strong style={{ color: '#F8FAFC' }}>{formatCLP(costoVariableConsolidado)}</strong></span>
               <span>
-                Nuevo Costo Directo: <strong style={{ color: '#DC2626' }}>{formatCLP(impactoInflacion.nuevoCostoDirectoBase)} (+{formatCLP(impactoInflacion.alzaCostoUnitario)})</strong>
+                Nuevo Costo Directo: <strong style={{ color: '#EF4444' }}>{formatCLP(impactoInflacion.nuevoCostoDirectoBase)} (+{formatCLP(impactoInflacion.alzaCostoUnitario)})</strong>
               </span>
             </div>
           </div>
@@ -1208,36 +1219,37 @@ export default function ModuloSimuladorQuePasaSi() {
           {/* Dictamen Instantáneo de Bolsillo */}
           <div
             style={{
-              backgroundColor: '#09090B',
-              color: '#FFFFFF',
+              backgroundColor: '#111827',
+              color: '#F8FAFC',
               borderRadius: '12px',
               padding: '18px 20px',
-              border: '1.5px solid #27272A',
+              border: '1px solid #1E293B',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
+              gap: '14px',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
             }}
           >
             <div>
-              <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#FEF08A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#E2F800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Respuesta Instantánea para Compras en Terreno
               </span>
               <p style={{ fontSize: '14px', lineHeight: 1.5, margin: '6px 0 0 0' }}>
-                Si tus insumos suben un <strong className="tabular-nums">{porcentajeInflacionProveedor}%</strong>,{' '}
-                <strong style={{ color: '#5EEAD4', fontSize: '15px' }}>
+                Si tus insumos suben un <strong className="tabular-nums" style={{ color: '#E2F800' }}>{porcentajeInflacionProveedor}%</strong>,{' '}
+                <strong style={{ color: '#10B981', fontSize: '15px' }}>
                   sube tu precio {formatCLP(impactoInflacion.ajustePrecioNecesario)} hoy
                 </strong>{' '}
-                (a <strong className="tabular-nums">{formatCLP(impactoInflacion.nuevoPrecioProtegido)}</strong>) o{' '}
-                <strong style={{ color: '#F87171' }}>
+                (a <strong className="tabular-nums" style={{ color: '#FFFFFF' }}>{formatCLP(impactoInflacion.nuevoPrecioProtegido)}</strong>) o{' '}
+                <strong style={{ color: '#EF4444' }}>
                   perderás {formatCLP(impactoInflacion.perdidaMensualProyectada)} a fin de mes
                 </strong>{' '}
                 ({formatCLP(impactoInflacion.perdidaAnualProyectada)} al año).
               </p>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', borderTop: '1px solid #27272A', paddingTop: '12px' }}>
-              <span className="tabular-nums" style={{ fontSize: '12px', color: '#A1A1AA' }}>
-                Precio Blindado Sugerido: <strong style={{ color: '#FFFFFF', fontSize: '14px' }}>{formatCLP(impactoInflacion.nuevoPrecioProtegido)}</strong>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', borderTop: '1px solid #1E293B', paddingTop: '14px' }}>
+              <span className="tabular-nums" style={{ fontSize: '12.5px', color: '#94A3B8' }}>
+                Precio Blindado Sugerido: <strong style={{ color: '#E2F800', fontSize: '15px' }}>{formatCLP(impactoInflacion.nuevoPrecioProtegido)}</strong>
               </span>
               <button
                 type="button"
