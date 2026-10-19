@@ -5,9 +5,13 @@
  */
 import figurasInsumosData from '../data/figurasInsumos3D.json' with { type: 'json' };
 import figurasProductosData from '../data/figurasProductosRecetas3D.json' with { type: 'json' };
+import iconosAnimadosData from '../data/iconosAnimados3D.json' with { type: 'json' };
 
 export const FIGURAS_INSUMOS_JSON = figurasInsumosData.tipologias;
 export const FIGURAS_PRODUCTOS_RECETAS_JSON = figurasProductosData.figuras;
+export const ICONOS_ANIMADOS_JSON = iconosAnimadosData;
+export const ICONOS_ANIMADOS_INSUMOS = iconosAnimadosData.insumos;
+export const ICONOS_ANIMADOS_PRODUCTOS = iconosAnimadosData.productos;
 
 export const TIPOLOGIAS_3D = {
   verdura_hoja: {
@@ -381,6 +385,27 @@ export function clasificarFiguraProductoReceta(nombreProducto = '', rubro = 'res
   if (rubro === 'minimarket') return FIGURAS_PRODUCTOS_RECETAS_JSON.canasta_retail_desayuno;
   if (rubro === 'services') return FIGURAS_PRODUCTOS_RECETAS_JSON.consultoria_estrategica_mba;
   return FIGURAS_PRODUCTOS_RECETAS_JSON.hamburguesa_gourmet;
+}
+
+/**
+ * Obtiene la especificación JSON animada para cualquier Insumo (scene, materials, meshes, animations, interaction)
+ */
+export function obtenerSpecAnimadaInsumo(nombreInsumo = 'Insumo', rubro = 'restaurant', tipologiaForzada = '') {
+  const infoTipologia =
+    tipologiaForzada && TIPOLOGIAS_3D[tipologiaForzada]
+      ? TIPOLOGIAS_3D[tipologiaForzada]
+      : clasificarTipologiaInsumo(nombreInsumo, rubro);
+
+  return ICONOS_ANIMADOS_INSUMOS[infoTipologia.id] || ICONOS_ANIMADOS_INSUMOS.verdura_hoja;
+}
+
+/**
+ * Obtiene la especificación JSON animada para cualquier Producto Final o Receta
+ */
+export function obtenerSpecAnimadaProducto(nombreProducto = '', rubro = 'restaurant', figuraForzada = '') {
+  const figuraBase = clasificarFiguraProductoReceta(nombreProducto, rubro, figuraForzada);
+  const clave = figuraBase?.id || 'hamburguesa_gourmet';
+  return ICONOS_ANIMADOS_PRODUCTOS[clave] || ICONOS_ANIMADOS_PRODUCTOS.hamburguesa_gourmet;
 }
 
 

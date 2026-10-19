@@ -313,7 +313,7 @@ export default function GeneradorRecetaOlla({
                     padding: '0 10px',
                     borderRadius: '5px',
                     border: '1px solid var(--color-border)',
-                    backgroundColor: recetaEnOlla?.imagenPersonalizada ? 'rgba(226, 248, 0, 0.15)' : '#FFFFFF',
+                    backgroundColor: recetaEnOlla?.imagenPersonalizada ? 'rgba(226, 248, 0, 0.15)' : 'var(--color-surface-elevated)',
                     color: recetaEnOlla?.imagenPersonalizada ? 'var(--color-primary)' : 'var(--color-foreground)',
                     fontSize: '11px',
                     fontWeight: 600,

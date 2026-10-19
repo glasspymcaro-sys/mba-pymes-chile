@@ -1,12 +1,12 @@
 import React from 'react';
-import ImagenJson3D from './ImagenJson3D.jsx';
+import IconoAnimado3D from './IconoAnimado3D.jsx';
 import InsumoFigura3D from './InsumoFigura3D.jsx';
-import { clasificarFiguraProductoReceta } from '../../lib/bibliotecaInsumos3D.js';
+import { obtenerSpecAnimadaProducto } from '../../lib/bibliotecaInsumos3D.js';
 
 /**
- * Escaparate 3D de Producto Terminado & Receta
- * Reemplaza el concepto de la ollita con una figura 3D isométrica de alta gama
- * basada en especificación .JSON o una imagen real subida por el usuario.
+ * Escaparate de Producto Terminado & Receta
+ * Presentación hiperrealista animada en movimiento basada en especificación .JSON
+ * (scene / materials / meshes / animations / interaction) o imagen subida por el usuario.
  */
 export default function ProductoRecetaFigura3D({
   nombreProducto = 'Producto',
@@ -18,7 +18,7 @@ export default function ProductoRecetaFigura3D({
   animando = false,
   alHacerClic,
 }) {
-  const specJson = clasificarFiguraProductoReceta(nombreProducto, rubro, figuraId);
+  const specAnimada = obtenerSpecAnimadaProducto(nombreProducto, rubro, figuraId);
 
   return (
     <div
@@ -36,19 +36,19 @@ export default function ProductoRecetaFigura3D({
       onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03) translateY(-2px)')}
       onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1) translateY(0)')}
     >
-      {/* Marco Isométrico 3D / Pedestal */}
+      {/* Marco Isométrico / Pedestal Dark Tech */}
       <div
         style={{
           width: `${tamaño}px`,
           height: `${tamaño}px`,
           borderRadius: '22px',
           background: animando
-            ? 'radial-gradient(circle at 35% 20%, #FFFFFF 0%, #F0FDFA 50%, #CCFBF1 100%)'
-            : 'radial-gradient(circle at 35% 20%, #FFFFFF 0%, #F8FAFC 55%, #E2E8F0 100%)',
-          border: animando ? '2.5px solid #0D9488' : '2px solid #CBD5E1',
+            ? 'radial-gradient(circle at 35% 20%, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 60%, rgba(7, 10, 18, 1) 100%)'
+            : 'radial-gradient(circle at 35% 20%, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 60%, rgba(7, 10, 18, 1) 100%)',
+          border: animando ? '2px solid var(--color-primary, #E2F800)' : '1.5px solid rgba(51, 65, 85, 0.8)',
           boxShadow: animando
-            ? '0 18px 36px -6px rgba(13, 148, 136, 0.35), 0 6px 14px rgba(15, 23, 42, 0.1), inset 0 2px 0 #FFFFFF'
-            : '0 14px 28px -6px rgba(15, 23, 42, 0.14), 0 4px 10px rgba(15, 23, 42, 0.06), inset 0 2px 0 #FFFFFF, inset 0 -2px 0 rgba(148, 163, 184, 0.3)',
+            ? '0 18px 36px -6px rgba(0, 0, 0, 0.7), 0 0 20px rgba(226, 248, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+            : '0 14px 28px -6px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -59,7 +59,6 @@ export default function ProductoRecetaFigura3D({
       >
         {imagenPersonalizada ? (
           <div
-            className="insumo-3d-float"
             style={{
               width: '100%',
               height: '100%',
@@ -70,11 +69,17 @@ export default function ProductoRecetaFigura3D({
             }}
           />
         ) : (
-          <ImagenJson3D descriptorJson={specJson} tamaño={Math.round(tamaño * 0.95)} />
+          <IconoAnimado3D
+            spec={specAnimada}
+            tamaño={Math.round(tamaño * 0.94)}
+            animado={true}
+            interactivo={true}
+            titulo={nombreProducto}
+          />
         )}
       </div>
 
-      {/* Miniaturas de los Insumos integrados a la receta (solo cuando el marco es amplio) */}
+      {/* Miniaturas de los Insumos integrados a la receta */}
       {tamaño >= 80 && insumosEnReceta.length > 0 && (
         <div
           style={{
@@ -93,20 +98,20 @@ export default function ProductoRecetaFigura3D({
             <div
               key={ing.idAsignado || ing.id || idx}
               style={{
-                width: '30px',
-                height: '30px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '8px',
                 overflow: 'hidden',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.18)',
-                border: '1.5px solid #FFFFFF',
-                backgroundColor: '#FFFFFF',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.4)',
+                border: '1.5px solid #334155',
+                backgroundColor: '#111827',
                 transform: `rotate(${((idx % 2 === 0 ? 1 : -1) * (idx + 1) * 2.5)}deg)`,
               }}
               title={`${ing.nombre} (${ing.cantidad || 1} ${ing.unidadMedida || 'un'})`}
             >
               <InsumoFigura3D
                 nombre={ing.nombre}
-                tamaño={30}
+                tamaño={32}
                 rubro={rubro}
                 tipologia={ing.tipologia}
                 imagenPersonalizada={ing.imagenPersonalizada || ing.imagenUrl}
@@ -118,11 +123,11 @@ export default function ProductoRecetaFigura3D({
               style={{
                 fontSize: '10px',
                 fontWeight: 800,
-                color: '#FFFFFF',
-                backgroundColor: 'var(--color-primary)',
+                color: '#070A12',
+                backgroundColor: 'var(--color-primary, #E2F800)',
                 padding: '2px 6px',
                 borderRadius: '10px',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
               }}
             >
               +{insumosEnReceta.length - 4}

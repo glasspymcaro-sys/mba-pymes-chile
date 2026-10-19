@@ -4,592 +4,1893 @@
   "figuras": {
     "hamburguesa_gourmet": {
       "id": "hamburguesa_gourmet",
-      "nombre": "Hamburguesa Gourmet Doble Brioche 3D",
+      "nombre": "Hamburguesa Gourmet Doble Brioche",
       "rubro": "restaurant",
-      "keywords": ["hamburguesa", "burger", "cheeseburger", "sandwich", "churrasco", "lomito", "completo", "brioche"],
+      "keywords": [
+        "hamburguesa",
+        "burger",
+        "cheeseburger",
+        "sandwich",
+        "churrasco",
+        "lomito",
+        "completo",
+        "brioche"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "hb_pan_top",
           "tipo": "radialGradient",
-          "cx": "38%", "cy": "30%", "r": "65%",
+          "cx": "38%",
+          "cy": "30%",
+          "r": "65%",
           "stops": [
-            { "offset": "0%", "color": "#FDE68A" },
-            { "offset": "50%", "color": "#D97706" },
-            { "offset": "100%", "color": "#78350F" }
+            {
+              "offset": "0%",
+              "color": "#FDE68A"
+            },
+            {
+              "offset": "50%",
+              "color": "#D97706"
+            },
+            {
+              "offset": "100%",
+              "color": "#78350F"
+            }
           ]
         },
         {
           "id": "hb_carne",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "0%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "0%",
           "stops": [
-            { "offset": "0%", "color": "#7F1D1D" },
-            { "offset": "50%", "color": "#991B1B" },
-            { "offset": "100%", "color": "#450A0A" }
+            {
+              "offset": "0%",
+              "color": "#7F1D1D"
+            },
+            {
+              "offset": "50%",
+              "color": "#991B1B"
+            },
+            {
+              "offset": "100%",
+              "color": "#450A0A"
+            }
           ]
         },
         {
           "id": "hb_queso",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#FEF08A" },
-            { "offset": "100%", "color": "#F59E0B" }
+            {
+              "offset": "0%",
+              "color": "#FEF08A"
+            },
+            {
+              "offset": "100%",
+              "color": "#F59E0B"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 56, "ry": 14, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 56,
+          "ry": 14,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "ellipse", "cx": 80, "cy": 124, "rx": 52, "ry": 14, "fill": "#E2E8F0", "stroke": "#94A3B8", "strokeWidth": 2 },
-            { "tipo": "path", "d": "M 36 108 Q 80 124 124 108 L 120 122 Q 80 134 40 122 Z", "fill": "url(#hb_pan_top)" },
-            { "tipo": "path", "d": "M 32 102 Q 48 112 64 102 Q 80 112 96 102 Q 112 112 128 102", "fill": "none", "stroke": "#10B981", "strokeWidth": 7, "strokeLinecap": "round" },
-            { "tipo": "rect", "x": 34, "y": 86, "width": 92, "height": 18, "rx": 9, "fill": "url(#hb_carne)", "stroke": "#450A0A", "strokeWidth": 1.5 },
-            { "tipo": "path", "d": "M 36 86 L 124 86 L 112 100 L 96 88 L 78 102 L 60 88 L 44 98 Z", "fill": "url(#hb_queso)" },
-            { "tipo": "ellipse", "cx": 64, "cy": 82, "rx": 22, "ry": 6, "fill": "#EF4444", "stroke": "#B91C1C", "strokeWidth": 1.5 },
-            { "tipo": "ellipse", "cx": 96, "cy": 82, "rx": 22, "ry": 6, "fill": "#DC2626", "stroke": "#991B1B", "strokeWidth": 1.5 },
-            { "tipo": "path", "d": "M 34 80 C 34 40 126 40 126 80 Q 80 90 34 80 Z", "fill": "url(#hb_pan_top)", "stroke": "#78350F", "strokeWidth": 1.5 },
-            { "tipo": "ellipse", "cx": 64, "cy": 58, "rx": 18, "ry": 7, "fill": "#FFFFFF", "opacity": 0.32 },
-            { "tipo": "circle", "cx": 62, "cy": 56, "r": 2, "fill": "#FFFBEB" },
-            { "tipo": "circle", "cx": 78, "cy": 52, "r": 2, "fill": "#FFFBEB" },
-            { "tipo": "circle", "cx": 94, "cy": 58, "r": 2, "fill": "#FFFBEB" },
-            { "tipo": "circle", "cx": 70, "cy": 66, "r": 2, "fill": "#FFFBEB" },
-            { "tipo": "circle", "cx": 88, "cy": 66, "r": 2, "fill": "#FFFBEB" }
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 124,
+              "rx": 52,
+              "ry": 14,
+              "fill": "#E2E8F0",
+              "stroke": "#94A3B8",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "path",
+              "d": "M 36 108 Q 80 124 124 108 L 120 122 Q 80 134 40 122 Z",
+              "fill": "url(#hb_pan_top)"
+            },
+            {
+              "tipo": "path",
+              "d": "M 32 102 Q 48 112 64 102 Q 80 112 96 102 Q 112 112 128 102",
+              "fill": "none",
+              "stroke": "#10B981",
+              "strokeWidth": 7,
+              "strokeLinecap": "round"
+            },
+            {
+              "tipo": "rect",
+              "x": 34,
+              "y": 86,
+              "width": 92,
+              "height": 18,
+              "rx": 9,
+              "fill": "url(#hb_carne)",
+              "stroke": "#450A0A",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "path",
+              "d": "M 36 86 L 124 86 L 112 100 L 96 88 L 78 102 L 60 88 L 44 98 Z",
+              "fill": "url(#hb_queso)"
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 64,
+              "cy": 82,
+              "rx": 22,
+              "ry": 6,
+              "fill": "#EF4444",
+              "stroke": "#B91C1C",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 96,
+              "cy": 82,
+              "rx": 22,
+              "ry": 6,
+              "fill": "#DC2626",
+              "stroke": "#991B1B",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "path",
+              "d": "M 34 80 C 34 40 126 40 126 80 Q 80 90 34 80 Z",
+              "fill": "url(#hb_pan_top)",
+              "stroke": "#78350F",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 64,
+              "cy": 58,
+              "rx": 18,
+              "ry": 7,
+              "fill": "#FFFFFF",
+              "opacity": 0.32
+            },
+            {
+              "tipo": "circle",
+              "cx": 62,
+              "cy": 56,
+              "r": 2,
+              "fill": "#FFFBEB"
+            },
+            {
+              "tipo": "circle",
+              "cx": 78,
+              "cy": 52,
+              "r": 2,
+              "fill": "#FFFBEB"
+            },
+            {
+              "tipo": "circle",
+              "cx": 94,
+              "cy": 58,
+              "r": 2,
+              "fill": "#FFFBEB"
+            },
+            {
+              "tipo": "circle",
+              "cx": 70,
+              "cy": 66,
+              "r": 2,
+              "fill": "#FFFBEB"
+            },
+            {
+              "tipo": "circle",
+              "cx": 88,
+              "cy": 66,
+              "r": 2,
+              "fill": "#FFFBEB"
+            }
           ]
         }
       ]
     },
     "pizza_artesanal": {
       "id": "pizza_artesanal",
-      "nombre": "Pizza Napolitana Artesanal a la Piedra 3D",
+      "nombre": "Pizza Napolitana Artesanal a la Piedra",
       "rubro": "restaurant",
-      "keywords": ["pizza", "napolitana", "fugazza", "calzone", "focaccia", "margherita"],
+      "keywords": [
+        "pizza",
+        "napolitana",
+        "fugazza",
+        "calzone",
+        "focaccia",
+        "margherita"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "pz_borde",
           "tipo": "radialGradient",
-          "cx": "50%", "cy": "50%", "r": "55%",
+          "cx": "50%",
+          "cy": "50%",
+          "r": "55%",
           "stops": [
-            { "offset": "0%", "color": "#FDE68A" },
-            { "offset": "75%", "color": "#D97706" },
-            { "offset": "100%", "color": "#92400E" }
+            {
+              "offset": "0%",
+              "color": "#FDE68A"
+            },
+            {
+              "offset": "75%",
+              "color": "#D97706"
+            },
+            {
+              "offset": "100%",
+              "color": "#92400E"
+            }
           ]
         },
         {
           "id": "pz_queso",
           "tipo": "radialGradient",
-          "cx": "45%", "cy": "45%", "r": "50%",
+          "cx": "45%",
+          "cy": "45%",
+          "r": "50%",
           "stops": [
-            { "offset": "0%", "color": "#FFFBEB" },
-            { "offset": "70%", "color": "#FDE047" },
-            { "offset": "100%", "color": "#DC2626" }
+            {
+              "offset": "0%",
+              "color": "#FFFBEB"
+            },
+            {
+              "offset": "70%",
+              "color": "#FDE047"
+            },
+            {
+              "offset": "100%",
+              "color": "#DC2626"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 134, "rx": 58, "ry": 14, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 134,
+          "rx": 58,
+          "ry": 14,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "ellipse", "cx": 80, "cy": 92, "rx": 58, "ry": 34, "fill": "#78350F" },
-            { "tipo": "ellipse", "cx": 80, "cy": 86, "rx": 58, "ry": 34, "fill": "url(#pz_borde)", "stroke": "#92400E", "strokeWidth": 2 },
-            { "tipo": "ellipse", "cx": 80, "cy": 86, "rx": 47, "ry": 26, "fill": "url(#pz_queso)" },
-            { "tipo": "ellipse", "cx": 60, "cy": 78, "rx": 9, "ry": 5.5, "fill": "#DC2626", "stroke": "#7F1D1D", "strokeWidth": 1 },
-            { "tipo": "ellipse", "cx": 96, "cy": 76, "rx": 9, "ry": 5.5, "fill": "#DC2626", "stroke": "#7F1D1D", "strokeWidth": 1 },
-            { "tipo": "ellipse", "cx": 78, "cy": 96, "rx": 9, "ry": 5.5, "fill": "#DC2626", "stroke": "#7F1D1D", "strokeWidth": 1 },
-            { "tipo": "ellipse", "cx": 54, "cy": 94, "rx": 8, "ry": 5, "fill": "#DC2626", "stroke": "#7F1D1D", "strokeWidth": 1 },
-            { "tipo": "ellipse", "cx": 104, "cy": 92, "rx": 8, "ry": 5, "fill": "#DC2626", "stroke": "#7F1D1D", "strokeWidth": 1 },
-            { "tipo": "circle", "cx": 78, "cy": 82, "r": 5, "fill": "#10B981" },
-            { "tipo": "circle", "cx": 68, "cy": 88, "r": 4, "fill": "#059669" },
-            { "tipo": "circle", "cx": 90, "cy": 86, "r": 4, "fill": "#10B981" }
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 92,
+              "rx": 58,
+              "ry": 34,
+              "fill": "#78350F"
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 86,
+              "rx": 58,
+              "ry": 34,
+              "fill": "url(#pz_borde)",
+              "stroke": "#92400E",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 86,
+              "rx": 47,
+              "ry": 26,
+              "fill": "url(#pz_queso)"
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 60,
+              "cy": 78,
+              "rx": 9,
+              "ry": 5.5,
+              "fill": "#DC2626",
+              "stroke": "#7F1D1D",
+              "strokeWidth": 1
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 96,
+              "cy": 76,
+              "rx": 9,
+              "ry": 5.5,
+              "fill": "#DC2626",
+              "stroke": "#7F1D1D",
+              "strokeWidth": 1
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 78,
+              "cy": 96,
+              "rx": 9,
+              "ry": 5.5,
+              "fill": "#DC2626",
+              "stroke": "#7F1D1D",
+              "strokeWidth": 1
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 54,
+              "cy": 94,
+              "rx": 8,
+              "ry": 5,
+              "fill": "#DC2626",
+              "stroke": "#7F1D1D",
+              "strokeWidth": 1
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 104,
+              "cy": 92,
+              "rx": 8,
+              "ry": 5,
+              "fill": "#DC2626",
+              "stroke": "#7F1D1D",
+              "strokeWidth": 1
+            },
+            {
+              "tipo": "circle",
+              "cx": 78,
+              "cy": 82,
+              "r": 5,
+              "fill": "#10B981"
+            },
+            {
+              "tipo": "circle",
+              "cx": 68,
+              "cy": 88,
+              "r": 4,
+              "fill": "#059669"
+            },
+            {
+              "tipo": "circle",
+              "cx": 90,
+              "cy": 86,
+              "r": 4,
+              "fill": "#10B981"
+            }
           ]
         }
       ]
     },
     "sushi_roll_nikkei": {
       "id": "sushi_roll_nikkei",
-      "nombre": "Tabla de Sushi & Rolls Nikkei 3D",
+      "nombre": "Tabla de Sushi & Rolls Nikkei",
       "rubro": "restaurant",
-      "keywords": ["sushi", "roll", "nikkei", "ceviche", "gohan", "poke", "gyoza", "sashimi", "handroll"],
+      "keywords": [
+        "sushi",
+        "roll",
+        "nikkei",
+        "ceviche",
+        "gohan",
+        "poke",
+        "gyoza",
+        "sashimi",
+        "handroll"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "su_salmon",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#FDA4AF" },
-            { "offset": "50%", "color": "#FB7185" },
-            { "offset": "100%", "color": "#E11D48" }
+            {
+              "offset": "0%",
+              "color": "#FDA4AF"
+            },
+            {
+              "offset": "50%",
+              "color": "#FB7185"
+            },
+            {
+              "offset": "100%",
+              "color": "#E11D48"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 134, "rx": 56, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 134,
+          "rx": 56,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "path", "d": "M 22 96 L 80 68 L 138 96 L 80 124 Z", "fill": "#27272A", "stroke": "#52525B", "strokeWidth": 2 },
-            { "tipo": "path", "d": "M 22 96 L 80 124 L 80 132 L 22 104 Z", "fill": "#18181B" },
-            { "tipo": "path", "d": "M 80 124 L 138 96 L 138 104 L 80 132 Z", "fill": "#09090B" },
-            { "tipo": "rect", "x": 42, "y": 64, "width": 26, "height": 28, "rx": 8, "fill": "#FFFFFF", "stroke": "#18181B", "strokeWidth": 2 },
-            { "tipo": "ellipse", "cx": 55, "cy": 64, "rx": 13, "ry": 7, "fill": "url(#su_salmon)" },
-            { "tipo": "circle", "cx": 55, "cy": 64, "r": 4, "fill": "#10B981" },
-            { "tipo": "rect", "x": 70, "y": 72, "width": 26, "height": 28, "rx": 8, "fill": "#FFFFFF", "stroke": "#18181B", "strokeWidth": 2 },
-            { "tipo": "ellipse", "cx": 83, "cy": 72, "rx": 13, "ry": 7, "fill": "#10B981" },
-            { "tipo": "circle", "cx": 83, "cy": 72, "r": 4.5, "fill": "url(#su_salmon)" },
-            { "tipo": "rect", "x": 96, "y": 60, "width": 26, "height": 28, "rx": 8, "fill": "#FFFFFF", "stroke": "#18181B", "strokeWidth": 2 },
-            { "tipo": "ellipse", "cx": 109, "cy": 60, "rx": 13, "ry": 7, "fill": "url(#su_salmon)" },
-            { "tipo": "circle", "cx": 109, "cy": 60, "r": 4, "fill": "#FEF08A" }
+            {
+              "tipo": "path",
+              "d": "M 22 96 L 80 68 L 138 96 L 80 124 Z",
+              "fill": "#27272A",
+              "stroke": "#52525B",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "path",
+              "d": "M 22 96 L 80 124 L 80 132 L 22 104 Z",
+              "fill": "#18181B"
+            },
+            {
+              "tipo": "path",
+              "d": "M 80 124 L 138 96 L 138 104 L 80 132 Z",
+              "fill": "#09090B"
+            },
+            {
+              "tipo": "rect",
+              "x": 42,
+              "y": 64,
+              "width": 26,
+              "height": 28,
+              "rx": 8,
+              "fill": "#FFFFFF",
+              "stroke": "#18181B",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 55,
+              "cy": 64,
+              "rx": 13,
+              "ry": 7,
+              "fill": "url(#su_salmon)"
+            },
+            {
+              "tipo": "circle",
+              "cx": 55,
+              "cy": 64,
+              "r": 4,
+              "fill": "#10B981"
+            },
+            {
+              "tipo": "rect",
+              "x": 70,
+              "y": 72,
+              "width": 26,
+              "height": 28,
+              "rx": 8,
+              "fill": "#FFFFFF",
+              "stroke": "#18181B",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 83,
+              "cy": 72,
+              "rx": 13,
+              "ry": 7,
+              "fill": "#10B981"
+            },
+            {
+              "tipo": "circle",
+              "cx": 83,
+              "cy": 72,
+              "r": 4.5,
+              "fill": "url(#su_salmon)"
+            },
+            {
+              "tipo": "rect",
+              "x": 96,
+              "y": 60,
+              "width": 26,
+              "height": 28,
+              "rx": 8,
+              "fill": "#FFFFFF",
+              "stroke": "#18181B",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 109,
+              "cy": 60,
+              "rx": 13,
+              "ry": 7,
+              "fill": "url(#su_salmon)"
+            },
+            {
+              "tipo": "circle",
+              "cx": 109,
+              "cy": 60,
+              "r": 4,
+              "fill": "#FEF08A"
+            }
           ]
         }
       ]
     },
     "bowl_proteico_palta": {
       "id": "bowl_proteico_palta",
-      "nombre": "Bowl Gourmet Proteico & Palta Hass 3D",
+      "nombre": "Bowl Gourmet Proteico & Palta Hass",
       "rubro": "restaurant",
-      "keywords": ["bowl", "ensalada", "palta", "quinoa", "saludable", "vegano", "vegetariano", "wok", "ramen", "sopa", "cazuela"],
+      "keywords": [
+        "bowl",
+        "ensalada",
+        "palta",
+        "quinoa",
+        "saludable",
+        "vegano",
+        "vegetariano",
+        "wok",
+        "ramen",
+        "sopa",
+        "cazuela"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "bw_ceramica",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#14B8A6" },
-            { "offset": "60%", "color": "#0F766E" },
-            { "offset": "100%", "color": "#134E4A" }
+            {
+              "offset": "0%",
+              "color": "#14B8A6"
+            },
+            {
+              "offset": "60%",
+              "color": "#0F766E"
+            },
+            {
+              "offset": "100%",
+              "color": "#134E4A"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 134, "rx": 52, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 134,
+          "rx": 52,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "path", "d": "M 30 78 Q 34 128 80 128 Q 126 128 130 78 Z", "fill": "url(#bw_ceramica)", "stroke": "#CCFBF1", "strokeWidth": 2 },
-            { "tipo": "ellipse", "cx": 80, "cy": 78, "rx": 50, "ry": 18, "fill": "#FEF3C7", "stroke": "#0F766E", "strokeWidth": 2.5 },
-            { "tipo": "circle", "cx": 60, "cy": 74, "r": 14, "fill": "#10B981" },
-            { "tipo": "circle", "cx": 96, "cy": 74, "r": 13, "fill": "#B91C1C" },
-            { "tipo": "circle", "cx": 78, "cy": 80, "r": 11, "fill": "#BEF264", "stroke": "#15803D", "strokeWidth": 2 },
-            { "tipo": "circle", "cx": 78, "cy": 66, "r": 7, "fill": "#EF4444" }
+            {
+              "tipo": "path",
+              "d": "M 30 78 Q 34 128 80 128 Q 126 128 130 78 Z",
+              "fill": "url(#bw_ceramica)",
+              "stroke": "#CCFBF1",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 78,
+              "rx": 50,
+              "ry": 18,
+              "fill": "#FEF3C7",
+              "stroke": "#0F766E",
+              "strokeWidth": 2.5
+            },
+            {
+              "tipo": "circle",
+              "cx": 60,
+              "cy": 74,
+              "r": 14,
+              "fill": "#10B981"
+            },
+            {
+              "tipo": "circle",
+              "cx": 96,
+              "cy": 74,
+              "r": 13,
+              "fill": "#B91C1C"
+            },
+            {
+              "tipo": "circle",
+              "cx": 78,
+              "cy": 80,
+              "r": 11,
+              "fill": "#BEF264",
+              "stroke": "#15803D",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "circle",
+              "cx": 78,
+              "cy": 66,
+              "r": 7,
+              "fill": "#EF4444"
+            }
           ]
         }
       ]
     },
     "pasteleria_tarta_cafe": {
       "id": "pasteleria_tarta_cafe",
-      "nombre": "Tarta Artesanal & Pastelería Fina 3D",
+      "nombre": "Tarta Artesanal & Pastelería Fina",
       "rubro": "restaurant",
-      "keywords": ["tarta", "torta", "pastel", "kuchen", "cheesecake", "postre", "dulce", "manzana", "chocolate", "helado", "brownie", "pie"],
+      "keywords": [
+        "tarta",
+        "torta",
+        "pastel",
+        "kuchen",
+        "cheesecake",
+        "postre",
+        "dulce",
+        "manzana",
+        "chocolate",
+        "helado",
+        "brownie",
+        "pie"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "pt_masa",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#FDE68A" },
-            { "offset": "50%", "color": "#F59E0B" },
-            { "offset": "100%", "color": "#B45309" }
+            {
+              "offset": "0%",
+              "color": "#FDE68A"
+            },
+            {
+              "offset": "50%",
+              "color": "#F59E0B"
+            },
+            {
+              "offset": "100%",
+              "color": "#B45309"
+            }
           ]
         },
         {
           "id": "pt_fruta",
           "tipo": "radialGradient",
-          "cx": "50%", "cy": "50%", "r": "50%",
+          "cx": "50%",
+          "cy": "50%",
+          "r": "50%",
           "stops": [
-            { "offset": "0%", "color": "#FDA4AF" },
-            { "offset": "60%", "color": "#E11D48" },
-            { "offset": "100%", "color": "#881337" }
+            {
+              "offset": "0%",
+              "color": "#FDA4AF"
+            },
+            {
+              "offset": "60%",
+              "color": "#E11D48"
+            },
+            {
+              "offset": "100%",
+              "color": "#881337"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 134, "rx": 54, "ry": 13, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 134,
+          "rx": 54,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.18,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "ellipse", "cx": 80, "cy": 116, "rx": 54, "ry": 16, "fill": "#FFFFFF", "stroke": "#CBD5E1", "strokeWidth": 2 },
-            { "tipo": "path", "d": "M 34 86 L 38 112 Q 80 124 122 112 L 126 86 Z", "fill": "url(#pt_masa)", "stroke": "#92400E", "strokeWidth": 1.5 },
-            { "tipo": "ellipse", "cx": 80, "cy": 86, "rx": 46, "ry": 18, "fill": "#FEF3C7", "stroke": "#D97706", "strokeWidth": 3 },
-            { "tipo": "ellipse", "cx": 80, "cy": 84, "rx": 36, "ry": 13, "fill": "url(#pt_fruta)" },
-            { "tipo": "circle", "cx": 80, "cy": 72, "r": 9, "fill": "#FFFBEB", "stroke": "#FDE68A", "strokeWidth": 1.5 },
-            { "tipo": "circle", "cx": 80, "cy": 66, "r": 5, "fill": "#E11D48", "clase": "insumo-3d-pulse" }
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 116,
+              "rx": 54,
+              "ry": 16,
+              "fill": "#FFFFFF",
+              "stroke": "#CBD5E1",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "path",
+              "d": "M 34 86 L 38 112 Q 80 124 122 112 L 126 86 Z",
+              "fill": "url(#pt_masa)",
+              "stroke": "#92400E",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 86,
+              "rx": 46,
+              "ry": 18,
+              "fill": "#FEF3C7",
+              "stroke": "#D97706",
+              "strokeWidth": 3
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 84,
+              "rx": 36,
+              "ry": 13,
+              "fill": "url(#pt_fruta)"
+            },
+            {
+              "tipo": "circle",
+              "cx": 80,
+              "cy": 72,
+              "r": 9,
+              "fill": "#FFFBEB",
+              "stroke": "#FDE68A",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "circle",
+              "cx": 80,
+              "cy": 66,
+              "r": 5,
+              "fill": "#E11D48",
+              "clase": "insumo-3d-pulse"
+            }
           ]
         }
       ]
     },
     "cafe_barista_combo": {
       "id": "cafe_barista_combo",
-      "nombre": "Combo Barista: Café Especialidad & Croissant 3D",
+      "nombre": "Combo Barista: Café Especialidad & Croissant",
       "rubro": "restaurant",
-      "keywords": ["cafe", "café", "espresso", "capuchino", "latte", "desayuno", "croissant", "medialuna", "cafeteria"],
+      "keywords": [
+        "cafe",
+        "café",
+        "espresso",
+        "capuchino",
+        "latte",
+        "desayuno",
+        "croissant",
+        "medialuna",
+        "cafeteria"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "cf_taza",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#FFFFFF" },
-            { "offset": "100%", "color": "#CBD5E1" }
+            {
+              "offset": "0%",
+              "color": "#FFFFFF"
+            },
+            {
+              "offset": "100%",
+              "color": "#CBD5E1"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 134, "rx": 54, "ry": 13, "fill": "#09090B", "opacity": 0.18, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 134,
+          "rx": 54,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.18,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "ellipse", "cx": 80, "cy": 116, "rx": 52, "ry": 15, "fill": "#E2E8F0", "stroke": "#94A3B8", "strokeWidth": 2 },
-            { "tipo": "path", "d": "M 42 70 Q 42 114 74 114 Q 106 114 106 70 Z", "fill": "url(#cf_taza)", "stroke": "#94A3B8", "strokeWidth": 2 },
-            { "tipo": "path", "d": "M 104 78 C 122 78 122 100 102 100", "fill": "none", "stroke": "#CBD5E1", "strokeWidth": 6, "strokeLinecap": "round" },
-            { "tipo": "ellipse", "cx": 74, "cy": 70, "rx": 32, "ry": 11, "fill": "#78350F", "stroke": "#FFFFFF", "strokeWidth": 2.5 },
-            { "tipo": "circle", "cx": 74, "cy": 70, "r": 8, "fill": "#FEF3C7", "opacity": 0.85 },
-            { "tipo": "path", "d": "M 82 110 Q 106 92 126 112 Q 106 122 82 110 Z", "fill": "#F59E0B", "stroke": "#B45309", "strokeWidth": 1.5 }
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 116,
+              "rx": 52,
+              "ry": 15,
+              "fill": "#E2E8F0",
+              "stroke": "#94A3B8",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "path",
+              "d": "M 42 70 Q 42 114 74 114 Q 106 114 106 70 Z",
+              "fill": "url(#cf_taza)",
+              "stroke": "#94A3B8",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "path",
+              "d": "M 104 78 C 122 78 122 100 102 100",
+              "fill": "none",
+              "stroke": "#CBD5E1",
+              "strokeWidth": 6,
+              "strokeLinecap": "round"
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 74,
+              "cy": 70,
+              "rx": 32,
+              "ry": 11,
+              "fill": "#78350F",
+              "stroke": "#FFFFFF",
+              "strokeWidth": 2.5
+            },
+            {
+              "tipo": "circle",
+              "cx": 74,
+              "cy": 70,
+              "r": 8,
+              "fill": "#FEF3C7",
+              "opacity": 0.85
+            },
+            {
+              "tipo": "path",
+              "d": "M 82 110 Q 106 92 126 112 Q 106 122 82 110 Z",
+              "fill": "#F59E0B",
+              "stroke": "#B45309",
+              "strokeWidth": 1.5
+            }
           ]
         }
       ]
     },
     "plato_ejecutivo_parrilla": {
       "id": "plato_ejecutivo_parrilla",
-      "nombre": "Plato Fuerte: Lomo Grillado & Papas Rústicas 3D",
+      "nombre": "Plato Fuerte: Lomo Grillado & Papas Rústicas",
       "rubro": "restaurant",
-      "keywords": ["plato", "almuerzo", "colacion", "lomo", "carne", "parrilla", "pollo", "pescado", "salmon", "papas", "combo", "menu"],
+      "keywords": [
+        "plato",
+        "almuerzo",
+        "colacion",
+        "lomo",
+        "carne",
+        "parrilla",
+        "pollo",
+        "pescado",
+        "salmon",
+        "papas",
+        "combo",
+        "menu"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "pl_carne",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#B91C1C" },
-            { "offset": "60%", "color": "#7F1D1D" },
-            { "offset": "100%", "color": "#450A0A" }
+            {
+              "offset": "0%",
+              "color": "#B91C1C"
+            },
+            {
+              "offset": "60%",
+              "color": "#7F1D1D"
+            },
+            {
+              "offset": "100%",
+              "color": "#450A0A"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 134, "rx": 58, "ry": 14, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 134,
+          "rx": 58,
+          "ry": 14,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "ellipse", "cx": 80, "cy": 100, "rx": 60, "ry": 26, "fill": "#FFFFFF", "stroke": "#CBD5E1", "strokeWidth": 3 },
-            { "tipo": "ellipse", "cx": 80, "cy": 100, "rx": 48, "ry": 20, "fill": "#F8FAFC", "stroke": "#E2E8F0", "strokeWidth": 1.5 },
-            { "tipo": "path", "d": "M 42 94 Q 58 74 90 82 Q 104 96 86 110 Q 54 114 42 94 Z", "fill": "url(#pl_carne)", "stroke": "#450A0A", "strokeWidth": 1.5 },
-            { "tipo": "rect", "x": 92, "y": 82, "width": 24, "height": 7, "rx": 3, "fill": "#FBBF24", "stroke": "#D97706", "strokeWidth": 1 },
-            { "tipo": "rect", "x": 96, "y": 90, "width": 24, "height": 7, "rx": 3, "fill": "#F59E0B", "stroke": "#B45309", "strokeWidth": 1 },
-            { "tipo": "circle", "cx": 64, "cy": 82, "r": 7, "fill": "#10B981" }
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 100,
+              "rx": 60,
+              "ry": 26,
+              "fill": "#FFFFFF",
+              "stroke": "#CBD5E1",
+              "strokeWidth": 3
+            },
+            {
+              "tipo": "ellipse",
+              "cx": 80,
+              "cy": 100,
+              "rx": 48,
+              "ry": 20,
+              "fill": "#F8FAFC",
+              "stroke": "#E2E8F0",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "path",
+              "d": "M 42 94 Q 58 74 90 82 Q 104 96 86 110 Q 54 114 42 94 Z",
+              "fill": "url(#pl_carne)",
+              "stroke": "#450A0A",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "rect",
+              "x": 92,
+              "y": 82,
+              "width": 24,
+              "height": 7,
+              "rx": 3,
+              "fill": "#FBBF24",
+              "stroke": "#D97706",
+              "strokeWidth": 1
+            },
+            {
+              "tipo": "rect",
+              "x": 96,
+              "y": 90,
+              "width": 24,
+              "height": 7,
+              "rx": 3,
+              "fill": "#F59E0B",
+              "stroke": "#B45309",
+              "strokeWidth": 1
+            },
+            {
+              "tipo": "circle",
+              "cx": 64,
+              "cy": 82,
+              "r": 7,
+              "fill": "#10B981"
+            }
           ]
         }
       ]
     },
     "canasta_retail_desayuno": {
       "id": "canasta_retail_desayuno",
-      "nombre": "Pack Minimarket & Canasta Familiar 3D",
+      "nombre": "Pack Minimarket & Canasta Familiar",
       "rubro": "minimarket",
-      "keywords": ["pack", "canasta", "desayuno", "familiar", "minimarket", "almacen", "supermercado", "combo", "caja"],
+      "keywords": [
+        "pack",
+        "canasta",
+        "desayuno",
+        "familiar",
+        "minimarket",
+        "almacen",
+        "supermercado",
+        "combo",
+        "caja"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "rt_caja",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#14B8A6" },
-            { "offset": "100%", "color": "#0F766E" }
+            {
+              "offset": "0%",
+              "color": "#14B8A6"
+            },
+            {
+              "offset": "100%",
+              "color": "#0F766E"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 54, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 54,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "rect", "x": 42, "y": 44, "width": 24, "height": 52, "rx": 5, "fill": "#2563EB", "stroke": "#93C5FD", "strokeWidth": 1.5 },
-            { "tipo": "rect", "x": 68, "y": 38, "width": 28, "height": 56, "rx": 6, "fill": "#D97706", "stroke": "#FDE68A", "strokeWidth": 1.5 },
-            { "tipo": "rect", "x": 94, "y": 50, "width": 24, "height": 46, "rx": 5, "fill": "#78350F", "stroke": "#FCD34D", "strokeWidth": 1.5 },
-            { "tipo": "path", "d": "M 28 84 L 132 84 L 122 124 L 38 124 Z", "fill": "url(#rt_caja)", "stroke": "#99F6E4", "strokeWidth": 2 },
-            { "tipo": "rect", "x": 58, "y": 96, "width": 44, "height": 14, "rx": 4, "fill": "#FFFFFF" }
+            {
+              "tipo": "rect",
+              "x": 42,
+              "y": 44,
+              "width": 24,
+              "height": 52,
+              "rx": 5,
+              "fill": "#2563EB",
+              "stroke": "#93C5FD",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "rect",
+              "x": 68,
+              "y": 38,
+              "width": 28,
+              "height": 56,
+              "rx": 6,
+              "fill": "#D97706",
+              "stroke": "#FDE68A",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "rect",
+              "x": 94,
+              "y": 50,
+              "width": 24,
+              "height": 46,
+              "rx": 5,
+              "fill": "#78350F",
+              "stroke": "#FCD34D",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "path",
+              "d": "M 28 84 L 132 84 L 122 124 L 38 124 Z",
+              "fill": "url(#rt_caja)",
+              "stroke": "#99F6E4",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "rect",
+              "x": 58,
+              "y": 96,
+              "width": 44,
+              "height": 14,
+              "rx": 4,
+              "fill": "#FFFFFF"
+            }
           ]
         }
       ]
     },
     "pack_bebidas_snacks": {
       "id": "pack_bebidas_snacks",
-      "nombre": "Six-Pack Bebidas & Snacks Retail 3D",
+      "nombre": "Six-Pack Bebidas & Snacks Retail",
       "rubro": "minimarket",
-      "keywords": ["bebida", "six-pack", "six", "cerveza", "jugo", "leche", "agua", "snack", "botella", "lata"],
+      "keywords": [
+        "bebida",
+        "six-pack",
+        "six",
+        "cerveza",
+        "jugo",
+        "leche",
+        "agua",
+        "snack",
+        "botella",
+        "lata"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "pk_botella",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#60A5FA" },
-            { "offset": "50%", "color": "#2563EB" },
-            { "offset": "100%", "color": "#1E3A8A" }
+            {
+              "offset": "0%",
+              "color": "#60A5FA"
+            },
+            {
+              "offset": "50%",
+              "color": "#2563EB"
+            },
+            {
+              "offset": "100%",
+              "color": "#1E3A8A"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 52, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 52,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "rect", "x": 38, "y": 44, "width": 24, "height": 76, "rx": 8, "fill": "url(#pk_botella)", "stroke": "#DBEAFE", "strokeWidth": 1.5 },
-            { "tipo": "rect", "x": 68, "y": 38, "width": 24, "height": 82, "rx": 8, "fill": "#DC2626", "stroke": "#FECACA", "strokeWidth": 1.5 },
-            { "tipo": "rect", "x": 98, "y": 48, "width": 24, "height": 72, "rx": 8, "fill": "#F59E0B", "stroke": "#FEF3C7", "strokeWidth": 1.5 },
-            { "tipo": "rect", "x": 32, "y": 90, "width": 96, "height": 32, "rx": 6, "fill": "#18181B", "stroke": "#52525B", "strokeWidth": 2 }
+            {
+              "tipo": "rect",
+              "x": 38,
+              "y": 44,
+              "width": 24,
+              "height": 76,
+              "rx": 8,
+              "fill": "url(#pk_botella)",
+              "stroke": "#DBEAFE",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "rect",
+              "x": 68,
+              "y": 38,
+              "width": 24,
+              "height": 82,
+              "rx": 8,
+              "fill": "#DC2626",
+              "stroke": "#FECACA",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "rect",
+              "x": 98,
+              "y": 48,
+              "width": 24,
+              "height": 72,
+              "rx": 8,
+              "fill": "#F59E0B",
+              "stroke": "#FEF3C7",
+              "strokeWidth": 1.5
+            },
+            {
+              "tipo": "rect",
+              "x": 32,
+              "y": 90,
+              "width": 96,
+              "height": 32,
+              "rx": 6,
+              "fill": "#18181B",
+              "stroke": "#52525B",
+              "strokeWidth": 2
+            }
           ]
         }
       ]
     },
     "kit_ferreteria_pro": {
       "id": "kit_ferreteria_pro",
-      "nombre": "Kit Ferretería, Construcción & Hogar 3D",
+      "nombre": "Kit Ferretería, Construcción & Hogar",
       "rubro": "minimarket",
-      "keywords": ["ferreteria", "kit", "herramienta", "tornillo", "construccion", "hogar", "aseo", "industrial"],
+      "keywords": [
+        "ferreteria",
+        "kit",
+        "herramienta",
+        "tornillo",
+        "construccion",
+        "hogar",
+        "aseo",
+        "industrial"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "fr_maletin",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#52525B" },
-            { "offset": "100%", "color": "#18181B" }
+            {
+              "offset": "0%",
+              "color": "#52525B"
+            },
+            {
+              "offset": "100%",
+              "color": "#18181B"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 52, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 52,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "path", "d": "M 62 46 L 62 34 L 98 34 L 98 46", "fill": "none", "stroke": "#F59E0B", "strokeWidth": 6, "strokeLinecap": "round" },
-            { "tipo": "rect", "x": 30, "y": 46, "width": 100, "height": 74, "rx": 10, "fill": "url(#fr_maletin)", "stroke": "#A1A1AA", "strokeWidth": 2 },
-            { "tipo": "rect", "x": 30, "y": 78, "width": 100, "height": 8, "fill": "#F59E0B" },
-            { "tipo": "rect", "x": 52, "y": 72, "width": 12, "height": 20, "rx": 3, "fill": "#E4E4E7" },
-            { "tipo": "rect", "x": 96, "y": 72, "width": 12, "height": 20, "rx": 3, "fill": "#E4E4E7" }
+            {
+              "tipo": "path",
+              "d": "M 62 46 L 62 34 L 98 34 L 98 46",
+              "fill": "none",
+              "stroke": "#F59E0B",
+              "strokeWidth": 6,
+              "strokeLinecap": "round"
+            },
+            {
+              "tipo": "rect",
+              "x": 30,
+              "y": 46,
+              "width": 100,
+              "height": 74,
+              "rx": 10,
+              "fill": "url(#fr_maletin)",
+              "stroke": "#A1A1AA",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "rect",
+              "x": 30,
+              "y": 78,
+              "width": 100,
+              "height": 8,
+              "fill": "#F59E0B"
+            },
+            {
+              "tipo": "rect",
+              "x": 52,
+              "y": 72,
+              "width": 12,
+              "height": 20,
+              "rx": 3,
+              "fill": "#E4E4E7"
+            },
+            {
+              "tipo": "rect",
+              "x": 96,
+              "y": 72,
+              "width": 12,
+              "height": 20,
+              "rx": 3,
+              "fill": "#E4E4E7"
+            }
           ]
         }
       ]
     },
     "consultoria_estrategica_mba": {
       "id": "consultoria_estrategica_mba",
-      "nombre": "Suite de Consultoría Estratégica & Auditoría 3D",
+      "nombre": "Suite de Consultoría Estratégica & Auditoría",
       "rubro": "services",
-      "keywords": ["auditoria", "consultoria", "estrategica", "mba", "asesoria", "directorio", "finanzas", "contabilidad", "legal"],
+      "keywords": [
+        "auditoria",
+        "consultoria",
+        "estrategica",
+        "mba",
+        "asesoria",
+        "directorio",
+        "finanzas",
+        "contabilidad",
+        "legal"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "cs_panel",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#0F766E" },
-            { "offset": "100%", "color": "#042F2E" }
+            {
+              "offset": "0%",
+              "color": "#0F766E"
+            },
+            {
+              "offset": "100%",
+              "color": "#042F2E"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 54, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 54,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "rect", "x": 26, "y": 36, "width": 108, "height": 76, "rx": 10, "fill": "url(#cs_panel)", "stroke": "#5EEAD4", "strokeWidth": 2.5 },
-            { "tipo": "rect", "x": 40, "y": 76, "width": 14, "height": 24, "rx": 3, "fill": "#5EEAD4" },
-            { "tipo": "rect", "x": 62, "y": 64, "width": 14, "height": 36, "rx": 3, "fill": "#2DD4BF" },
-            { "tipo": "rect", "x": 84, "y": 52, "width": 14, "height": 48, "rx": 3, "fill": "#FEF08A" },
-            { "tipo": "rect", "x": 106, "y": 44, "width": 14, "height": 56, "rx": 3, "fill": "#10B981" },
-            { "tipo": "path", "d": "M 44 68 L 68 56 L 90 46 L 112 38", "fill": "none", "stroke": "#FFFFFF", "strokeWidth": 3, "strokeLinecap": "round" }
+            {
+              "tipo": "rect",
+              "x": 26,
+              "y": 36,
+              "width": 108,
+              "height": 76,
+              "rx": 10,
+              "fill": "url(#cs_panel)",
+              "stroke": "#5EEAD4",
+              "strokeWidth": 2.5
+            },
+            {
+              "tipo": "rect",
+              "x": 40,
+              "y": 76,
+              "width": 14,
+              "height": 24,
+              "rx": 3,
+              "fill": "#5EEAD4"
+            },
+            {
+              "tipo": "rect",
+              "x": 62,
+              "y": 64,
+              "width": 14,
+              "height": 36,
+              "rx": 3,
+              "fill": "#2DD4BF"
+            },
+            {
+              "tipo": "rect",
+              "x": 84,
+              "y": 52,
+              "width": 14,
+              "height": 48,
+              "rx": 3,
+              "fill": "#FEF08A"
+            },
+            {
+              "tipo": "rect",
+              "x": 106,
+              "y": 44,
+              "width": 14,
+              "height": 56,
+              "rx": 3,
+              "fill": "#10B981"
+            },
+            {
+              "tipo": "path",
+              "d": "M 44 68 L 68 56 L 90 46 L 112 38",
+              "fill": "none",
+              "stroke": "#FFFFFF",
+              "strokeWidth": 3,
+              "strokeLinecap": "round"
+            }
           ]
         }
       ]
     },
     "desarrollo_software_cloud": {
       "id": "desarrollo_software_cloud",
-      "nombre": "Plataforma SaaS, Desarrollo FullStack & Cloud 3D",
+      "nombre": "Plataforma SaaS, Desarrollo FullStack & Cloud",
       "rubro": "services",
-      "keywords": ["software", "cloud", "desarrollo", "soporte", "app", "web", "saas", "sistema", "ti", "tecnologia"],
+      "keywords": [
+        "software",
+        "cloud",
+        "desarrollo",
+        "soporte",
+        "app",
+        "web",
+        "saas",
+        "sistema",
+        "ti",
+        "tecnologia"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "sw_cube",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#6366F1" },
-            { "offset": "100%", "color": "#312E81" }
+            {
+              "offset": "0%",
+              "color": "#6366F1"
+            },
+            {
+              "offset": "100%",
+              "color": "#312E81"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 54, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 54,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "path", "d": "M 34 62 L 80 36 L 126 62 L 80 88 Z", "fill": "#A5B4FC", "stroke": "#E0E7FF", "strokeWidth": 2 },
-            { "tipo": "path", "d": "M 34 62 L 80 88 L 80 124 L 34 98 Z", "fill": "url(#sw_cube)" },
-            { "tipo": "path", "d": "M 80 88 L 126 62 L 126 98 L 80 124 Z", "fill": "#1E1B4B" },
-            { "tipo": "circle", "cx": 80, "cy": 62, "r": 9, "fill": "#5EEAD4", "clase": "insumo-3d-pulse" }
+            {
+              "tipo": "path",
+              "d": "M 34 62 L 80 36 L 126 62 L 80 88 Z",
+              "fill": "#A5B4FC",
+              "stroke": "#E0E7FF",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "path",
+              "d": "M 34 62 L 80 88 L 80 124 L 34 98 Z",
+              "fill": "url(#sw_cube)"
+            },
+            {
+              "tipo": "path",
+              "d": "M 80 88 L 126 62 L 126 98 L 80 124 Z",
+              "fill": "#1E1B4B"
+            },
+            {
+              "tipo": "circle",
+              "cx": 80,
+              "cy": 62,
+              "r": 9,
+              "fill": "#5EEAD4",
+              "clase": "insumo-3d-pulse"
+            }
           ]
         }
       ]
     },
     "agencia_diseno_marketing": {
       "id": "agencia_diseno_marketing",
-      "nombre": "Diseño UI/UX, Branding & Campaña Digital 3D",
+      "nombre": "Diseño UI/UX, Branding & Campaña Digital",
       "rubro": "services",
-      "keywords": ["diseño", "diseno", "ui", "ux", "grafica", "marketing", "branding", "publicidad", "campaña", "redes"],
+      "keywords": [
+        "diseño",
+        "diseno",
+        "ui",
+        "ux",
+        "grafica",
+        "marketing",
+        "branding",
+        "publicidad",
+        "campaña",
+        "redes"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "mk_canvas",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#EC4899" },
-            { "offset": "50%", "color": "#8B5CF6" },
-            { "offset": "100%", "color": "#3B82F6" }
+            {
+              "offset": "0%",
+              "color": "#EC4899"
+            },
+            {
+              "offset": "50%",
+              "color": "#8B5CF6"
+            },
+            {
+              "offset": "100%",
+              "color": "#3B82F6"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 52, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 52,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "rect", "x": 32, "y": 38, "width": 96, "height": 74, "rx": 12, "fill": "url(#mk_canvas)", "stroke": "#F3E8FF", "strokeWidth": 2.5 },
-            { "tipo": "circle", "cx": 64, "cy": 74, "r": 16, "fill": "#FEF08A", "opacity": 0.9 },
-            { "tipo": "polygon", "points": "88,56 114,92 66,92", "fill": "#FFFFFF", "opacity": 0.9 }
+            {
+              "tipo": "rect",
+              "x": 32,
+              "y": 38,
+              "width": 96,
+              "height": 74,
+              "rx": 12,
+              "fill": "url(#mk_canvas)",
+              "stroke": "#F3E8FF",
+              "strokeWidth": 2.5
+            },
+            {
+              "tipo": "circle",
+              "cx": 64,
+              "cy": 74,
+              "r": 16,
+              "fill": "#FEF08A",
+              "opacity": 0.9
+            },
+            {
+              "tipo": "polygon",
+              "points": "88,56 114,92 66,92",
+              "fill": "#FFFFFF",
+              "opacity": 0.9
+            }
           ]
         }
       ]
     },
     "sandwich_mechada_italiano": {
       "id": "sandwich_mechada_italiano",
-      "nombre": "Sándwich Mechada Italiano & Palta Hass 3D",
+      "nombre": "Sándwich Mechada Italiano & Palta Hass",
       "rubro": "restaurant",
-      "keywords": ["sandwich", "sanduich", "mechada", "italiano", "chacarero", "lomito", "completo", "barros"],
+      "keywords": [
+        "sandwich",
+        "sanduich",
+        "mechada",
+        "italiano",
+        "chacarero",
+        "lomito",
+        "completo",
+        "barros"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "mech_pan",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "0%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "0%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#FBBF24" },
-            { "offset": "100%", "color": "#B45309" }
+            {
+              "offset": "0%",
+              "color": "#FBBF24"
+            },
+            {
+              "offset": "100%",
+              "color": "#B45309"
+            }
           ]
         },
         {
           "id": "mech_palta",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "0%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "0%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#84CC16" },
-            { "offset": "100%", "color": "#4D7C0F" }
+            {
+              "offset": "0%",
+              "color": "#84CC16"
+            },
+            {
+              "offset": "100%",
+              "color": "#4D7C0F"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 58, "ry": 14, "fill": "#09090B", "opacity": 0.22, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 58,
+          "ry": 14,
+          "fill": "#09090B",
+          "opacity": 0.22,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "rect", "x": 22, "y": 104, "width": 116, "height": 22, "rx": 10, "fill": "url(#mech_pan)" },
-            { "tipo": "rect", "x": 26, "y": 88, "width": 108, "height": 18, "rx": 6, "fill": "#78350F" },
-            { "tipo": "rect", "x": 24, "y": 74, "width": 112, "height": 16, "rx": 5, "fill": "#DC2626" },
-            { "tipo": "rect", "x": 22, "y": 60, "width": 116, "height": 16, "rx": 5, "fill": "url(#mech_palta)" },
-            { "tipo": "path", "d": "M 20 54 Q 80 18 140 54 L 138 60 Q 80 32 22 60 Z", "fill": "url(#mech_pan)", "stroke": "#FDE68A", "strokeWidth": 1.5 }
+            {
+              "tipo": "rect",
+              "x": 22,
+              "y": 104,
+              "width": 116,
+              "height": 22,
+              "rx": 10,
+              "fill": "url(#mech_pan)"
+            },
+            {
+              "tipo": "rect",
+              "x": 26,
+              "y": 88,
+              "width": 108,
+              "height": 18,
+              "rx": 6,
+              "fill": "#78350F"
+            },
+            {
+              "tipo": "rect",
+              "x": 24,
+              "y": 74,
+              "width": 112,
+              "height": 16,
+              "rx": 5,
+              "fill": "#DC2626"
+            },
+            {
+              "tipo": "rect",
+              "x": 22,
+              "y": 60,
+              "width": 116,
+              "height": 16,
+              "rx": 5,
+              "fill": "url(#mech_palta)"
+            },
+            {
+              "tipo": "path",
+              "d": "M 20 54 Q 80 18 140 54 L 138 60 Q 80 32 22 60 Z",
+              "fill": "url(#mech_pan)",
+              "stroke": "#FDE68A",
+              "strokeWidth": 1.5
+            }
           ]
         }
       ]
     },
     "pack_abarrotes_despensa": {
       "id": "pack_abarrotes_despensa",
-      "nombre": "Cesta Abarrotes Despensa & Granos 3D",
+      "nombre": "Cesta Abarrotes Despensa & Granos",
       "rubro": "minimarket",
-      "keywords": ["abarrotes", "despensa", "arroz", "fideos", "aceite", "azucar", "harina", "legumbres"],
+      "keywords": [
+        "abarrotes",
+        "despensa",
+        "arroz",
+        "fideos",
+        "aceite",
+        "azucar",
+        "harina",
+        "legumbres"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "cesta_wood",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "0%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "0%",
           "stops": [
-            { "offset": "0%", "color": "#78350F" },
-            { "offset": "50%", "color": "#B45309" },
-            { "offset": "100%", "color": "#78350F" }
+            {
+              "offset": "0%",
+              "color": "#78350F"
+            },
+            {
+              "offset": "50%",
+              "color": "#B45309"
+            },
+            {
+              "offset": "100%",
+              "color": "#78350F"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 56, "ry": 14, "fill": "#09090B", "opacity": 0.22, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 56,
+          "ry": 14,
+          "fill": "#09090B",
+          "opacity": 0.22,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "rect", "x": 42, "y": 42, "width": 32, "height": 56, "rx": 6, "fill": "#0284C7" },
-            { "tipo": "rect", "x": 84, "y": 36, "width": 30, "height": 62, "rx": 6, "fill": "#D97706" },
-            { "tipo": "polygon", "points": "24,84 136,84 124,124 36,124", "fill": "url(#cesta_wood)", "stroke": "#FDE68A", "strokeWidth": 2 },
-            { "tipo": "line", "x1": "28", "y1": "104", "x2": "132", "y2": "104", "stroke": "#451A03", "strokeWidth": 2.5 }
+            {
+              "tipo": "rect",
+              "x": 42,
+              "y": 42,
+              "width": 32,
+              "height": 56,
+              "rx": 6,
+              "fill": "#0284C7"
+            },
+            {
+              "tipo": "rect",
+              "x": 84,
+              "y": 36,
+              "width": 30,
+              "height": 62,
+              "rx": 6,
+              "fill": "#D97706"
+            },
+            {
+              "tipo": "polygon",
+              "points": "24,84 136,84 124,124 36,124",
+              "fill": "url(#cesta_wood)",
+              "stroke": "#FDE68A",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "line",
+              "x1": "28",
+              "y1": "104",
+              "x2": "132",
+              "y2": "104",
+              "stroke": "#451A03",
+              "strokeWidth": 2.5
+            }
           ]
         }
       ]
     },
     "consultoria_financiera_tributaria": {
       "id": "consultoria_financiera_tributaria",
-      "nombre": "Dictamen Tributario, Balance & Finanzas MBA 3D",
+      "nombre": "Dictamen Tributario, Balance & Finanzas MBA",
       "rubro": "services",
-      "keywords": ["tributario", "tributaria", "balance", "financiero", "contable", "impuestos", "flujo", "renta"],
+      "keywords": [
+        "tributario",
+        "tributaria",
+        "balance",
+        "financiero",
+        "contable",
+        "impuestos",
+        "flujo",
+        "renta"
+      ],
       "viewBox": "0 0 160 160",
       "gradientes": [
         {
           "id": "fin_gold",
           "tipo": "linearGradient",
-          "x1": "0%", "y1": "0%", "x2": "100%", "y2": "100%",
+          "x1": "0%",
+          "y1": "0%",
+          "x2": "100%",
+          "y2": "100%",
           "stops": [
-            { "offset": "0%", "color": "#0F766E" },
-            { "offset": "50%", "color": "#14B8A6" },
-            { "offset": "100%", "color": "#042F2E" }
+            {
+              "offset": "0%",
+              "color": "#0F766E"
+            },
+            {
+              "offset": "50%",
+              "color": "#14B8A6"
+            },
+            {
+              "offset": "100%",
+              "color": "#042F2E"
+            }
           ]
         }
       ],
       "capas": [
-        { "tipo": "ellipse", "cx": 80, "cy": 136, "rx": 54, "ry": 13, "fill": "#09090B", "opacity": 0.2, "clase": "insumo-3d-shadow" },
+        {
+          "tipo": "ellipse",
+          "cx": 80,
+          "cy": 136,
+          "rx": 54,
+          "ry": 13,
+          "fill": "#09090B",
+          "opacity": 0.2,
+          "clase": "insumo-3d-shadow"
+        },
         {
           "tipo": "group",
           "clase": "insumo-3d-float",
           "hijos": [
-            { "tipo": "rect", "x": 30, "y": 38, "width": 100, "height": 84, "rx": 10, "fill": "url(#fin_gold)", "stroke": "#CCFBF1", "strokeWidth": 2 },
-            { "tipo": "rect", "x": 42, "y": 80, "width": 14, "height": 30, "rx": 3, "fill": "#FDE047" },
-            { "tipo": "rect", "x": 64, "y": 66, "width": 14, "height": 44, "rx": 3, "fill": "#FDE047" },
-            { "tipo": "rect", "x": 86, "y": 52, "width": 14, "height": 58, "rx": 3, "fill": "#FDE047" },
-            { "tipo": "polyline", "points": "49,76 71,60 93,46 114,36", "fill": "none", "stroke": "#FFFFFF", "strokeWidth": 3 }
+            {
+              "tipo": "rect",
+              "x": 30,
+              "y": 38,
+              "width": 100,
+              "height": 84,
+              "rx": 10,
+              "fill": "url(#fin_gold)",
+              "stroke": "#CCFBF1",
+              "strokeWidth": 2
+            },
+            {
+              "tipo": "rect",
+              "x": 42,
+              "y": 80,
+              "width": 14,
+              "height": 30,
+              "rx": 3,
+              "fill": "#FDE047"
+            },
+            {
+              "tipo": "rect",
+              "x": 64,
+              "y": 66,
+              "width": 14,
+              "height": 44,
+              "rx": 3,
+              "fill": "#FDE047"
+            },
+            {
+              "tipo": "rect",
+              "x": 86,
+              "y": 52,
+              "width": 14,
+              "height": 58,
+              "rx": 3,
+              "fill": "#FDE047"
+            },
+            {
+              "tipo": "polyline",
+              "points": "49,76 71,60 93,46 114,36",
+              "fill": "none",
+              "stroke": "#FFFFFF",
+              "strokeWidth": 3
+            }
           ]
         }
       ]
