@@ -32,11 +32,11 @@ export default function GestionCostosVariablesRest({
       <div
         style={{
           flex: '1',
-          background: '#ffffff',
+          background: 'var(--color-surface, #0D131F)',
           padding: '24px',
           borderRadius: '16px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-          border: '1px solid #e4ecf3',
+          boxShadow: 'var(--shadow-card)',
+          border: '1px solid var(--color-border)',
         }}
       >
         <div
@@ -47,17 +47,17 @@ export default function GestionCostosVariablesRest({
             marginBottom: '20px',
           }}
         >
-          <h3 style={{ margin: 0, color: '#1a252f', fontSize: '18px' }}>
+          <h3 style={{ margin: 0, color: 'var(--color-foreground, #F8FAFC)', fontSize: '18px' }}>
             Listado de Costos Adicionales
           </h3>
           <div
             style={{
-              background: '#fcf3cf',
+              background: 'rgba(226, 248, 0, 0.12)',
               padding: '8px 16px',
               borderRadius: '8px',
-              border: '1px solid #f1c40f',
+              border: '1px solid rgba(226, 248, 0, 0.35)',
               fontWeight: 'bold',
-              color: '#d35400',
+              color: 'var(--color-primary)',
             }}
           >
             Costo Extra por Plato: ${totalVariable.toLocaleString('es-CL')}
@@ -69,8 +69,8 @@ export default function GestionCostosVariablesRest({
             style={{
               textAlign: 'center',
               padding: '40px',
-              color: '#95a5a6',
-              background: '#f8fafc',
+              color: 'var(--color-muted-foreground)',
+              background: 'var(--color-surface-elevated, #131A29)',
               borderRadius: '8px',
             }}
           >

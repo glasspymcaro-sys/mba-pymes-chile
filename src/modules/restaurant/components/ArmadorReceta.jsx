@@ -85,18 +85,18 @@ export default function ArmadorReceta({
       <div
         style={{
           flex: '1',
-          background: '#f8fafc',
+          background: 'var(--color-surface, #0D131F)',
           padding: '20px',
           borderRadius: '16px',
-          border: '1px solid #e4ecf3',
+          border: '1px solid var(--color-border)',
         }}
       >
         <h3
-          style={{ margin: '0 0 15px 0', fontSize: '16px', color: '#1a252f' }}
+          style={{ margin: '0 0 15px 0', fontSize: '16px', color: 'var(--color-foreground, #F8FAFC)' }}
         >
           Despensa (Insumos)
         </h3>
-        <p style={{ fontSize: '13px', color: '#7f8c8d', marginBottom: '15px' }}>
+        <p style={{ fontSize: '13px', color: 'var(--color-muted-foreground)', marginBottom: '15px' }}>
           Arrastra los ingredientes hacia tu receta.
         </p>
 
@@ -113,8 +113,8 @@ export default function ArmadorReceta({
                 onDragStart={(e) => handleDragStart(e, insumo)}
                 style={{
                   padding: '12px',
-                  background: 'white',
-                  border: '1px solid #d1d9e0',
+                  background: 'var(--color-surface-elevated, #131A29)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   cursor: 'grab',
                   display: 'flex',
@@ -127,12 +127,12 @@ export default function ArmadorReceta({
                     style={{
                       display: 'block',
                       fontSize: '14px',
-                      color: '#2c3e50',
+                      color: 'var(--color-foreground, #F8FAFC)',
                     }}
                   >
                     {insumo.nombre}
                   </strong>
-                  <span style={{ fontSize: '12px', color: '#7f8c8d' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>
                     {insumo.proveedor}
                   </span>
                 </div>
@@ -140,7 +140,7 @@ export default function ArmadorReceta({
                   style={{
                     fontSize: '13px',
                     fontWeight: 'bold',
-                    color: '#3498db',
+                    color: 'var(--color-primary)',
                   }}
                 >
                   ${insumo.costoPorUnidad} / {insumo.unidad}
@@ -154,15 +154,15 @@ export default function ArmadorReceta({
       <div
         style={{
           flex: '2',
-          background: '#ffffff',
+          background: 'var(--color-surface, #0D131F)',
           padding: '24px',
           borderRadius: '16px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-          border: '1px solid #e4ecf3',
+          boxShadow: 'var(--shadow-card)',
+          border: '1px solid var(--color-border)',
         }}
       >
         <h3
-          style={{ margin: '0 0 20px 0', color: '#1a252f', fontSize: '18px' }}
+          style={{ margin: '0 0 20px 0', color: 'var(--color-foreground, #F8FAFC)', fontSize: '18px' }}
         >
           Armar Nueva Receta
         </h3>
@@ -246,10 +246,10 @@ export default function ArmadorReceta({
                     display: 'flex',
                     alignItems: 'center',
                     gap: '15px',
-                    background: 'white',
+                    background: 'var(--color-surface-elevated, #131A29)',
                     padding: '10px',
                     borderRadius: '8px',
-                    border: '1px solid #ecf0f1',
+                    border: '1px solid var(--color-border)',
                   }}
                 >
                   <div

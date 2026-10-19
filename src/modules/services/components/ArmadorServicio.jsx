@@ -66,9 +66,9 @@ export default function ArmadorServicio({ recursosDisponibles = [], onGuardarSer
   return (
     <div style={{ display: 'flex', gap: '24px', maxWidth: '1100px', margin: '0 auto' }}>
       
-      <div style={{ flex: '1', background: '#f8fafc', padding: '20px', borderRadius: '16px', border: '1px solid #e4ecf3' }}>
-        <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: '#1a252f' }}>Equipo y Recursos</h3>
-        <p style={{ fontSize: '13px', color: '#7f8c8d', marginBottom: '15px' }}>Arrastra perfiles o tecnologías a tu proyecto.</p>
+      <div style={{ flex: '1', background: 'var(--color-surface, #0D131F)', padding: '20px', borderRadius: '16px', border: '1px solid var(--color-border)' }}>
+        <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: 'var(--color-foreground, #F8FAFC)' }}>Equipo y Recursos</h3>
+        <p style={{ fontSize: '13px', color: 'var(--color-muted-foreground)', marginBottom: '15px' }}>Arrastra perfiles o tecnologías a tu proyecto.</p>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '500px', overflowY: 'auto' }}>
           {recursosDisponibles.map(rec => (
@@ -78,8 +78,8 @@ export default function ArmadorServicio({ recursosDisponibles = [], onGuardarSer
               onDragStart={(e) => handleDragStart(e, rec)}
               style={{
                 padding: '12px',
-                background: 'white',
-                border: '1px solid #d1d9e0',
+                background: 'var(--color-surface-elevated, #131A29)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '8px',
                 cursor: 'grab',
                 display: 'flex',
@@ -88,10 +88,10 @@ export default function ArmadorServicio({ recursosDisponibles = [], onGuardarSer
               }}
             >
               <div>
-                <strong style={{ display: 'block', fontSize: '14px', color: '#2c3e50' }}>{rec.nombre}</strong>
-                <span style={{ fontSize: '12px', color: '#7f8c8d' }}>{rec.tipo}</span>
+                <strong style={{ display: 'block', fontSize: '14px', color: 'var(--color-foreground, #F8FAFC)' }}>{rec.nombre}</strong>
+                <span style={{ fontSize: '12px', color: 'var(--color-muted-foreground)' }}>{rec.tipo}</span>
               </div>
-              <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#3498db' }}>
+              <div style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--color-primary)' }}>
                 ${rec.costoPorUnidad.toLocaleString('es-CL')} / {rec.unidad}
               </div>
             </div>
@@ -99,8 +99,8 @@ export default function ArmadorServicio({ recursosDisponibles = [], onGuardarSer
         </div>
       </div>
 
-      <div style={{ flex: '2', background: '#ffffff', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid #e4ecf3' }}>
-        <h3 style={{ margin: '0 0 20px 0', color: '#1a252f', fontSize: '18px' }}>Estructurar Nuevo Servicio</h3>
+      <div style={{ flex: '2', background: 'var(--color-surface, #0D131F)', padding: '24px', borderRadius: '16px', boxShadow: 'var(--shadow-card)', border: '1px solid var(--color-border)' }}>
+        <h3 style={{ margin: '0 0 20px 0', color: 'var(--color-foreground, #F8FAFC)', fontSize: '18px' }}>Estructurar Nuevo Servicio</h3>
         
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginBottom: '20px' }}>
@@ -114,10 +114,10 @@ export default function ArmadorServicio({ recursosDisponibles = [], onGuardarSer
             onDrop={handleDrop}
             style={{
               minHeight: '150px',
-              border: '2px dashed #bdc3c7',
+              border: '2px dashed var(--color-border-strong)',
               borderRadius: '12px',
               padding: '20px',
-              backgroundColor: elementos.length > 0 ? '#f8fafc' : '#ffffff',
+              backgroundColor: elementos.length > 0 ? 'var(--color-surface-elevated, #131A29)' : 'var(--color-surface, #0D131F)',
               display: 'flex',
               flexDirection: 'column',
               gap: '10px',
@@ -126,13 +126,13 @@ export default function ArmadorServicio({ recursosDisponibles = [], onGuardarSer
             }}
           >
             {elementos.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#95a5a6', margin: 'auto' }}>
+              <div style={{ textAlign: 'center', color: 'var(--color-muted-foreground)', margin: 'auto' }}>
                 <span style={{ fontSize: '16px', display: 'block', marginBottom: '10px' }}>Area de Planificación</span>
                 Suelta el personal o los recursos aqui
               </div>
             ) : (
               elementos.map(el => (
-                <div key={el.id} style={{ display: 'flex', alignItems: 'center', gap: '15px', background: 'white', padding: '10px', borderRadius: '8px', border: '1px solid #ecf0f1' }}>
+                <div key={el.id} style={{ display: 'flex', alignItems: 'center', gap: '15px', background: 'var(--color-surface-elevated, #131A29)', padding: '10px', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
                   <div style={{ flex: '1', fontSize: '14px', fontWeight: 'bold' }}>{el.nombre}</div>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

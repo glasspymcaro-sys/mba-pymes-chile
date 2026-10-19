@@ -555,7 +555,7 @@ export default function GraficoPuntoEquilibrio({
           flexWrap: 'wrap',
           gap: '8px',
           padding: '10px 14px',
-          backgroundColor: '#FAFAFA',
+          backgroundColor: 'var(--color-surface-elevated, #131A29)',
           borderRadius: '8px',
           border: '1px solid var(--color-border)',
         }}

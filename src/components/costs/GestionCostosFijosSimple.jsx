@@ -102,7 +102,7 @@ export default function GestionCostosFijosSimple() {
           </p>
         </div>
 
-        <div style={{ padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--color-border)', backgroundColor: '#FAFAFA', textAlign: 'right' }}>
+        <div style={{ padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface-elevated, #131A29)', textAlign: 'right' }}>
           <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', letterSpacing: '0.04em' }}>
             CARGA FIJA MENSUAL (CF)
           </span>
@@ -128,7 +128,7 @@ export default function GestionCostosFijosSimple() {
               borderRadius: '5px',
               fontSize: '11px',
               fontWeight: 500,
-              backgroundColor: '#FAFAFA',
+              backgroundColor: 'var(--color-surface-elevated, #131A29)',
               color: 'var(--color-foreground)',
               border: '1px solid var(--color-border)',
               cursor: 'pointer',
@@ -159,7 +159,7 @@ export default function GestionCostosFijosSimple() {
           alignItems: 'flex-end',
           padding: '16px',
           borderRadius: '8px',
-          backgroundColor: '#FAFAFA',
+          backgroundColor: 'var(--color-surface-elevated, #131A29)',
           border: '1px solid var(--color-border)',
         }}
       >
@@ -351,7 +351,7 @@ export default function GestionCostosFijosSimple() {
                 </span>
               </div>
 
-              <div style={{ width: '100%', height: '4px', backgroundColor: '#F4F4F5', borderRadius: '999px', overflow: 'hidden' }}>
+              <div style={{ width: '100%', height: '4px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
                 <div
                   style={{
                     width: `${Math.min(100, pesoPct)}%`,

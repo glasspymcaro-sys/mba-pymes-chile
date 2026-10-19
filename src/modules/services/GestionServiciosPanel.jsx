@@ -20,8 +20,8 @@ export default function GestionServiciosPanel({ recursos, servicios, onGuardarSe
       </div>
 
       {servicios.length > 0 && (
-        <div style={{ background: '#f8fafc', padding: '30px', borderRadius: '16px', border: '1px solid #e4ecf3' }}>
-          <h3 style={{ margin: '0 0 20px 0', color: '#1a252f', fontSize: '20px' }}>
+        <div style={{ background: 'var(--color-surface, #0D131F)', padding: '30px', borderRadius: '16px', border: '1px solid var(--color-border)' }}>
+          <h3 style={{ margin: '0 0 20px 0', color: 'var(--color-foreground, #F8FAFC)', fontSize: '20px' }}>
             Portafolio de Servicios Activos ({servicios.length})
           </h3>
           
@@ -32,8 +32,8 @@ export default function GestionServiciosPanel({ recursos, servicios, onGuardarSe
                 : 0;
 
               return (
-                <div key={srv.id} style={{ background: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)', border: '1px solid #ecf0f1' }}>
-                  <h4 style={{ margin: '0 0 15px 0', fontSize: '18px', color: '#2c3e50', borderBottom: '2px solid #f4f7f9', paddingBottom: '10px' }}>
+                <div key={srv.id} style={{ background: 'var(--color-surface-elevated, #131A29)', padding: '24px', borderRadius: '12px', boxShadow: 'var(--shadow-card)', border: '1px solid var(--color-border)' }}>
+                  <h4 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--color-foreground, #F8FAFC)', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
                     {srv.nombre}
                   </h4>
                   

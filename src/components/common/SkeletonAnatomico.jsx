@@ -42,7 +42,7 @@ export default function SkeletonAnatomico({
           padding: '18px',
           borderRadius: '10px',
           border: '1px solid var(--color-border)',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--color-surface-elevated, #131A29)',
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',

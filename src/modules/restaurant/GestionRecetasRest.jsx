@@ -30,14 +30,14 @@ export default function GestionRecetasRest({
       {recetas.length > 0 && (
         <div
           style={{
-            background: '#f8fafc',
+            background: 'var(--color-surface, #0D131F)',
             padding: '30px',
             borderRadius: '16px',
-            border: '1px solid #e4ecf3',
+            border: '1px solid var(--color-border)',
           }}
         >
           <h3
-            style={{ margin: '0 0 20px 0', color: '#1a252f', fontSize: '20px' }}
+            style={{ margin: '0 0 20px 0', color: 'var(--color-foreground, #F8FAFC)', fontSize: '20px' }}
           >
             Platos Configurados ({recetas.length})
           </h3>
@@ -63,11 +63,11 @@ export default function GestionRecetasRest({
                 <div
                   key={receta.id}
                   style={{
-                    background: 'white',
+                    background: 'var(--color-surface-elevated, #131A29)',
                     padding: '20px',
                     borderRadius: '12px',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.02)',
-                    border: '1px solid #ecf0f1',
+                    boxShadow: 'var(--shadow-card)',
+                    border: '1px solid var(--color-border)',
                   }}
                 >
                   <h4

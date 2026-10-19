@@ -111,8 +111,8 @@ export default function MesaServicios3D({ tamaño = 120, itemsEnMesa = [], alHac
                 borderRadius: '7px',
                 overflow: 'hidden',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-                border: '1.5px solid #FFFFFF',
-                backgroundColor: '#FFFFFF',
+                border: '1.5px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface-elevated, #131A29)',
               }}
               title={ing.nombre}
             >
@@ -143,7 +143,7 @@ export default function MesaServicios3D({ tamaño = 120, itemsEnMesa = [], alHac
           color: itemsEnMesa.length > 0 ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
           padding: '2px 8px',
           borderRadius: '6px',
-          backgroundColor: '#F4F4F5',
+          backgroundColor: 'var(--color-surface-elevated, #131A29)',
           marginTop: '2px',
         }}
       >

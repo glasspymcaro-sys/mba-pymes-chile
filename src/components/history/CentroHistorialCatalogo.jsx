@@ -172,7 +172,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
               gap: '3px',
               padding: '3px',
               borderRadius: '8px',
-              backgroundColor: '#F1F5F9',
+              backgroundColor: 'var(--color-surface-elevated, #131A29)',
               border: '1px solid var(--color-border)',
             }}
           >
@@ -370,7 +370,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                           width: '74px',
                           height: '74px',
                           borderRadius: '8px',
-                          backgroundColor: '#FAFAFA',
+                          backgroundColor: 'var(--color-surface-elevated, #131A29)',
                           border: '1px solid var(--color-border)',
                           display: 'flex',
                           alignItems: 'center',
@@ -576,7 +576,7 @@ export default function CentroHistorialCatalogo({ onCargarProductoEnGenerador, o
                           width: '52px',
                           height: '52px',
                           borderRadius: '8px',
-                          backgroundColor: '#FAFAFA',
+                          backgroundColor: 'var(--color-surface-elevated, #131A29)',
                           border: '1px solid var(--color-border)',
                           display: 'flex',
                           alignItems: 'center',

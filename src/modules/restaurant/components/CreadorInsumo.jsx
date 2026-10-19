@@ -37,16 +37,16 @@ export default function CreadorInsumo({ onGuardarInsumo }) {
   return (
     <div
       style={{
-        background: '#ffffff',
+        background: 'var(--color-surface, #0D131F)',
         padding: '24px',
         borderRadius: '16px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-        border: '1px solid #e4ecf3',
+        boxShadow: 'var(--shadow-card)',
+        border: '1px solid var(--color-border)',
         maxWidth: '500px',
         margin: '0 auto',
       }}
     >
-      <h3 style={{ margin: '0 0 20px 0', color: '#1a252f', fontSize: '18px' }}>
+      <h3 style={{ margin: '0 0 20px 0', color: 'var(--color-foreground, #F8FAFC)', fontSize: '18px' }}>
         Registrar Nuevo Insumo
       </h3>
 

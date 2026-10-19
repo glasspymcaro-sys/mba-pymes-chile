@@ -26,15 +26,15 @@ export default function GestionInsumosRest({
       <div
         style={{
           flex: '1',
-          background: '#ffffff',
+          background: 'var(--color-surface, #0D131F)',
           padding: '24px',
           borderRadius: '16px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-          border: '1px solid #e4ecf3',
+          boxShadow: 'var(--shadow-card)',
+          border: '1px solid var(--color-border)',
         }}
       >
         <h3
-          style={{ margin: '0 0 20px 0', color: '#1a252f', fontSize: '18px' }}
+          style={{ margin: '0 0 20px 0', color: 'var(--color-foreground, #F8FAFC)', fontSize: '18px' }}
         >
           Base de Datos de Insumos ({insumos.length})
         </h3>
@@ -44,8 +44,8 @@ export default function GestionInsumosRest({
             style={{
               textAlign: 'center',
               padding: '40px',
-              color: '#95a5a6',
-              background: '#f8fafc',
+              color: 'var(--color-muted-foreground)',
+              background: 'var(--color-surface-elevated, #131A29)',
               borderRadius: '8px',
             }}
           >
@@ -64,8 +64,8 @@ export default function GestionInsumosRest({
               <thead>
                 <tr
                   style={{
-                    borderBottom: '2px solid #e4ecf3',
-                    color: '#5c6c7b',
+                    borderBottom: '2px solid var(--color-border)',
+                    color: 'var(--color-muted-foreground)',
                     fontSize: '13px',
                   }}
                 >
@@ -82,9 +82,8 @@ export default function GestionInsumosRest({
                   <tr
                     key={insumo.id}
                     style={{
-                      borderBottom: '1px solid #f0f4f8',
+                      borderBottom: '1px solid var(--color-border-subtle)',
                       transition: 'background 0.2s',
-                      ':hover': { background: '#f8fafc' },
                     }}
                   >
                     <td

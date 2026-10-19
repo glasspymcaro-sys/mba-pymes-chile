@@ -208,8 +208,8 @@ export default function OllitaCocina3D({ tamaño = 120, insumosEnOlla = [], alHa
                 borderRadius: '8px',
                 overflow: 'hidden',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.22)',
-                border: '1.5px solid #ffffff',
-                backgroundColor: '#ffffff',
+                border: '1.5px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface-elevated, #131A29)',
                 transform: `rotate(${((idx % 2 === 0 ? 1 : -1) * (idx + 1) * 3)}deg)`,
                 transition: 'transform 0.2s ease',
               }}

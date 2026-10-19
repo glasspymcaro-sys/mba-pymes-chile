@@ -74,7 +74,7 @@ export default function AsesorFinancieroIA() {
   };
 
   const metricBoxStyle = {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'var(--color-surface-elevated, #131A29)',
     border: '1px solid var(--color-border)',
     boxShadow: 'var(--shadow-card)',
     padding: '14px 16px',
@@ -190,7 +190,7 @@ export default function AsesorFinancieroIA() {
       ) : diagnostico ? (
         <div
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--color-surface-elevated, #131A29)',
             borderRadius: '8px',
             border: '1px solid var(--color-border)',
             padding: '18px',

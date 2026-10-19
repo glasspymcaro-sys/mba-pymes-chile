@@ -35,18 +35,18 @@ export default class ErrorBoundary extends React.Component {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '24px',
-            backgroundColor: 'var(--color-background, #FAFAFA)',
+            backgroundColor: 'var(--color-background, #070A12)',
           }}
         >
           <div
             style={{
               maxWidth: '480px',
               width: '100%',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid rgba(0, 0, 0, 0.08)',
-              borderRadius: '10px',
+              backgroundColor: 'var(--color-surface, #0D131F)',
+              border: '1px solid var(--color-border, #1E293B)',
+              borderRadius: '12px',
               padding: '24px',
-              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+              boxShadow: 'var(--shadow-popover)',
               display: 'flex',
               flexDirection: 'column',
               gap: '14px',
@@ -58,12 +58,12 @@ export default class ErrorBoundary extends React.Component {
                   width: '32px',
                   height: '32px',
                   borderRadius: '6px',
-                  backgroundColor: '#FEF2F2',
-                  border: '1px solid #FECACA',
+                  backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#DC2626',
+                  color: '#EF4444',
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -73,16 +73,16 @@ export default class ErrorBoundary extends React.Component {
                 </svg>
               </div>
               <div>
-                <span style={{ fontSize: '11px', fontWeight: 600, color: '#DC2626', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block' }}>
+                <span style={{ fontSize: '11px', fontWeight: 600, color: '#EF4444', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block' }}>
                   Diagnóstico de Sistema • Contención Activa
                 </span>
-                <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#09090B', letterSpacing: '-0.02em', margin: 0 }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-foreground, #F8FAFC)', letterSpacing: '-0.02em', margin: 0 }}>
                   Anomalía detectada en el módulo de interfaz
                 </h3>
               </div>
             </div>
 
-            <p style={{ fontSize: '13px', color: '#52525B', lineHeight: 1.5, margin: 0 }}>
+            <p style={{ fontSize: '13px', color: 'var(--color-muted-foreground, #94A3B8)', lineHeight: 1.5, margin: 0 }}>
               El contenedor de seguridad aisló un error de ejecución para proteger la integridad de sus datos financieros y recetas activas.
             </p>
 
@@ -91,11 +91,11 @@ export default class ErrorBoundary extends React.Component {
                 style={{
                   padding: '8px 12px',
                   borderRadius: '6px',
-                  backgroundColor: '#F4F4F5',
-                  border: '1px solid rgba(0, 0, 0, 0.06)',
+                  backgroundColor: 'var(--color-surface-elevated, #131A29)',
+                  border: '1px solid var(--color-border, #1E293B)',
                   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                   fontSize: '11.5px',
-                  color: '#09090B',
+                  color: '#F8FAFC',
                   overflowX: 'auto',
                 }}
               >

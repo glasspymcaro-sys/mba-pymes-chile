@@ -84,7 +84,7 @@ export default function VisorEscenaPBR3D({
             gap: '2px',
             padding: '2px',
             borderRadius: '6px',
-            backgroundColor: '#F4F4F5',
+            backgroundColor: 'var(--color-surface-elevated, #131A29)',
             border: '1px solid var(--color-border)',
           }}
         >
@@ -102,10 +102,10 @@ export default function VisorEscenaPBR3D({
                 borderRadius: '4px',
                 fontSize: '11px',
                 fontWeight: modoMaterial === m.id ? 600 : 500,
-                backgroundColor: modoMaterial === m.id ? '#FFFFFF' : 'transparent',
-                color: modoMaterial === m.id ? '#09090B' : '#52525B',
+                backgroundColor: modoMaterial === m.id ? '#1E293B' : 'transparent',
+                color: modoMaterial === m.id ? 'var(--color-foreground)' : 'var(--color-muted-foreground)',
                 border: 'none',
-                boxShadow: modoMaterial === m.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                boxShadow: modoMaterial === m.id ? '0 1px 3px rgba(0,0,0,0.4)' : 'none',
                 cursor: 'pointer',
               }}
             >
@@ -240,7 +240,7 @@ export default function VisorEscenaPBR3D({
               gap: '8px',
             }}
           >
-            <div style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: '#FAFAFA', border: '1px solid var(--color-border)' }}>
+            <div style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: 'var(--color-surface-elevated, #131A29)', border: '1px solid var(--color-border)' }}>
               <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
                 Costo Directo (CV)
               </span>
@@ -249,7 +249,7 @@ export default function VisorEscenaPBR3D({
               </span>
             </div>
 
-            <div style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: '#FAFAFA', border: '1px solid var(--color-border)' }}>
+            <div style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: 'var(--color-surface-elevated, #131A29)', border: '1px solid var(--color-border)' }}>
               <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted-foreground)', display: 'block', textTransform: 'uppercase' }}>
                 Precio Venta (P)
               </span>

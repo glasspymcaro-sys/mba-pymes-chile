@@ -167,7 +167,7 @@ export default function GeneradorRecetaOlla({
           gap: '14px',
           padding: '14px 16px',
           borderRadius: '8px',
-          backgroundColor: '#FAFAFA',
+          backgroundColor: 'var(--color-surface-elevated, #131A29)',
           border: '1px solid var(--color-border)',
         }}
       >
